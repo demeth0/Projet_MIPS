@@ -54,7 +54,17 @@ void textInstructionToOpcode(char textInstruction, Instruction *instruction){
 }
 
 
-
+/*
+Description:
+	remplie les paramètres block de l'instruction
+parametre:
+	Instruction* instruction - l'instruction qui va etre modifiée
+	char bn - les tailles des blocks
+return: 
+	void
+erreur:
+	si l'instruction pas initialisée
+*/
 void setBlocksSize(Instruction* instruction, char b0,char b1,char b2, char b3,char b4,char b5,char b6,char b7){
 	instruction->b0=b0;
 	instruction->b1=b1;
