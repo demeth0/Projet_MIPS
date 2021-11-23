@@ -4,3 +4,7 @@ int main(int argc, char const *argv[])
 	printf("edited\n");
 	return 0;
 }
+
+int test(){
+	
+}
