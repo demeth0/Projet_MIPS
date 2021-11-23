@@ -1,5 +1,5 @@
 #include "textToBin.h"
-#include "operation_code_defines.h"
+
 
 /*
 On suppose :
