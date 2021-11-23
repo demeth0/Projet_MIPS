@@ -12,10 +12,15 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
 
 /*
 Description:
-	Récupere tout les char jusqu'au premier espace dan sl'instruction en  parametre
+	Récupere tout les char jusqu'au premier espace dan l'instruction en  parametre
 et les mets dans res. exemple pour 'addiu $val, $res, 10' va donner 'addiu\0' 
+parametre:
+	textInstruction - l'instruction complete dans un tableau de char (fin \0)
+	res - tableau de char qui va stocker l'instruction au moin de taille 8 (fin \0)
 return:
 	void
+erreur:
+	si res est trop petit ou textInstruction n'est pas valide
 */
 void getOperationCodeText(char* textInstruction, char* res);
 

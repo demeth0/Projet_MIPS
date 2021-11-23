@@ -8,7 +8,7 @@ On suppose :
 */
 void textInstructionToOpcode(char textInstruction, Instruction *instruction){
 	char [8] opcode;
-	getInstruction(textInstruction,opcode);
+	getOperationCodeText(textInstruction,opcode);
 
 	if(opcode[1]=='\0' && opcode[0]=='j'){
 		/* alors forcément instruction 'j' 
@@ -51,6 +51,27 @@ void textInstructionToOpcode(char textInstruction, Instruction *instruction){
 	}else{
 		/* syscall */
 	}
+}
+
+/*
+Description:
+	Récupere tout les char jusqu'au premier espace dan l'instruction en  parametre
+et les mets dans res. exemple pour 'addiu $val, $res, 10' va donner 'addiu\0' 
+parametre:
+	textInstruction - l'instruction complete dans un tableau de char (fin \0)
+	res - tableau de char qui va stocker l'instruction au moin de taille 8 (fin \0)
+return:
+	void
+erreur:
+	si res est trop petit ou textInstruction n'est pas valide
+*/
+void getOperationCodeText(char* textInstruction, char* res){
+	int i=0;
+	while(textInstruction[i]!=' '){
+		res[i]=textInstruction[i];
+		i++;
+	}
+	res[i]='\0';
 }
 
 
