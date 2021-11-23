@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Instruction{
+	unsigned char [4] code;
+	unsigned char id;
+	unsigned char b0,b1,b2,b3,b4,b5,b6,b7;
+} Instruction;
+
+void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
+
+/*
+Récupere tout les char jusqu'au premier espace dan sl'instruction en  parametre
+et les mets dans res. exemple pour 'addiu $val, $res, 10' va donner 'addiu\0' 
+*/
+void getOperationCodeText(char* textInstruction, char* res);
