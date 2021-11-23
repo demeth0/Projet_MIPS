@@ -7,7 +7,6 @@ typedef struct Instruction{
 	unsigned char b0,b1,b2,b3,b4,b5,b6,b7;
 } Instruction;
 
-/*commentaire*/
 void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
 
 /*
