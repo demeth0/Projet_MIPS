@@ -1,11 +1,5 @@
 int main(int argc, char const *argv[])
 {
-	printf("hello world !--\n");
-	printf("edited\n");
-	test
+	printf("hello world !\n");
 	return 0;
-}
-
-int test(){
-	printf("lol\n");
 }
