@@ -53,6 +53,15 @@ void textInstructionToOpcode(char textInstruction, Instruction *instruction){
 	}
 }
 
+void setNormalOpCode(Instruction *instruction, char opCode){
+	instruction->code[0] = (instruction->code[0]&0x03) + (opCode<<2);
+}
+
+void setSpecialOpCode(Instruction *instruction, char opCode){
+	instruction->code[3] = (instruction->code[0]&0xC0) + opCode;
+	setNormalOpCode(instruction,0);
+}
+
 /*
 Description:
 	Récupere tout les char jusqu'au premier espace dan l'instruction en  parametre
