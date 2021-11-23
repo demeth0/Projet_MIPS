@@ -17,6 +17,7 @@ void textInstructionToOpcode(char textInstruction, Instruction *instruction){
 		*/
 		instruction->code[0] = (instruction->code[0]&0x03) + (J_CODE<<2);
 		instruction->id = J_ID;
+		setBlocksSize(instruction,6,26,0,0,0,0,0,0);
 	}else if(opcode[2]=='\0'){
 		/*
 			or
@@ -50,4 +51,17 @@ void textInstructionToOpcode(char textInstruction, Instruction *instruction){
 	}else{
 		/* syscall */
 	}
+}
+
+
+
+void setBlocksSize(Instruction* instruction, char b0,char b1,char b2, char b3,char b4,char b5,char b6,char b7){
+	instruction->b0=b0;
+	instruction->b1=b1;
+	instruction->b2=b2;
+	instruction->b3=b3;
+	instruction->b4=b4;
+	instruction->b5=b5;
+	instruction->b6=b6;
+	instruction->b7=b7;
 }
