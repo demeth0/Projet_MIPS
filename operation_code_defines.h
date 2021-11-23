@@ -1,6 +1,8 @@
 #ifndef OPERATION_CODE_DEFINES
 #define OPERATION_CODE_DEFINES
 
+
+/*X_CODE correspond au binaire de l'instruction en hexadecimal*/
 #define ADD_ID   0
 #define ADD_CODE 0x20
 
