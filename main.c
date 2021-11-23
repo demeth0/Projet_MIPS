@@ -7,5 +7,5 @@ int main(int argc, char const *argv[])
 }
 
 int test(){
-	
+	printf("lol\n");
 }
