@@ -11,6 +11,32 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
 
 /*
 Description:
+	met les 6 premiers bits de l'instruction avec opCode en conservant les valeurs d'origine pour le reste
+parametre:
+	instruction - l'instruction en paramtre a changer
+	opCode - le code instruction a insérer en début
+return:
+	void
+error :
+	si instruction pas initialiser
+*/
+void setNormalOpCode(Instruction *instruction, char opCode);
+
+/*
+Description:
+	met les 6 premiers bits de l'instruction a 0 et les 6 derniers avec opCode en conservant les valeurs d'origine pour le reste
+parametre:
+	instruction - l'instruction en paramtre a changer
+	opCode - le code instruction a insérer en fin
+return:
+	void
+error :
+	si instruction pas initialiser
+*/
+void setSpecialOpCode(Instruction *instruction, char opCode);
+
+/*
+Description:
 	Récupere tout les char jusqu'au premier espace dan l'instruction en  parametre
 et les mets dans res. exemple pour 'addiu $val, $res, 10' va donner 'addiu\0' 
 parametre:

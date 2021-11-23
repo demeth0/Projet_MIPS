@@ -1,3 +1,6 @@
+/*
+valeurs decimales des registres mappées a leurs noms
+*/
 #ifndef REGISTER_DEFINES
 #define REGISTER_DEFINES
 
