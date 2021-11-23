@@ -13,6 +13,8 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
 Description:
 	Récupere tout les char jusqu'au premier espace dan sl'instruction en  parametre
 et les mets dans res. exemple pour 'addiu $val, $res, 10' va donner 'addiu\0' 
+return:
+	void
 */
 void getOperationCodeText(char* textInstruction, char* res);
 
