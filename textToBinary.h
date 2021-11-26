@@ -69,23 +69,61 @@ void setBlocksSize(Instruction* instruction, char b0,char b1,char b2, char b3,ch
 
 /*
 Description:
-	Prend deux octets et une position entre 0 et 8, le résultat est les positions bits de poid fort de b1 plus les 8-position 
-	bits de poid fort de b2 
-exemple:
-	b1 = 10011101
-	b2 = 11111111
-	pos = 5
-
-	donc b1 : 10011
-         b2 :      111
-         res: 10011111
-parametres:
-	b1 - premier octet
-	b2 - deuxieme octet
-	pos - l'index de compositon
-return:
-	le résultat de l'opération
+	prend en parametre une instruction dont les tailles b[n] sont initialisées, et un numéro de block
+	la valeur value de dim octet sera écrite dans le code de la struct Instruction dans zone qui luis est associée
+	avec la taille correspondante dans b[n].
+parametre:
+	instruction - l'insqtruction dont les valeurs b[n] sont intialisée ainsi que le code ou la zone dédiée
+	a la valeur qu'on veut écrire soit vide de données
+	field - le numéro de block qu'on souhaite remplire
+	value - la valeur que le block va prendre tableau de 8*dim bit soit dim char tell que 8*dim > b[field]
+	dim - taille du tableau value en octet
+erreurs:
+	si instruction n'est pas initialisée, alors il y a risque de crash aussi la zone dans le code de 
+	l'instruction ou l'on veut écrire doit nécéssairement etre vide en risque de corrompre tout le code.
+	la taille de value ne provoquera pas d'exeption, la fonction tronquera le nombre automatiquement.
 */
-void pasteReg(Instruction* instruction, int field,char value);
+void pasteValue(Instruction* instruction, int field,unsigned char* value,int dim);
+
+/*
+Description:
+	Déplace vers la gauche les bits de la chaine values n fois
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la gauche
+	size - la taille en octet de la chaine
+*/
+void shiftLNBit(unsigned char *values, int n, int size);
+
+/*
+Description:
+	Déplace vers la gauche les bits de la chaine values n fois avec n entre 0 et 8
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la gauche
+	size - la taille en octet de la chaine
+*/
+void shiftL8Bit(unsigned char *values, int n, int size);
+
+/*
+Description:
+	Déplace vers la droite les bits de la chaine values n fois
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la droite
+	size - la taille en octet de la chaine
+*/
+void shiftRNBit(unsigned char *values, int n, int size);
+
+/*
+Description:
+	Déplace vers la droite les bits de la chaine values n fois avec n entre 0 et 8
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la droite
+	size - la taille en octet de la chaine
+*/
+void shiftR8Bit(unsigned char *values, int n, int size);
+
 
 #endif

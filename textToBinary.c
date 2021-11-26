@@ -129,38 +129,139 @@ void setBlocksSize(Instruction* instruction, char b0,char b1,char b2, char b3,ch
 }
 
 /*
-Description: 
-	on passe en parametre un numéro de field et une instruction, l'algo écrit la valeur passée en parametre dans l'espace
-préciser par le field, la valeur écrite est écrite en tant que nombre binaire de 5 bits (registre)
-
-parametres:
-	instruction - l'objet instruction
-	field - le numéro du bloc dans l'instruction
-	value - la valeur a écrire de 5bit
+Description:
+	prend en parametre une instruction dont les tailles b[n] sont initialisées, et un numéro de block
+	la valeur value de dim octet sera écrite dans le code de la struct Instruction dans zone qui luis est associée
+	avec la taille correspondante dans b[n].
+parametre:
+	instruction - l'insqtruction dont les valeurs b[n] sont intialisée ainsi que le code ou la zone dédiée
+	a la valeur qu'on veut écrire soit vide de données
+	field - le numéro de block qu'on souhaite remplire
+	value - la valeur que le block va prendre tableau de 8*dim bit soit dim char tell que 8*dim > b[field]
+	dim - taille du tableau value en octet
+erreurs:
+	si instruction n'est pas initialisée, alors il y a risque de crash aussi la zone dans le code de 
+	l'instruction ou l'on veut écrire doit nécéssairement etre vide en risque de corrompre tout le code.
+	la taille de value ne provoquera pas d'exeption, la fonction tronquera le nombre automatiquement.
 */
-void pasteReg(Instruction* instruction, int field,char value){
+void pasteValue(Instruction* instruction, int field,unsigned char* value,int dim){
+	/* size in bit of the value not necessarly a multiple of 8 */
 	int size=instruction->b[field];
-	int index,used,pos=0,i;
-	int reg = value<<3;
-	if(size == 5){
-		for(i=0;i<field;i++){
-			pos += instruction->b[i];
-		}
-		/* index du premier octet a éditer */
-		index = pos/8;
-		
-		/*
-		pos%8 = nb de bit réservé a d'autres fields dans l'octet
-		nb of bit left to write on in instruction */
-		used = pos%8;
+	/* position wanted on the instruction code */
+	int pos = 0,i=0;
 
-		if(used == 0){
-			instruction->code[index] += reg;
-		}else{
-			instruction->code[index] += (reg >> used);
-			if(used > 3){
-				instruction->code[index+1] += reg << (8-used);
-			}
+	/* temp values */
+	unsigned char val[4];
+	unsigned char mask1[4];
+	unsigned char mask2[4];
+
+	/* calculate position in bit in the 32bit code */
+	for(i=0;i<field;i++){
+		pos += instruction->b[i];
+	}
+
+	/* init mask at 0xFFFFFFFF and val at 0x00000000 */
+	for(i=0;i<4;i++){
+		mask1[i] = 0xFF;
+		mask2[i] = 0xFF;
+		val[i]=0;
+	}
+
+	/* met value dans val (taille value =< 4) */
+	for(i=0;i<dim && i<(size/8);i++){
+		printf("%02x\n", value[i]);
+		val[i+(4-dim)]=value[i];
+	}
+
+	/* positionne la valeur a la fin tel que le bit de poid fort soit le premier dans la chaine */
+	shiftLNBit(val, 32-size, 4);
+	/* décale val pour etre a la bonne position dans le code */
+	shiftRNBit(val, pos,4);
+
+	/* calcul les mask pour l'insertion dans le code */
+	shiftRNBit(mask1, pos,4);
+	shiftLNBit(mask2, 32-(pos+size), 4);
+
+	/* insertion dans le code */
+	for(i=0;i<4;i++){
+		instruction->code[i] = mask1[i] &mask2[i]&val[i];
+	}
+}
+
+/*
+Description:
+	Déplace vers la gauche les bits de la chaine values n fois
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la gauche
+	size - la taille en octet de la chaine
+*/
+void shiftLNBit(unsigned char *values, int n, int size){
+	int shift=n,i;
+	while(shift > 8){
+		for(i=1;i<size;i++){
+			values[i-1]=values[i];
 		}
+		values[i-1]=0;
+		shift-=8;
+	}
+
+	shiftL8Bit(values, shift, size);
+}
+
+/*
+Description:
+	Déplace vers la gauche les bits de la chaine values n fois avec n entre 0 et 8
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la gauche
+	size - la taille en octet de la chaine
+*/
+void shiftL8Bit(unsigned char *values, int n, int size){
+	int i;
+	values[0]=values[0]<<n;
+
+	for(i=1;i<size;i++){
+		values[i-1] += values[i] >> (8-n);
+		values[i]=values[i]<<n;
+	}
+}
+
+/*
+Description:
+	Déplace vers la droite les bits de la chaine values n fois
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la droite
+	size - la taille en octet de la chaine
+*/
+void shiftRNBit(unsigned char *values, int n, int size){
+	int shift=n,i;
+	while(shift > 8){
+		for(i=size-1;i>0;i--){
+			values[i]=values[i-1];
+		}
+		values[i]=0;
+		shift-=8;
+	}
+
+	shiftR8Bit(values, shift, size);
+}
+
+/*
+Description:
+	Déplace vers la droite les bits de la chaine values n fois avec n entre 0 et 8
+parametres:
+	values - un tableau d'octet représentant le nombre binaire
+	n - le nombre de fois qu'on fait le déplacement vers la droite
+	size - la taille en octet de la chaine
+*/
+void shiftR8Bit(unsigned char *values, int n, int size){
+	int i;
+	values[size-1]=values[size-1]>>n;
+
+	for(i=size-1;i>0;i--){
+		values[i] += values[i-1] << (8-n);
+		values[i-1]=values[i-1]>>n;
 	}
 }
