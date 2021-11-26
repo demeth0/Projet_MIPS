@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include "operation_code_defines.h"
 
-typedef struct Instruction{
+struct Instruction{
 	unsigned char [4] code;
 	unsigned int id;
 	unsigned char b0,b1,b2,b3,b4,b5,b6,b7;
-} Instruction;
+};
+
+typedef struct Instruction Instruction;
 
 void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
 
