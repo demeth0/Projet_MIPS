@@ -92,7 +92,7 @@
 
 /*000010*/
 #define SRL_ID   21
-#define SLT_CODE 0x02
+#define SRL_CODE 0x02
 
 /*100010*/
 #define SUB_ID   22

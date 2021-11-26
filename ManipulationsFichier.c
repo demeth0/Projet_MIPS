@@ -10,7 +10,7 @@ return:
 	void
 */
 void readInstruction(FILE *f, char *result){
-	char c = 0;
+	char c = 'a';
 	
 	/*
 	lis les caractères uns a uns et s'arrete si il trouve un retours a la ligne ou un début de commentaire

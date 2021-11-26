@@ -2,7 +2,7 @@
 #define MANIPULATION_FICHIER_LIB
 
 #include <stdio.h>
-#include <textToBinary.h>
+#include "textToBinary.h"
 
 /*
 Description: 

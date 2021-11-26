@@ -5,15 +5,14 @@
 #include <stdlib.h>
 #include "operation_code_defines.h"
 
-struct Instruction{
-	unsigned char [4] code;
+typedef struct Instruction{
+	unsigned char code[4];
 	unsigned int id;
-	unsigned char b0,b1,b2,b3,b4,b5,b6,b7;
-};
+	unsigned char b[8];
+}Instruction;
 
-typedef struct Instruction Instruction;
 
-void textInstructionToOpcode(char* textInstruction, Instruction *instruction);
+void textInstructionToOpcode(char* textInstruction, Instruction* instruction);
 
 /*
 Description:
@@ -67,4 +66,26 @@ erreur:
 	si l'instruction pas initialisée
 */
 void setBlocksSize(Instruction* instruction, char b0,char b1,char b2, char b3,char b4,char b5,char b6,char b7);
+
+/*
+Description:
+	Prend deux octets et une position entre 0 et 8, le résultat est les positions bits de poid fort de b1 plus les 8-position 
+	bits de poid fort de b2 
+exemple:
+	b1 = 10011101
+	b2 = 11111111
+	pos = 5
+
+	donc b1 : 10011
+         b2 :      111
+         res: 10011111
+parametres:
+	b1 - premier octet
+	b2 - deuxieme octet
+	pos - l'index de compositon
+return:
+	le résultat de l'opération
+*/
+void pasteReg(Instruction* instruction, int field,char value);
+
 #endif
