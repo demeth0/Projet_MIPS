@@ -1,5 +1,6 @@
 #include "ManipulationsFichier.h"
 
+
 /*
 Description: 
 	va metre dans resultat l'instruction (texte) sur la ligne suivante dans le fichier en paramètre en enlevant les commentaires.
@@ -11,7 +12,8 @@ return:
 */
 void readInstruction(FILE *f, char *result){
 	char c = 'a';
-	
+	char *res_copy = result;
+
 	/*
 	lis les caractères uns a uns et s'arrete si il trouve un retours a la ligne ou un début de commentaire
 	*/
@@ -19,10 +21,11 @@ void readInstruction(FILE *f, char *result){
 		c = fgetc(f);
 
 		/* met la valeur dans resultat */
-		*result = c;
+		*res_copy = c;
 		/* avance dans la chaine de caractère */
-		result++;
+		res_copy++;
 	}
+	*res_copy = '\0';
 
 	/*
 	dans le cas ou il trouve un commentaire on continue de lire la ligne jusqu'au bout pour avancer le curseur jusqu'a la fin de la ligne
@@ -42,4 +45,17 @@ parametres:
 */
 void writeHexInstructionToFile(FILE *f, Instruction inst){
 	fprintf(f, "%02x%02x%02x%02x\n", inst.code[0],inst.code[1],inst.code[2],inst.code[3]);
+}
+
+/*
+Description:
+	Supprime les espaces au début et a la fin de la ligne
+parametres:
+	line - chaine de caractères
+	size - taille chaine de caractère
+return:
+	void
+*/
+void supprimerEspaces(char **line, int size){
+	
 }

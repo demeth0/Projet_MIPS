@@ -17,6 +17,7 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 		*/
 		instruction->code[0] = (instruction->code[0]&0x03) + (J_CODE<<2);
 		instruction->id = J_ID;
+
 		setBlocksSize(instruction,6,26,0,0,0,0,0,0);
 	}else if(opcode[2]=='\0'){
 		/*
@@ -64,7 +65,7 @@ return:
 error :
 	si instruction pas initialiser
 */
-void setNormalOpCode(Instruction *instruction, char opCode){
+void setNormalOpCode(Instruction *instruction, Byte opCode){
 	instruction->code[0] = (instruction->code[0]&0x03) + (opCode<<2);
 }
 
@@ -79,7 +80,7 @@ return:
 error :
 	si instruction pas initialiser
 */
-void setSpecialOpCode(Instruction *instruction, char opCode){
+void setSpecialOpCode(Instruction *instruction, Byte opCode){
 	instruction->code[3] = (instruction->code[0]&0xC0) + opCode;
 	setNormalOpCode(instruction,0);
 }
@@ -117,7 +118,7 @@ return:
 erreur:
 	si l'instruction pas initialisée
 */
-void setBlocksSize(Instruction* instruction, char b0,char b1,char b2, char b3,char b4,char b5,char b6,char b7){
+void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,Byte b4,Byte b5,Byte b6,Byte b7){
 	instruction->b[0]=b0;
 	instruction->b[1]=b1;
 	instruction->b[2]=b2;
@@ -144,16 +145,16 @@ erreurs:
 	l'instruction ou l'on veut écrire doit nécéssairement etre vide en risque de corrompre tout le code.
 	la taille de value ne provoquera pas d'exeption, la fonction tronquera le nombre automatiquement.
 */
-void pasteValue(Instruction* instruction, int field,unsigned char* value,int dim){
+void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	/* size in bit of the value not necessarly a multiple of 8 */
 	int size=instruction->b[field];
 	/* position wanted on the instruction code */
 	int pos = 0,i=0;
 
 	/* temp values */
-	unsigned char val[4];
-	unsigned char mask1[4];
-	unsigned char mask2[4];
+	Byte val[4];
+	Byte mask1[4];
+	Byte mask2[4];
 
 	/* calculate position in bit in the 32bit code */
 	for(i=0;i<field;i++){
@@ -196,7 +197,7 @@ parametres:
 	n - le nombre de fois qu'on fait le déplacement vers la gauche
 	size - la taille en octet de la chaine
 */
-void shiftLNBit(unsigned char *values, int n, int size){
+void shiftLNBit(Byte *values, int n, int size){
 	int shift=n,i;
 	while(shift > 8){
 		for(i=1;i<size;i++){
@@ -217,7 +218,7 @@ parametres:
 	n - le nombre de fois qu'on fait le déplacement vers la gauche
 	size - la taille en octet de la chaine
 */
-void shiftL8Bit(unsigned char *values, int n, int size){
+void shiftL8Bit(Byte *values, int n, int size){
 	int i;
 	values[0]=values[0]<<n;
 
@@ -235,7 +236,7 @@ parametres:
 	n - le nombre de fois qu'on fait le déplacement vers la droite
 	size - la taille en octet de la chaine
 */
-void shiftRNBit(unsigned char *values, int n, int size){
+void shiftRNBit(Byte *values, int n, int size){
 	int shift=n,i;
 	while(shift > 8){
 		for(i=size-1;i>0;i--){
@@ -256,7 +257,7 @@ parametres:
 	n - le nombre de fois qu'on fait le déplacement vers la droite
 	size - la taille en octet de la chaine
 */
-void shiftR8Bit(unsigned char *values, int n, int size){
+void shiftR8Bit(Byte *values, int n, int size){
 	int i;
 	values[size-1]=values[size-1]>>n;
 

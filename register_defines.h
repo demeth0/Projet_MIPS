@@ -15,22 +15,22 @@ valeurs decimales des registres mappées a leurs noms
 #define A3 7
 
 #define T0 8
-#define T0 9
-#define T0 10
-#define T0 11
-#define T0 12
-#define T0 13
-#define T0 14
-#define T0 15
+#define T1 9
+#define T2 10
+#define T3 11
+#define T4 12
+#define T5 13
+#define T6 14
+#define T7 15
 
 #define S0 16
-#define S0 17
-#define S0 18
-#define S0 19
-#define S0 20
-#define S0 21
-#define S0 22
-#define S0 23
+#define S1 17
+#define S2 18
+#define S3 19
+#define S4 20
+#define S5 21
+#define S6 22
+#define S7 23
 
 #define T8 24
 #define T8 25
