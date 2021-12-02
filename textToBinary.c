@@ -169,8 +169,10 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	}
 
 	/* met value dans val (taille value =< 4) */
-	for(i=0;i<dim && i<(size/8);i++){
+	for(i=0;i<dim;i++){
 		printf("%02x\n", value[i]);
+		/* on doit écrire a la fin car les shift sont appliqués dans le sens 
+		inverse aux indices des tableaux */
 		val[i+(4-dim)]=value[i];
 	}
 
@@ -185,7 +187,7 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 
 	/* insertion dans le code */
 	for(i=0;i<4;i++){
-		instruction->code[i] = mask1[i] &mask2[i]&val[i];
+		instruction->code[i] += mask1[i] &mask2[i]&val[i];
 	}
 }
 
