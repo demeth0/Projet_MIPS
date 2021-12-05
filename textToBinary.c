@@ -477,3 +477,19 @@ void param_to_tab(char tab[8][16],char *instruction){
 		i++;
 	}
 }
+
+
+
+Byte registerToByte(char *val){
+	int taille =strlen(val);
+    int dizaine = 1;
+    int index =0;
+    Byte resultat =0;
+    while(index<taille){
+        resultat+=dizaine*(val[taille -1 -index]-48);
+
+        dizaine *=10;
+        index++;
+    }
+    return resultat;
+}
