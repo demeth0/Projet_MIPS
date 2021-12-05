@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "operation_code_defines.h"
-
-typedef unsigned char Byte;
+#include "ByteUtils.h"
 
 typedef struct Instruction{
 	Byte code[4];
@@ -91,46 +90,6 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim);
 
 /*
 Description:
-	Déplace vers la gauche les bits de la chaine values n fois
-parametres:
-	values - un tableau d'octet représentant le nombre binaire
-	n - le nombre de fois qu'on fait le déplacement vers la gauche
-	size - la taille en octet de la chaine
-*/
-void shiftLNBit(Byte *values, int n, int size);
-
-/*
-Description:
-	Déplace vers la gauche les bits de la chaine values n fois avec n entre 0 et 8
-parametres:
-	values - un tableau d'octet représentant le nombre binaire
-	n - le nombre de fois qu'on fait le déplacement vers la gauche
-	size - la taille en octet de la chaine
-*/
-void shiftL8Bit(Byte *values, int n, int size);
-
-/*
-Description:
-	Déplace vers la droite les bits de la chaine values n fois
-parametres:
-	values - un tableau d'octet représentant le nombre binaire
-	n - le nombre de fois qu'on fait le déplacement vers la droite
-	size - la taille en octet de la chaine
-*/
-void shiftRNBit(Byte *values, int n, int size);
-
-/*
-Description:
-	Déplace vers la droite les bits de la chaine values n fois avec n entre 0 et 8
-parametres:
-	values - un tableau d'octet représentant le nombre binaire
-	n - le nombre de fois qu'on fait le déplacement vers la droite
-	size - la taille en octet de la chaine
-*/
-void shiftR8Bit(Byte *values, int n, int size);
-
-/*
-Description:
 	transforme une chaine de caractères en lower case
 parametre:
 	text - chaine de caractère se finissant par \0
@@ -143,24 +102,6 @@ void toLowerCase(char *text);
 
 /*
 Description:
-	convertis un entier dans un integer en un entier encoder sur un tableu de Byte de taille 2
-parametre:
-	res - tableu de Byte de taille nécéssairement 2
-	i - entier sur integer
-return:
-	void
-erreur:
-	si res ne fait pas une taille de 2 
-*/
-void IntTo2ByteArray(int i,Byte *res);
-
-
-
-
-void toLowerCase(char *text);
-
-/*
-Description:
 	place les arguments dans une matrice de caracteres
 parametre:
 	tab - tableu bidimensionnel de char
@@ -169,19 +110,6 @@ return:
 	void
 */
 void param_to_tab(char tab[8][16],char *instruction);
-
-
-/*
-Description:
-	prend en parametre une chaine de caractère représentant une valeur immédiate
-	en hexadécimale ou décimale et la converit en un Integer
-parametre:
-	str - chaine de caractère finissant par \0
-return:
-	la valeur décimale signée de la chaine
-*/
-int ImmediatStrToInteger(char *str);
-
 
 /*
 Description:
