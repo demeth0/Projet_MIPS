@@ -171,7 +171,16 @@ return:
 void param_to_tab(char tab[8][16],char *instruction);
 
 
-
+/*
+Description:
+	prend en parametre une chaine de caractère représentant une valeur immédiate
+	en hexadécimale ou décimale et la converit en un Integer
+parametre:
+	str - chaine de caractère finissant par \0
+return:
+	la valeur décimale signée de la chaine
+*/
+int ImmediatStrToInteger(char *str);
 
 
 /*

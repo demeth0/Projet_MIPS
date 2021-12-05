@@ -184,7 +184,41 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 }
 
 void writeInstructionOperands(Instruction *inst, char *isnt_str){
+	/*pasteValue(Instruction* instruction, int field,Byte* value,int dim) */
+	char operandes[8][16];
+	Byte imm[2];
+	Byte reg;
 
+	param_to_tab(operandes,isnt_str);
+	switch(inst->id){
+		case ADD_ID:
+			/*ADD rd(0), rs(1), rt(2)*/
+			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | ADD*/
+
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,1,&reg,1);
+						
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,2,&reg,1);
+
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,3,&reg,1);
+			break;
+
+		case ADDI_ID:
+			/*ADDI rt(0), rs(1), imm(2)*/
+			/*ADDI | rs(1) | rt(0) | imm(2)*/
+
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,1,&reg,1);
+						
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,2,&reg,1);
+
+			/* write imm */
+
+			break;
+	}
 }
 
 /*
@@ -451,13 +485,14 @@ void IntTo2ByteArray(int i,Byte *res){
 		weight = weight>>1;
 	}
 }
+
 void param_to_tab(char tab[8][16],char *instruction){
 	int index = 0;
 	int i =0;
 	int j=0;
 	int taille = strlen(instruction);
 	while(index < taille && instruction[index] != ','){
-	    index++;  //on skip l'instruction pour aller aux parametres
+	    index++;  /* on skip l'instruction pour aller aux parametres */
 	} 
 	index++;
 	while(index<taille){
@@ -493,3 +528,92 @@ Byte registerToByte(char *val){
     }
     return resultat;
 }
+
+/*
+Description:
+	convertis un entier signé dans une chaine de caractere en sa valeur décimale
+parametre:
+	str - la chaine de caractère finissant par \0
+return:
+	res - la valeur décimale signée
+*/
+int SignedStrIntegerToInt(char *str){
+	char *cp = str;
+	int res=0;
+	int sign=1;
+	if((*cp)=='-'){
+		sign=-1;
+		cp++;
+	}
+	while((*cp) != '\0'){
+		printf("%d\n", res);
+		res = res*10 + ((*cp)-'0');
+		cp++;
+	}
+
+	return sign*res;
+}
+
+/*
+Description:
+	convertit un entier hexadécimal en sa valeur décimale signée
+paramètre:
+	str - lower case string of the value
+return:
+	res - la valeur décimale signée de la chaine
+*/
+int HexStrIntegerToInt(char *str){
+	char *cp = str;
+	int res=0;
+	int buffer=0;
+	while((*cp) != '\0'){
+		switch((*cp)){
+			case 'a':
+				buffer=0xA;
+				break;
+			case 'b':
+				buffer=0xB;
+				break;
+			case 'c':
+				buffer=0xC;
+				break;
+			case 'd':
+				buffer=0xD;
+				break;
+			case 'e':
+				buffer=0xE;
+				break;
+			case 'f':
+				buffer=0xF;
+				break;
+			default:
+				buffer=(*cp)-'0';
+				break;
+		}
+		res = res<<4;
+		res += buffer;
+		
+		cp++;
+	}
+
+	return res;
+}
+
+/*
+Description:
+	prend en parametre une chaine de caractère représentant une valeur immédiate
+	en hexadécimale ou décimale et la converit en un Integer
+parametre:
+	str - chaine de caractère finissant par \0
+return:
+	la valeur décimale signée de la chaine
+*/
+int ImmediatStrToInteger(char *str){
+	int res;
+	if(str[0]=='0' && str[1]=='x'){
+		res=HexStrIntegerToInt(str+2);
+	}else{
+		res = SignedStrIntegerToInt(str);
+	}
+	return res;
+} 
