@@ -19,11 +19,12 @@ void readInstruction(FILE *f, char *result){
 	*/
 	while((!feof(f)) && (c != '\n') && (c != '#')){
 		c = fgetc(f);
-
-		/* met la valeur dans resultat */
-		*res_copy = c;
-		/* avance dans la chaine de caractère */
-		res_copy++;
+		if (c != '\n'){
+			/* met la valeur dans resultat */
+			*res_copy = c;
+			/* avance dans la chaine de caractère */
+			res_copy++;
+		}
 	}
 	*res_copy = '\0';
 
