@@ -10,9 +10,7 @@ all: $(OBJECTS)
 main.o: main.c 
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-
-
-test: test.o InstructionCompiler.o ManipulationsFichier.o
+test: test.o InstructionCompiler.o ManipulationsFichier.o ByteUtils.o
 	@$(CC) $^ -o $@ $(CFLAGS)
 
 test.o: test.c InstructionCompiler.h operation_code_defines.h ManipulationsFichier.h register_defines.h ByteUtils.h

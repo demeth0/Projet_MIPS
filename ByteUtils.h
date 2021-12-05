@@ -37,5 +37,15 @@ erreur:
 */
 void IntTo2ByteArray(int i,Byte *res);
 
+/*
+Description:
+	prend en parametre une chaine de caractère représentant une valeur immédiate
+	en hexadécimale ou décimale et la converit en un Integer
+parametre:
+	str - chaine de caractère finissant par \0
+return:
+	la valeur décimale signée de la chaine
+*/
+int ImmediatStrToInteger(char *str);
 
 #endif

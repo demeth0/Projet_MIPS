@@ -57,28 +57,6 @@ parametres:
 return:
 	void
 */
-void supprimerEspaces(char **line){
-	char *str;
-	int size=0;
-
-	/* décale le début de la chaine de caractère jusqu'au premier caractère non espace */
-	while((*(*line))==' '){
-		(*line)++;
-	}
-
-	/* récupere la chaine a partir du premier caractère */
-	str=(*line);
-	while(str[size] != '\0'){
-		size++;
-		/* calcul la taille */
-	}
-
-	/* prend le dernier caractère */
-	size--;
-
-	/*réduit la taille de la chaine tant que ce sont des espaces*/
-	while(size>0 && str[size]==' '){
-		str[size]='\0';
-		size--;
-	}
+void supprimerEspaces(char *line){
+	line[0]='z';
 }
