@@ -169,4 +169,18 @@ return:
 	void
 */
 void param_to_tab(char tab[8][16],char *instruction);
+
+
+
+
+
+/*
+Description:
+	transforme une chaine de caractere en binaire  -> "11" = 11
+parametre:
+	val - chai,e de caractere
+return:
+	Byte
+*/
+Byte registerToByte(char *val);
 #endif
