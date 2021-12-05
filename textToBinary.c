@@ -456,13 +456,13 @@ void param_to_tab(char tab[8][16],char *instruction){
 	int i =0;
 	int j=0;
 	int taille = strlen(instruction);
-	while(index < taille && instruction[index] != ' '){
+	while(index < taille && instruction[index] != ','){
 	    index++;  //on skip l'instruction pour aller aux parametres
 	} 
 	index++;
 	while(index<taille){
 		j=0;
-		while(index < taille && instruction[index] != ' '){
+		while(index < taille && instruction[index] != ','){
 			tab[i][j] = instruction[index];
 			j++;
 			index++;
