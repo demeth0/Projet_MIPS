@@ -196,13 +196,13 @@ void writeInstructionOperands(Instruction *inst, char *isnt_str){
 			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | ADD*/
 
 			reg = registerToByte(operandes[1]);
-			pasteValue(inst,1,&reg,1);
+			pasteValue(inst,/*flag*/1,&reg,1);
 						
 			reg = registerToByte(operandes[2]);
-			pasteValue(inst,2,&reg,1);
+			pasteValue(inst,/*flag*/2,&reg,1);
 
 			reg = registerToByte(operandes[0]);
-			pasteValue(inst,3,&reg,1);
+			pasteValue(inst,/*flag*/3,&reg,1);
 			break;
 
 		case ADDI_ID:
@@ -210,14 +210,62 @@ void writeInstructionOperands(Instruction *inst, char *isnt_str){
 			/*ADDI | rs(1) | rt(0) | imm(2)*/
 
 			reg = registerToByte(operandes[1]);
-			pasteValue(inst,1,&reg,1);
+			pasteValue(inst,/*flag*/1,&reg,1);
 						
 			reg = registerToByte(operandes[0]);
-			pasteValue(inst,2,&reg,1);
+			pasteValue(inst,/*flag*/2,&reg,1);
 
 			/* write imm */
-
+			IntTo2ByteArray(ImmediatStrToInteger(operandes[2]),imm);
+			pasteValue(inst,/*flag*/3,imm,2);
 			break;
+		case AND_ID:
+			/*AND rd(0), rs(1), rt(2)*/
+			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | AND*/
+
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+						
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+			break;
+
+		case BEQ_ID:
+			/*BEQ rs(0), rt(1), offset(2)*/
+			/*BEQ | rs(0) | rt(1) | offset(2)*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+						
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			IntTo2ByteArray(ImmediatStrToInteger(operandes[2]),imm);
+			pasteValue(inst,/*flag*/3,imm,2);
+			break;
+
+		case BGTZ_ID:
+			/*BGTZ rs(0), offset(1)*/
+			/*BGTZ | rs(0) | 0 | offset(1)*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,1,&reg,1);
+
+			IntTo2ByteArray(ImmediatStrToInteger(operandes[1]),imm);
+			pasteValue(inst,/*flag*/3,imm,2);
+			break;
+
+		case BLEZ_ID:
+			/*BGTZ rs(0), rt(1), offset(2)*/
+			/*BGTZ | rs(0) | 0 | offset(2)*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+
+			IntTo2ByteArray(ImmediatStrToInteger(operandes[1]),imm);
+			pasteValue(inst,/*flag*/3,imm,2);
+			break;
+
 	}
 }
 

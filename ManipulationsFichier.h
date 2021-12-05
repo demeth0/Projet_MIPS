@@ -33,6 +33,6 @@ parametres:
 return:
 	void
 */
-void supprimerEspaces(char **line);
+void supprimerEspaces(char *line);
 
 #endif
