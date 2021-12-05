@@ -154,4 +154,19 @@ erreur:
 */
 void IntTo2ByteArray(int i,Byte *res);
 
+
+
+
+void toLowerCase(char *text);
+
+/*
+Description:
+	place les arguments dans une matrice de caracteres
+parametre:
+	tab - tableu bidimensionnel de char
+	instruction - pointeur vers char
+return:
+	void
+*/
+void param_to_tab(char tab[8][16],char *instruction);
 #endif
