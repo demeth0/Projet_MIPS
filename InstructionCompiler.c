@@ -482,7 +482,7 @@ Byte registerToByte(char *val){
     Byte resultat =0;
     if (val[0] == '$')
     	index++;
-    /*tant qu'on à pas finit de lire le nombre*/
+    /*tant qu'on a pas finit de lire le nombre*/
     while(index<taille && val[index] != ')'){
     	/*on ajoute au résultat la valeur décimale correspondante au caractere fois la bonne dizaine*/
         resultat+=dizaine*(val[taille -1 -index]-48);
@@ -518,7 +518,7 @@ Byte indirectRegisterToByte(char *str, int *offset){
     while(pos<taille & str[pos] != '(')
     	pos++;
 
-    /*tant qu'on à pas finit de lire le nombre*/
+    /*tant qu'on a pas finit de lire l'offset*/
     while(index<pos){
   
         *offset+=dizaine*(str[pos -1 -index]-48);
@@ -527,6 +527,8 @@ Byte indirectRegisterToByte(char *str, int *offset){
         index++;
     }
     index++;
+
+    /*on se place au numéro de registre*/
     Byte *ptr = str + index;
 
     return (registerToByte(ptr));
