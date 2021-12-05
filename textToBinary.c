@@ -451,3 +451,29 @@ void IntTo2ByteArray(int i,Byte *res){
 		weight = weight>>1;
 	}
 }
+void param_to_tab(char tab[8][16],char *instruction){
+	int index = 0;
+	int i =0;
+	int j=0;
+	int taille = strlen(instruction);
+	while(index < taille && instruction[index] != ' '){
+	    index++;  //on skip l'instruction pour aller aux parametres
+	} 
+	index++;
+	while(index<taille){
+		j=0;
+		while(index < taille && instruction[index] != ' '){
+			tab[i][j] = instruction[index];
+			j++;
+			index++;
+		}
+		tab[i][j] ='\0';
+		if (instruction[index]==' ')
+			index++;
+		i++;
+	}
+	while(i<8){
+		tab[i][0]='\0';
+		i++;
+	}
+}
