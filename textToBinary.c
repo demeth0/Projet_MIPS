@@ -27,6 +27,27 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 			jr
 			sw
 		*/
+
+		if (!strcmp("or",opcode)){
+			setNormalOpCode(instruction, OR_CODE);
+			instruction->id = OR_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("lw",opcode)){
+			setNormalOpCode(instruction, LW_CODE);
+			instruction->id = LW_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("jr",opcode)){
+			setNormalOpCode(instruction, JR_CODE);
+			instruction->id = JR_ID;
+			setBlocksSize(instruction,6,5,10,5,6,0,0,0);
+		}
+		else if (!strcmp("sw",opcode)){
+			setNormalOpCode(instruction, SW_CODE);
+			instruction->id = SW_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
 	}else if(opcode[3]=='\0'){
 		/*
 		add
@@ -42,6 +63,72 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 		srl
 		sub
 		xor*/
+
+		if (!strcmp("add",opcode)){
+			setNormalOpCode(instruction, ADD_CODE);
+			instruction->id = ADD_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("and",opcode)){
+			setNormalOpCode(instruction, AND_CODE);
+			instruction->id = AND_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("beq",opcode)){
+			setNormalOpCode(instruction, BEQ_CODE);
+			instruction->id = BEQ_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("bne",opcode)){
+			setNormalOpCode(instruction, BNE_CODE);
+			instruction->id = BNE_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("div",opcode)){
+			setNormalOpCode(instruction, DIV_CODE);
+			instruction->id = DIV_ID;
+			setBlocksSize(instruction,6,5,5,10,6,0,0,0);
+		}
+		else if (!strcmp("jal",opcode)){
+			setNormalOpCode(instruction, JAL_CODE);
+			instruction->id = JAL_ID;
+			setBlocksSize(instruction,6,26,0,0,0,0,0,0);
+		}
+		else if (!strcmp("lui",opcode)){
+			setNormalOpCode(instruction, LUI_CODE);
+			instruction->id = LUI_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("nop",opcode)){
+			setNormalOpCode(instruction, NOP_CODE);
+			instruction->id = NOP_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("sll",opcode)){
+			setNormalOpCode(instruction, SLL_CODE);
+			instruction->id = SLL_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("slt",opcode)){
+			setNormalOpCode(instruction, SLT_CODE);
+			instruction->id = SLT_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("srl",opcode)){
+			setNormalOpCode(instruction, SRL_CODE);
+			instruction->id = SRL_ID;
+			setBlocksSize(instruction,6,4,1,5,5,5,6,0);
+		}
+		else if (!strcmp("sub",opcode)){
+			setNormalOpCode(instruction, SUB_CODE);
+			instruction->id = SUB_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
+		else if (!strcmp("xor",opcode)){
+			setNormalOpCode(instruction, XOR_CODE);
+			instruction->id = XOR_ID;
+			setBlocksSize(instruction,6,5,5,5,5,6,0,0);
+		}
 	}else if(opcode[4]=='\0'){
 		/*rotr
 		addi
@@ -50,8 +137,49 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 		mfhi
 		mflo
 		mult*/
+
+		if (!strcmp("rotr",opcode)){
+			setNormalOpCode(instruction, ROTR_CODE);
+			instruction->id = ROTR_ID;
+			setBlocksSize(instruction,6,4,1,5,5,5,6,0);
+		}
+		else if (!strcmp("addi",opcode)){
+			setNormalOpCode(instruction, ADDI_CODE);
+			instruction->id = ADDI_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("bgtz",opcode)){
+			setNormalOpCode(instruction, BGTZ_CODE);
+			instruction->id = BGTZ_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("blez",opcode)){
+			setNormalOpCode(instruction, BLEZ_CODE);
+			instruction->id = BLEZ_ID;
+			setBlocksSize(instruction,6,5,5,16,0,0,0,0);
+		}
+		else if (!strcmp("mfhi",opcode)){
+			setNormalOpCode(instruction, MFHI_CODE);
+			instruction->id = MFHI_ID;
+			setBlocksSize(instruction,6,10,5,5,6,0,0,0);
+		}
+		else if (!strcmp("mflo",opcode)){
+			setNormalOpCode(instruction, MFLO_CODE);
+			instruction->id = MFLO_ID;
+			setBlocksSize(instruction,6,10,5,5,6,0,0,0);
+		}
+		else if (!strcmp("mult",opcode)){
+			setNormalOpCode(instruction, MULT_CODE);
+			instruction->id = MULT_ID;
+			setBlocksSize(instruction,6,5,5,10,6,0,0,0);
+		}
 	}else{
 		/* syscall */
+		if (!strcmp("syscall",opcode)){
+			setNormalOpCode(instruction, SYSCALL_CODE);
+			instruction->id = SYSCALL_ID;
+			setBlocksSize(instruction,6,20,6,0,0,0,0,0);
+		}
 	}
 }
 
