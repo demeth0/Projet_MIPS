@@ -33,7 +33,7 @@ valeurs decimales des registres mappées a leurs noms
 #define S7 23
 
 #define T8 24
-#define T8 25
+#define T9 25
 
 #define K0 26
 #define K1 27

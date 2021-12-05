@@ -126,5 +126,16 @@ parametres:
 */
 void shiftR8Bit(Byte *values, int n, int size);
 
+/*
+Description:
+	transforme une chaine de caractères en lower case
+parametre:
+	text - chaine de caractère se finissant par \0
+return:
+	void
+erreur:
+	si la chaine n'est pas terminée par \0
+*/
+void toLowerCase(char *text);
 
 #endif

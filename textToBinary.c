@@ -233,6 +233,28 @@ void getOperationCodeText(char* textInstruction, char* res){
 		i++;
 	}
 	res[i]='\0';
+	toLowerCase(res); /* instruction en lower case */
+}
+
+/*
+Description:
+	transforme une chaine de caractères en lower case
+parametre:
+	text - chaine de caractère se finissant par \0
+return:
+	void
+erreur:
+	si la chaine n'est pas terminée par \0
+*/
+void toLowerCase(char *text){
+	char *cp = text;
+	while((*cp)!='\0'){
+		if((*cp)>= 'A' && (*cp)<='Z'){
+			(*cp)=(*cp)+32;
+		}
+
+		cp++;
+	}
 }
 
 
