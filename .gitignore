@@ -3,3 +3,4 @@ tests/
 *.o
 test.exe
 main.exe
+test.c

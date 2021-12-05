@@ -1,5 +1,5 @@
-#ifndef TEXT_TO_BINARY
-#define TEXT_TO_BINARY
+#ifndef INSTRUCTION_COMPILER_MIPS
+#define INSTRUCTION_COMPILER_MIPS
 
 #include <stdio.h>
 #include <stdlib.h>

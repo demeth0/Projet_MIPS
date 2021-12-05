@@ -2,7 +2,7 @@
 #define MANIPULATION_FICHIER_LIB
 
 #include <stdio.h>
-#include "textToBinary.h"
+#include "InstructionCompiler.h"
 
 /*
 Description: 
@@ -33,6 +33,6 @@ parametres:
 return:
 	void
 */
-void supprimerEspaces(char **line, int size);
+void supprimerEspaces(char **line);
 
 #endif

@@ -1,4 +1,4 @@
-#include "textToBinary.h"
+#include "InstructionCompiler.h"
 
 
 /*
