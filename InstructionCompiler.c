@@ -422,7 +422,7 @@ void param_to_tab(char tab[8][16],char *instruction){
 Description:
 	transforme une chaine de caractere en binaire  -> "11" = 11
 parametre:
-	val - chai,e de caractere
+	val - chaine de caractere
 return:
 	Byte
 */
@@ -435,7 +435,7 @@ Byte registerToByte(char *val){
     if (val[0] == '$')
     	index++;
     /*tant qu'on à pas finit de lire le nombre*/
-    while(index<taille){
+    while(index<taille && val[index] != ')'){
     	/*on ajoute au résultat la valeur décimale correspondante au caractere fois la bonne dizaine*/
         resultat+=dizaine*(val[taille -1 -index]-48);
 
@@ -443,4 +443,43 @@ Byte registerToByte(char *val){
         index++;
     }
     return resultat;
+}
+
+
+
+/*
+Description:
+  retourne la valeur du registre et met dans offset la valeur de l'offset.
+  example si on a "200($1)" => offset=200 et return = 1
+parametre:
+	str - chaine de caractere
+	offset - chaine de caractere
+return:
+	Byte
+*/
+Byte indirectRegisterToByte(char *str, int *offset){
+	/*on recupère l'offset*/
+	int taille =strlen(str);
+	int pos =0;
+
+
+    int dizaine = 1;
+    int index =0;
+    *offset = 0;
+
+    while(pos<taille & str[pos] != '(')
+    	pos++;
+
+    /*tant qu'on à pas finit de lire le nombre*/
+    while(index<pos){
+  
+        *offset+=dizaine*(str[pos -1 -index]-48);
+
+        dizaine *=10;
+        index++;
+    }
+    index++;
+    Byte *ptr = str + index;
+
+    return (registerToByte(ptr));
 }

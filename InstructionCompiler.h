@@ -120,4 +120,17 @@ return:
 	Byte
 */
 Byte registerToByte(char *val);
+
+
+/*
+Description:
+  retourne la valeur du registre et met dans offset la valeur de l'offset.
+  example si on a "200($1)" => offset=200 et return = 1
+parametre:
+	str - chaine de caractere
+	offset - chaine de caractere
+return:
+	Byte
+*/
+Byte indirectRegisterToByte(char *str, int *offset);
 #endif
