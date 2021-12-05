@@ -419,3 +419,31 @@ void shiftR8Bit(Byte *values, int n, int size){
 		values[i-1]=values[i-1]>>n;
 	}
 }
+
+/*
+Description:
+	convertis un entier dans un integer en un entier encoder sur un tableu de Byte de taille 2
+parametre:
+	res - tableu de Byte de taille nécéssairement 2
+	i - entier sur integer
+return:
+	void
+erreur:
+	si res ne fait pas une taille de 2 
+*/
+void IntTo2ByteArray(int i,Byte *res){
+	int cp = i;
+	int weight = 0x8000;
+
+	while(weight > 0){
+		shiftLNBit(res, 1, 2); /*décale vers la gauche le resultat car on ajoute le nouveau bit de poid faible*/
+		/*printf("weight: %d, cp: %d\n",weight,cp);*/
+		/* alors le bi est a 1 sinon 0*/
+		if(cp-weight >=0){
+			cp=cp-weight;
+			res[1]++;
+		}
+		
+		weight = weight>>1;
+	}
+}

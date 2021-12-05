@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "operation_code_defines.h"
 
 typedef unsigned char Byte;
@@ -137,5 +138,18 @@ erreur:
 	si la chaine n'est pas terminée par \0
 */
 void toLowerCase(char *text);
+
+/*
+Description:
+	convertis un entier dans un integer en un entier encoder sur un tableu de Byte de taille 2
+parametre:
+	res - tableu de Byte de taille nécéssairement 2
+	i - entier sur integer
+return:
+	void
+erreur:
+	si res ne fait pas une taille de 2 
+*/
+void IntTo2ByteArray(int i,Byte *res);
 
 #endif
