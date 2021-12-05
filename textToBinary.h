@@ -56,6 +56,8 @@ erreur:
 */
 void getOperationCodeText(char* textInstruction, char* res);
 
+void writeInstructionOperands(Instruction *inst, char *isnt_str);
+
 /*
 Description:
 	remplie les paramètres block de l'instruction

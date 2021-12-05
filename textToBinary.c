@@ -183,6 +183,10 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	}
 }
 
+void writeInstructionOperands(Instruction *inst, char *isnt_str){
+
+}
+
 /*
 Description:
 	met les 6 premiers bits de l'instruction avec opCode en conservant les valeurs d'origine pour le reste
