@@ -15,7 +15,8 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 			j -> 6 premiers bits a 000010
 			donc code[0] = 000010xx
 		*/
-		instruction->code[0] = (instruction->code[0]&0x03) + (J_CODE<<2);
+		/*instruction->code[0] = (instruction->code[0]&0x03) + (J_CODE<<2);*/
+		setNormalOpCode(instruction, J_CODE);
 		instruction->id = J_ID;
 
 		setBlocksSize(instruction,6,26,0,0,0,0,0,0);
