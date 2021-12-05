@@ -379,40 +379,61 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 		instruction->code[i] += mask1[i] &mask2[i]&val[i];
 	}
 }
-
+/*
+Description:
+	place les arguments dans une matrice de caracteres
+parametre:
+	tab - tableu bidimensionnel de char
+	instruction - pointeur vers char
+return:
+	void
+*/
 void param_to_tab(char tab[8][16],char *instruction){
 	int index = 0;
 	int i =0;
 	int j=0;
 	int taille = strlen(instruction);
 	while(index < taille && instruction[index] != ','){
-	    index++;  /* on skip l'instruction pour aller aux parametres */
+	    index++;  /* on passe l'instruction pour aller aux parametres */
 	} 
 	index++;
-	while(index<taille){
+	/*tant qu'on est pas à la fin de l'instruction alors il reste des paramètres*/
+	while(index<taille){  
 		j=0;
-		while(index < taille && instruction[index] != ','){
+		/*on récupère le paramètre jusqu'au prochain ','*/
+		while(index < taille && instruction[index] != ','){   
 			tab[i][j] = instruction[index];
 			j++;
 			index++;
 		}
 		tab[i][j] ='\0';
-		if (instruction[index]==' ')
+		/*on saute la virgule*/
+		if (instruction[index]==',')
 			index++;
 		i++;
 	}
+	/*on definit le reste des lignes avec une simple '\0' */
 	while(i<8){
 		tab[i][0]='\0';
 		i++;
 	}
 }
-
+/*
+Description:
+	transforme une chaine de caractere en binaire  -> "11" = 11
+parametre:
+	val - chai,e de caractere
+return:
+	Byte
+*/
 Byte registerToByte(char *val){
 	int taille =strlen(val);
     int dizaine = 1;
     int index =0;
     Byte resultat =0;
+    /*tant qu'on à pas finit de lire le nombre*/
     while(index<taille){
+    	/*on ajoute au résultat la valeur décimale correspondante au caractere fois la bonne dizaine*/
         resultat+=dizaine*(val[taille -1 -index]-48);
 
         dizaine *=10;
