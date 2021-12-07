@@ -154,4 +154,14 @@ return:
 	void
 */
 void format_instr(char *instr);
+
+/*
+Description:
+	initialise instruction
+parametre:
+	instruction a initialiser
+return:
+	void
+*/
+void initInst(Instruction *inst);
 #endif

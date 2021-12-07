@@ -573,3 +573,29 @@ Byte indirectRegisterToByte(char *str, int *offset){
 
     return (registerToByte(ptr));
 }
+
+/*
+Description:
+	initialise instruction
+parametre:
+	instruction a initialiser
+return:
+	void
+*/
+void initInst(Instruction *inst){
+	inst->code[0]=0;
+	inst->code[1]=0;
+	inst->code[2]=0;
+	inst->code[3]=0; 
+
+	inst->b[0]=0;
+	inst->b[1]=0;
+	inst->b[2]=0;
+	inst->b[3]=0; 
+	inst->b[4]=0;
+	inst->b[5]=0;
+	inst->b[6]=0;
+	inst->b[7]=0;
+
+	inst->id = 0xFF;
+}
