@@ -194,17 +194,19 @@ void writeInstructionOperands(Instruction *inst, char *isnt_str){
 		case ADD_ID:
 			/*ADD rd(0), rs(1), rt(2)*/
 			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | ADD*/
-
+			printf("debug: %s %s %s\n", operandes[0],operandes[1],operandes[2]);
 			reg = registerToByte(operandes[1]);
+			printf("rs: %s %d\n", operandes[1],reg);
 			pasteValue(inst,/*flag*/1,&reg,1);
 						
 			reg = registerToByte(operandes[2]);
+			printf("rt: %s %d\n", operandes[2],reg);
 			pasteValue(inst,/*flag*/2,&reg,1);
 
 			reg = registerToByte(operandes[0]);
+			printf("rd: %s %d\n", operandes[0],reg);
 			pasteValue(inst,/*flag*/3,&reg,1);
 			break;
-
 		case ADDI_ID:
 			/*ADDI rt(0), rs(1), imm(2)*/
 			/*ADDI | rs(1) | rt(0) | imm(2)*/
@@ -501,6 +503,7 @@ void format_instr(char *instr,char *cast){
 	}
 	cast[i] = '\0';
 }
+
 /*
 Description:
 	transforme une chaine de caractere en binaire  -> "11" = 11
@@ -509,21 +512,16 @@ parametre:
 return:
 	Byte
 */
-unsigned char registerToByte(char *val){
-
-	int taille =strlen(val);
-    int dizaine = 1;
-    int index =0;
-    unsigned char resultat =0;
-    if (val[0] == '$')
-    	index++;
+Byte registerToByte(char *val){
+	char *cp = val;
+    Byte resultat = 0;
+    if ((*cp) == '$')
+    	cp++;
     /*tant qu'on a pas finit de lire le nombre*/
-    while(index<taille && val[index] != ')'){
+    while((*cp)!='\0' && (*cp) != ')'){
     	/*on ajoute au résultat la valeur décimale correspondante au caractere fois la bonne dizaine*/
-        resultat+=dizaine*(val[taille -1 -index]-48);
-
-        dizaine *=10;
-        index++;
+        resultat=resultat * 10 + (*cp)-'0';
+        cp++;
     }
     return resultat;
 }
