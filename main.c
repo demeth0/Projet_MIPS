@@ -21,15 +21,52 @@ void printInst(char *str_inst,Instruction inst){
 
 int main(int argc, char const *argv[])
 {
-	char str_inst[] = "ADD $1,$2,$3";
-	Instruction inst;
 
-	format_instr(str_inst);
-	initInst(&inst);
 
-	textInstructionToOpcode(str_inst, &inst);
-	writeInstructionOperands(&inst, str_inst);
-	printInst(str_inst,inst);
+	int seq=0;
+	FILE *fichier=NULL;
 
+	int parseur = 1;
+	char line[128];
+	Instruction instr;
+	fichier_sortie = fopen("output.txt","w+");
+	if(fichier_sortie!= NULL){
+		while(parseur< argc){
+			if(!strcmp("-pas",argv[parseur]))
+				seq=1;
+			else{
+				fichier = fopen(argv[parseur],"r");
+				if (fichier ==NULL){
+					printf("erreur: fichier non valide")
+					exit(EXIT_FAILURE);
+				}
+			}
+			parseur++;
+		}
+
+		printf("%d\n",seq);
+		if (fichier == NULL)
+			printf("null");
+		else 
+			printf("non null\n");
+
+
+
+		if(seq && fichier !=NULL){
+			while(!feof(fichier)){
+				readInstruction(fichier,line);
+				format_instr(line);
+				initInst(&instr);
+				textInstructionToOpcode(line,instr);
+				writeHexInstructionToFile(fichier_sortie,instr);
+
+				writeInstructionOperands(&instr, line);
+				printInst(line,instr);
+			}
+		}
+
+		fclose(fichier);
+		fclose(fichier_sortie);
+	}
 	return 0;
 }
