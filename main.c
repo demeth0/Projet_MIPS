@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "InstructionCompiler.h"
+#include "ManipulationsFichier.h"
 
 void printInst(char *str_inst,Instruction inst){
 	printf("Instruction : \n\t\"%s\"\n\tID: %d\n\tHex: %02x%02x %02x%02x\n\tBlocks size: %d %d %d %d %d %d %d %d\n", 
@@ -29,7 +30,7 @@ int main(int argc, char const *argv[])
 	int parseur = 1;
 	char line[128];
 	Instruction instr;
-	fichier_sortie = fopen("output.txt","w+");
+	FILE *fichier_sortie = fopen("output.txt","w+");
 	if(fichier_sortie!= NULL){
 		while(parseur< argc){
 			if(!strcmp("-pas",argv[parseur]))
@@ -37,7 +38,7 @@ int main(int argc, char const *argv[])
 			else{
 				fichier = fopen(argv[parseur],"r");
 				if (fichier ==NULL){
-					printf("erreur: fichier non valide")
+					printf("erreur: fichier non valide");
 					exit(EXIT_FAILURE);
 				}
 			}
@@ -52,16 +53,18 @@ int main(int argc, char const *argv[])
 
 
 
-		if(seq && fichier !=NULL){
+		if(fichier !=NULL){
 			while(!feof(fichier)){
 				readInstruction(fichier,line);
 				format_instr(line);
 				initInst(&instr);
-				textInstructionToOpcode(line,instr);
-				writeHexInstructionToFile(fichier_sortie,instr);
+				textInstructionToOpcode(line,&instr);
 
 				writeInstructionOperands(&instr, line);
+				writeHexInstructionToFile(fichier_sortie,instr);
 				printInst(line,instr);
+				if(seq)
+					
 			}
 		}
 
