@@ -188,6 +188,7 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 	char operandes[8][16];
 	Byte imm[2];
 	Byte reg;
+	int int_immediat;
 
 	param_to_tab(operandes,inst_str);
 	switch(inst->id){
@@ -300,7 +301,10 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 			break;
 
 		case JR_ID:
-			printf("Instruction JR a implementer\n");
+			/* JR rs */
+			/*SPECIAL | rs | 0 | hint | JR*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/1,&reg,1);
 			break;
 
 		case LUI_ID:
@@ -313,7 +317,16 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 			pasteValue(inst,/*flag*/3,imm,2);
 			break;
 		case LW_ID:
-			printf("LW a implementer\n");
+			/*LW rt(0), offset(base)(1)*/
+			/*LW | base | rt | offset*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = indirectRegisterToByte(operandes[1],&int_immediat);
+			pasteValue(inst,/*flag*/1,&reg,1);
+
+			IntTo2ByteArray(int_immediat,imm);
+			pasteValue(inst,/*flag*/3,imm,2);
 			break;
 
 		case MFHI_ID:
@@ -426,12 +439,20 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 			break;
 
 		case SW_ID:
-			/*SW rt, offset(base)*/
-			printf("SW a implémenter");
+			/*SW rt(0), offset(base)(1)*/
+			/*SW | base | rt | offset*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = indirectRegisterToByte(operandes[1],&int_immediat);
+			pasteValue(inst,/*flag*/1,&reg,1);
+
+			IntTo2ByteArray(int_immediat,imm);
+			pasteValue(inst,/*flag*/3,imm,2);
 			break;
 
 		case SYSCALL_ID:
-			printf("SYSCALL a implementer\n");
+			/*code sur 20 bit pas de valeur donnée*/
 			break;
 
 		case XOR_ID:
