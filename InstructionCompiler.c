@@ -268,6 +268,185 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 			pasteValue(inst,/*flag*/3,imm,2);
 			break;
 
+		case BNE_ID:
+			/* BNE rs(0) ,rt(1) ,offset(2) */
+			/*BNE | rs(0) | rt(1) | offset(2)*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			IntTo2ByteArray(ImmediatStrToInteger(operandes[2]),imm);
+			pasteValue(inst,/*flag*/3,imm,2);
+			break;
+
+		case DIV_ID:
+			/*DIV rs(0),rt(1)*/
+			/*SPECIAL | rs(0) | rt(1) | 0 | DIV*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+			break;
+
+		case J_ID:
+			printf("Instruction J a implementer\n");
+			break;
+
+		case JAL_ID:
+			printf("Instruction JAL a implementer\n");
+			break;
+
+		case JR_ID:
+			printf("Instruction JR a implementer\n");
+			break;
+
+		case LUI_ID:
+			/*LUI rt, imm*/
+			/*LUI | 0 | rt(0) | imm(1)*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			IntTo2ByteArray(ImmediatStrToInteger(operandes[1]),imm);
+			pasteValue(inst,/*flag*/3,imm,2);
+			break;
+		case LW_ID:
+			printf("LW a implementer\n");
+			break;
+
+		case MFHI_ID:
+			/*MFHI rd(0)*/
+			/*SPECIAL | 0 | rd | 0 | MFHI*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+			break;
+
+		case MFLO_ID:
+			/*MFLO rd(0)*/
+			/*SPECIAL | 0 | rd(0) | 0 | MFLO*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+			break;
+
+		case MULT_ID:
+			/*MULT rs(0),rt(1)*/
+			/*SPECIAL | rs(0) | rt(1) | 0 | MULT*/
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/2,&reg,1);			
+			break;
+
+		case NOP_ID:
+			/*Do nothing*/
+			break;
+
+		case OR_ID:
+			/*OR rd(0),rs(1),rt(2)*/
+			/*SPECIAL | rs(1) | rt (2) | rd(0) | OR*/
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+						
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+			break;
+
+		case ROTR_ID:
+			/*ROTR rd(0),rt(1),sa(2)*/
+			/*SPECIAL | 0 | R | rt(1) | rd(0) | sa(2) | ROTR*/
+			reg = 1;
+			pasteValue(inst,/*flag*/2,&reg,1);
+			
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+						
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/4,&reg,1);
+
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/5,&reg,1);
+			break;
+
+		case SLL_ID:
+			/*SLL rd(0),rt(1),sa(2)*/
+			/*SPECIAL | 0 | rt(1) | rd(0) | sa(2) | SLL*/
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+						
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/4,&reg,1);
+			break;
+
+		case SLT_ID:
+			/*SLT rd(0),rs(1),rt(2)*/
+			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | SLT*/
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+						
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+			break;
+
+		case SRL_ID:
+			/*SRL rd(0),rt(1),sa(2)*/
+			/*SPECIAL | 0 | R | rt(1) | rd(0) | sa(2) | SRL*/
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+						
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/4,&reg,1);
+
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/5,&reg,1);
+			break;
+
+		case SUB_ID:
+			/*SUB rd(0),rs(1),rt(2)*/
+			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | SUB*/
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+						
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+			break;
+
+		case SW_ID:
+			/*SW rt, offset(base)*/
+			printf("SW a implémenter");
+			break;
+
+		case SYSCALL_ID:
+			printf("SYSCALL a implementer\n");
+			break;
+
+		case XOR_ID:
+			/*XOR rd(0),rs(1),rt(2)*/
+			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | XOR*/
+			reg = registerToByte(operandes[1]);
+			pasteValue(inst,/*flag*/1,&reg,1);
+						
+			reg = registerToByte(operandes[2]);
+			pasteValue(inst,/*flag*/2,&reg,1);
+
+			reg = registerToByte(operandes[0]);
+			pasteValue(inst,/*flag*/3,&reg,1);
+			break;
+
 	}
 }
 
