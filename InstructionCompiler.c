@@ -183,13 +183,13 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	}
 }
 
-void writeInstructionOperands(Instruction *inst, char *isnt_str){
+void writeInstructionOperands(Instruction *inst, char *inst_str){
 	/*pasteValue(Instruction* instruction, int field,Byte* value,int dim) */
 	char operandes[8][16];
 	Byte imm[2];
 	Byte reg;
 
-	param_to_tab(operandes,isnt_str);
+	param_to_tab(operandes,inst_str);
 	switch(inst->id){
 		case ADD_ID:
 			/*ADD rd(0), rs(1), rt(2)*/
@@ -409,7 +409,6 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 
 	/* met value dans val (taille value =< 4) */
 	for(i=0;i<dim;i++){
-		printf("%02x\n", value[i]);
 		/* on doit écrire a la fin car les shift sont appliqués dans le sens 
 		inverse aux indices des tableaux */
 		val[i+(4-dim)]=value[i];
