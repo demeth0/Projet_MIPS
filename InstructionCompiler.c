@@ -442,6 +442,9 @@ void param_to_tab(char tab[8][16],char *instruction){
 	int i =0;
 	int j=0;
 	int taille = strlen(instruction);
+	while(instruction[index] != ' ')
+		index++;
+	index++;
 	/*tant qu'on est pas à la fin de l'instruction alors il reste des paramètres*/
 	while(index<taille){  
 		j=0;

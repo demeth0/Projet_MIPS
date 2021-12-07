@@ -24,15 +24,6 @@ parametres:
 */
 void writeHexInstructionToFile(FILE *f, Instruction inst);
 
-/*
-Description:
-	Supprime les espaces au début et a la fin de la ligne
-parametres:
-	line - chaine de caractères
-	size - taille chaine de caractère
-return:
-	void
-*/
-void supprimerEspaces(char *line);
+
 
 #endif
