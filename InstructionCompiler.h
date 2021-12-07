@@ -144,11 +144,11 @@ parametre:
 return:
 	void
 */
-void del_espace(char *instr,char *cast);
+void del_espace(char *instr);
 
 /*
 Description:
-  enleve les especes l'operation et les espaces dans  "    ADD $1, $2, $3   " -> "$1,$2,$3"
+  enleve les especes l'operation et les espaces dans  "    ADD $1, $2, $3   " -> "ADD $1,$2,$3"
   le résultat est placé dans cast
 parametre:
 	instr - chaine de caractere
@@ -156,5 +156,5 @@ parametre:
 return:
 	void
 */
-void format_instr(char *instr,char *cast);
+void format_instr(char *instr);
 #endif

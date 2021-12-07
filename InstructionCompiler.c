@@ -466,7 +466,7 @@ void param_to_tab(char tab[8][16],char *instruction){
 }
 
 
-void del_espace(char *instr,char *cast){
+void del_espace(char *instr){
 	int index =0;
 	int taille = strlen(instr);
 	int i =0;
@@ -478,30 +478,34 @@ void del_espace(char *instr,char *cast){
 		taille--;
 
 	while(index<taille){
-		cast[i] = instr[index];
+		instr[i] = instr[index];
 		i++;
 		index++;
 	}
-	cast[i] = '\0';
+	instr[i] = '\0';
 }
 
-void format_instr(char *instr,char *cast){
+void format_instr(char *instr){
 	int index =0;
 	int taille = strlen(instr);
 	int i =0;
-	del_espace(instr,cast);
-	strcpy(instr,cast);
-	while(instr[index]!=' ')
+	del_espace(instr);
+	while(instr[index]!=' '){
+		instr[i]=instr[index];
 		index++;
+		i++;
+	}
+	instr[i] = ' ';
+	i++;
 	index++; /*on skip l'operation*/
 	while(index<taille){
 		if (instr[index]!= ' '){
-			cast[i] = instr[index];
+			instr[i] = instr[index];
 			i++;
 		}
 		index++;
 	}
-	cast[i] = '\0';
+	instr[i] = '\0';
 }
 
 /*
@@ -538,7 +542,7 @@ parametre:
 return:
 	Byte
 */
-unsigned char indirectRegisterToByte(char *str, int *offset){
+Byte indirectRegisterToByte(char *str, int *offset){
 	/*on recupère l'offset*/
 	int taille =strlen(str);
 	int pos =0;
