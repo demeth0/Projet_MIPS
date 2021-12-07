@@ -26,6 +26,7 @@ int main(int argc, char const *argv[])
 
 	int seq=0;
 	FILE *fichier=NULL;
+	char dmp;
 
 	int parseur = 1;
 	char line[128];
@@ -47,13 +48,13 @@ int main(int argc, char const *argv[])
 
 		printf("%d\n",seq);
 		if (fichier == NULL)
-			printf("null");
+			printf("null\n");
 		else 
 			printf("non null\n");
 
 
 
-		if(fichier !=NULL){
+		if(fichier !=NULL){ /*mode fichier activé*/
 			while(!feof(fichier)){
 				readInstruction(fichier,line);
 				format_instr(line);
@@ -63,12 +64,29 @@ int main(int argc, char const *argv[])
 				writeInstructionOperands(&instr, line);
 				writeHexInstructionToFile(fichier_sortie,instr);
 				printInst(line,instr);
+				if(seq){
+					printf("next>");
+					scanf("n%1c\n",&dmp);
+				}
+			}
+			printf("\n");
+			fclose(fichier);
+		}
+		else{/*mode sequentiel à la main activé*/
+			while(strcmp("end",line)){ /*tant que line != "end"*/
+				printf("instruction>");
+				fgets(line,128,stdin);
+				format_instr(line);
+				initInst(&instr);
+				textInstructionToOpcode(line,&instr);
 
-
+				writeInstructionOperands(&instr, line);
+				writeHexInstructionToFile(fichier_sortie,instr);
+				printInst(line,instr);
 			}
 		}
 
-		fclose(fichier);
+		
 		fclose(fichier_sortie);
 	}
 	return 0;

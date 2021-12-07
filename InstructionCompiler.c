@@ -664,6 +664,7 @@ void del_espace(char *instr){
 		index++;
 	}
 	instr[i] = '\0';
+
 }
 
 void format_instr(char *instr){
