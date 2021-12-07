@@ -63,8 +63,8 @@ int main(int argc, char const *argv[])
 				writeInstructionOperands(&instr, line);
 				writeHexInstructionToFile(fichier_sortie,instr);
 				printInst(line,instr);
-				if(seq)
-					
+
+
 			}
 		}
 
