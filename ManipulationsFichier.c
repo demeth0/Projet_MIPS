@@ -13,13 +13,16 @@ return:
 void readInstruction(FILE *f, char *result){
 	char c = 'a';
 	char *res_copy = result;
-
+	int loop=1;
 	/*
 	lis les caractères uns a uns et s'arrete si il trouve un retours a la ligne ou un début de commentaire
 	*/
-	while((!feof(f)) && (c != '\n') && (c != '#')){
+	while(loop){
 		c = fgetc(f);
-		if (c != '\n'){
+
+		loop=(!feof(f)) && (c != '\n') && c != '#';
+
+		if (loop){
 			/* met la valeur dans resultat */
 			*res_copy = c;
 			/* avance dans la chaine de caractère */
