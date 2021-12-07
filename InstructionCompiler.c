@@ -441,10 +441,6 @@ void param_to_tab(char tab[8][16],char *instruction){
 	int i =0;
 	int j=0;
 	int taille = strlen(instruction);
-	while(index < taille && instruction[index] != ','){
-	    index++;  /* on passe l'instruction pour aller aux parametres */
-	} 
-	index++;
 	/*tant qu'on est pas à la fin de l'instruction alors il reste des paramètres*/
 	while(index<taille){  
 		j=0;
@@ -466,6 +462,45 @@ void param_to_tab(char tab[8][16],char *instruction){
 		i++;
 	}
 }
+
+
+void del_espace(char *instr,char *cast){
+	int index =0;
+	int taille = strlen(instr);
+	int i =0;
+
+	while(instr[index] == ' ')
+		index++;
+
+	while(instr[taille-1] ==' ')
+		taille--;
+
+	while(index<taille){
+		cast[i] = instr[index];
+		i++;
+		index++;
+	}
+	cast[i] = '\0';
+}
+
+void format_instr(char *instr,char *cast){
+	int index =0;
+	int taille = strlen(instr);
+	int i =0;
+	del_espace(instr,cast);
+	strcpy(instr,cast);
+	while(instr[index]!=' ')
+		index++;
+	index++; /*on skip l'operation*/
+	while(index<taille){
+		if (instr[index]!= ' '){
+			cast[i] = instr[index];
+			i++;
+		}
+		index++;
+	}
+	cast[i] = '\0';
+}
 /*
 Description:
 	transforme une chaine de caractere en binaire  -> "11" = 11
@@ -474,12 +509,12 @@ parametre:
 return:
 	Byte
 */
-Byte registerToByte(char *val){
+unsigned char registerToByte(char *val){
 
 	int taille =strlen(val);
     int dizaine = 1;
     int index =0;
-    Byte resultat =0;
+    unsigned char resultat =0;
     if (val[0] == '$')
     	index++;
     /*tant qu'on a pas finit de lire le nombre*/
@@ -505,7 +540,7 @@ parametre:
 return:
 	Byte
 */
-Byte indirectRegisterToByte(char *str, int *offset){
+unsigned char indirectRegisterToByte(char *str, int *offset){
 	/*on recupère l'offset*/
 	int taille =strlen(str);
 	int pos =0;
@@ -513,9 +548,10 @@ Byte indirectRegisterToByte(char *str, int *offset){
 
     int dizaine = 1;
     int index =0;
+    char *ptr;
     *offset = 0;
 
-    while(pos<taille & str[pos] != '(')
+    while(pos<taille && str[pos] != '(')
     	pos++;
 
     /*tant qu'on a pas finit de lire l'offset*/
@@ -529,7 +565,7 @@ Byte indirectRegisterToByte(char *str, int *offset){
     index++;
 
     /*on se place au numéro de registre*/
-    Byte *ptr = str + index;
+    ptr = str + index;
 
     return (registerToByte(ptr));
 }

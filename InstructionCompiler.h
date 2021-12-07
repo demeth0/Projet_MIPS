@@ -133,4 +133,28 @@ return:
 	Byte
 */
 Byte indirectRegisterToByte(char *str, int *offset);
+
+/*
+Description:
+  enleve les especes de debut de de fin d'une chaine de caractere "    ADD $1, $2, $3   " -> "ADD $1, $2, $3"
+  le résultat est placé dans cast
+parametre:
+	instr - chaine de caractere
+	cast - chaine de caractere
+return:
+	void
+*/
+void del_espace(char *instr,char *cast);
+
+/*
+Description:
+  enleve les especes l'operation et les espaces dans  "    ADD $1, $2, $3   " -> "$1,$2,$3"
+  le résultat est placé dans cast
+parametre:
+	instr - chaine de caractere
+	cast - chaine de caractere
+return:
+	void
+*/
+void format_instr(char *instr,char *cast);
 #endif
