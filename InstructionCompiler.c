@@ -9,7 +9,7 @@ On suppose :
 void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	char opcode[8];
 	getOperationCodeText(textInstruction,opcode);
-
+	instruction->id = UNKNOWN_ID;
 	if(opcode[1]=='\0' && opcode[0]=='j'){
 		/* alors forcément instruction 'j' 
 			j -> 6 premiers bits a 000010
@@ -521,7 +521,7 @@ void getOperationCodeText(char* textInstruction, char* res){
 		i++;
 	}
 	res[i]='\0';
-	toLowerCase(res); /* instruction en lower case */
+	
 }
 
 /*
@@ -709,6 +709,7 @@ void format_instr(char *instr){
 		index++;
 	}
 	instr[i] = '\0';
+	toLowerCase(instr);
 }
 
 /*
