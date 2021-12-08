@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -pedantic -ansi -Wall
-OBJECTS = main.o InstructionCompiler.o ManipulationsFichier.o ByteUtils.o
+OBJECTS = main.o InstructionCompiler.o ManipulationsFichier.o ByteUtils.o LabelLib.o
 BIN = main
 RM = rm -f
 
@@ -8,12 +8,6 @@ all: $(OBJECTS)
 	@$(CC) $(OBJECTS) -o $(BIN) $(CFLAGS)
 
 main.o: main.c 
-	@$(CC) -c $< -o $@ $(CFLAGS)
-
-test: test.o InstructionCompiler.o ManipulationsFichier.o ByteUtils.o
-	@$(CC) $^ -o $@ $(CFLAGS)
-
-test.o: test.c InstructionCompiler.h operation_code_defines.h ManipulationsFichier.h register_defines.h ByteUtils.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
 InstructionCompiler.o: InstructionCompiler.c InstructionCompiler.h operation_code_defines.h ByteUtils.h
@@ -25,5 +19,16 @@ ManipulationsFichier.o: ManipulationsFichier.c ManipulationsFichier.h Instructio
 ByteUtils.o: ByteUtils.c ByteUtils.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
+LabelLib.o: LabelLib.c LabelLib.h
+	@$(CC) -c $< -o $@ $(CFLAGS)
 clean:
-	@$(RM) $(OBJECTS) $(BIN)
+	@$(RM) *.o $(BIN)
+
+
+
+
+
+test: test.o InstructionCompiler.o ManipulationsFichier.o ByteUtils.o LabelLib.o
+	@$(CC) $^ -o $@ $(CFLAGS)
+test.o: test.c InstructionCompiler.h operation_code_defines.h ManipulationsFichier.h register_defines.h ByteUtils.h
+	@$(CC) -c $< -o $@ $(CFLAGS)

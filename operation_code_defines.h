@@ -109,4 +109,6 @@
 /*100110*/
 #define XOR_ID   25
 #define XOR_CODE 0x26
+
+#define UNKNOWN_ID 0xFF
 #endif
