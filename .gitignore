@@ -2,6 +2,6 @@ Projet_MIPS/
 tests/
 *.o
 main.exe
-test.*
+test*
 main
 output.txt
