@@ -20,7 +20,7 @@ void readInstruction(FILE *f, char *result){
 	while(loop){
 		c = fgetc(f);
 
-		loop=(!feof(f)) && (c != '\n') && c != '#';
+		loop=(!feof(f)) && (c != '\n') && (c != '#');
 
 		if (loop){
 			/* met la valeur dans resultat */
