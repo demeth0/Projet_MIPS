@@ -20,16 +20,31 @@ void printInst(char *str_inst,Instruction *inst){
 				inst->b[7]);
 }
 
-void processLine(char *line, Instruction *inst){
+/*
+return:
+	success : la commande a été traduite et executée sans erreurs
+*/
+int processLine(char *line, Instruction *inst){
+	int state=1;
+	initInst(inst); /* remet l'instruction a 0 a chaque appel */
 	format_instr(line);
 	textInstructionToOpcode(line,inst);
-	writeInstructionOperands(inst, line);
-	printInst(line,inst);
+	if(inst->id == UNKNOWN_ID){
+		/*printf("undefined instruction\n");*/
+		state=0;
+	}else{
+		writeInstructionOperands(inst, line);
+		printInst(line,inst);
+	}
+	
+	return state;
 }
 
 int main(int argc, char const *argv[])
 {
 	int seq=0;
+	int run=1;
+
 	FILE *fichier=NULL;
 	FILE *fichier_sortie=NULL;
 	char dmp;
@@ -40,7 +55,6 @@ int main(int argc, char const *argv[])
 
 	if(argc <= 3){
 		fichier_sortie = fopen("output.txt","w+");
-		initInst(&instr);
 
 		if(fichier_sortie!= NULL){
 			while(parseur<argc){
@@ -59,8 +73,9 @@ int main(int argc, char const *argv[])
 			if(fichier !=NULL){ /*mode fichier activé*/
 				while(!feof(fichier)){
 					readInstruction(fichier,line);
-					processLine(line, &instr);
-					writeHexInstructionToFile(fichier_sortie,instr);
+					if(processLine(line, &instr)){
+						writeHexInstructionToFile(fichier_sortie,instr);
+					}
 
 					if(seq){
 						printf("next>");
@@ -70,11 +85,13 @@ int main(int argc, char const *argv[])
 				printf("\n");
 				fclose(fichier);
 			}else{/*mode sequentiel à la main activé*/
-				while(strcmp("end",line)){ /*tant que line != "end"*/
+				while(run){ /*tant que line != "end"*/
 					printf("instruction>");
-					fgets(line,128,stdin);
-					processLine(line, &instr);
-					writeHexInstructionToFile(fichier_sortie,instr);
+					readInstruction(stdin,line);
+					run = strcmp(line,"end");
+					if(run && processLine(line, &instr)){
+						writeHexInstructionToFile(fichier_sortie,instr);
+					}
 				}
 			}
 			

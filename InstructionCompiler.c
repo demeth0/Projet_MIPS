@@ -2,9 +2,16 @@
 
 
 /*
-On suppose :
-	le texte instruction est valide
-	la struct Instruction est initialisée
+Description:
+	prend une instruction texte d'une ligne et initialise la structure instruction
+	avec le type et la taille des blocks de donnée de l'instruction
+parametre:
+	textInstruction - chaine de caractère contenan l'instruction
+	instruction - la struct inistruction qui recoit les informations déja initialiser
+return:
+	void
+erreur:
+	si la chaine de caractère ne fini pas par \0
 */
 void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	char opcode[8];
@@ -183,6 +190,16 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	}
 }
 
+/*
+Description:
+	prend en paramètre une instruction et la chaine de caractère de l'instruction avec ses
+	opérandes et remplis les opérandes dans le code de la struct instruction
+parametre:
+	inst - l'instruction a remplir
+	inst_str - le texte qui continen l'instruction 
+return:
+	void
+*/
 void writeInstructionOperands(Instruction *inst, char *inst_str){
 	/*pasteValue(Instruction* instruction, int field,Byte* value,int dim) */
 	char operandes[8][16];
@@ -689,24 +706,23 @@ void del_espace(char *instr){
 }
 
 void format_instr(char *instr){
-	int index =0;
-	int taille = strlen(instr);
+	char *cursor=instr;
 	int i =0;
 	del_espace(instr);
-	while(instr[index]!=' '){
-		instr[i]=instr[index];
-		index++;
+	while((*cursor)!=' ' && (*cursor)!='\0'){
+		instr[i]=(*cursor);
+		cursor++;
 		i++;
 	}
 	instr[i] = ' ';
 	i++;
-	index++; /*on skip l'operation*/
-	while(index<taille){
-		if (instr[index]!= ' '){
-			instr[i] = instr[index];
+	cursor++; /*on skip l'operation*/
+	while((*cursor) != '\0'){
+		if ((*cursor)!= ' '){
+			instr[i] = (*cursor);
 			i++;
 		}
-		index++;
+		cursor++;
 	}
 	instr[i] = '\0';
 	toLowerCase(instr);

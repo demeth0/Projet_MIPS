@@ -13,7 +13,32 @@ typedef struct Instruction{
 	Byte b[8];
 }Instruction;
 
+
+/*
+Description:
+	prend une instruction texte d'une ligne et initialise la structure instruction
+	avec le type et la taille des blocks de donnée de l'instruction
+parametre:
+	textInstruction - chaine de caractère contenan l'instruction
+	instruction - la struct inistruction qui recoit les informations déja initialiser
+return:
+	void
+erreur:
+	si la chaine de caractère ne fini pas par \0
+*/
 void textInstructionToOpcode(char* textInstruction, Instruction* instruction);
+
+/*
+Description:
+	prend en paramètre une instruction et la chaine de caractère de l'instruction avec ses
+	opérandes et remplis les opérandes dans le code de la struct instruction
+parametre:
+	inst - l'instruction a remplir
+	inst_str - le texte qui continen l'instruction 
+return:
+	void
+*/
+void writeInstructionOperands(Instruction *inst, char *isnt_str);
 
 /*
 Description:
@@ -54,8 +79,6 @@ erreur:
 	si res est trop petit ou textInstruction n'est pas valide
 */
 void getOperationCodeText(char* textInstruction, char* res);
-
-void writeInstructionOperands(Instruction *inst, char *isnt_str);
 
 /*
 Description:

@@ -194,3 +194,31 @@ int ImmediatStrToInteger(char *str){
 	}
 	return res;
 } 
+
+/*
+Description:
+	incrémente le nombre de 1
+parametre:
+	tab - tableau d'octet représentant un nombre
+	size - taille en octet du nombre
+return:
+	void
+*/
+void incr(Byte *tab, int size){
+	int index=size-1;
+	while(tab[index]==0xFF && index >= 0){
+		tab[index]=0;
+		index--;
+	}
+	if(index >= 0){
+		tab[index]++;
+	}
+}
+
+
+void incr4(Byte *tab, int size){
+	incr(tab,size);
+	incr(tab,size);
+	incr(tab,size);
+	incr(tab,size);
+}
