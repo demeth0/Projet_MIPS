@@ -1,5 +1,10 @@
 #include "ByteUtils.h"
 
+
+/*
+fait un déplacement binaire vers la gauche de maximum 8bit. 
+Opération élémentaire sur un tableau de Byte
+*/
 void shiftL8Bit(Byte *values, int n, int size){
 	int i;
 	values[0]=values[0]<<n;
@@ -23,6 +28,10 @@ void shiftLNBit(Byte *values, int n, int size){
 	shiftL8Bit(values, shift, size);
 }
 
+/*
+fait un déplacement binaire vers la droite de maximum 8bit. 
+Opération élémentaire sur un tableau de Byte
+*/
 void shiftR8Bit(Byte *values, int n, int size){
 	int i;
 	values[size-1]=values[size-1]>>n;
@@ -52,7 +61,6 @@ void IntTo2ByteArray(int i,Byte *res){
 
 	while(weight > 0){
 		shiftLNBit(res, 1, 2); /*décale vers la gauche le résultat car on ajoute le nouveau bit de poids faible*/
-		/*printf("weight: %d, cp: %d\n",weight,cp);*/
 		/* alors le bit est à 1 sinon 0*/
 		if((cp&weight) != 0){
 			cp=cp&(~weight);
