@@ -152,4 +152,29 @@ void incr4(Byte *tab, int size){
 	incr(tab,size);
 }
 
-void add_to_byte(Byte tab[4],int value);
+void addToByte(Byte data[4],int value){
+	Byte overflow=0;
+	Byte extracted = value & 0xFF; /*8 premiers bits*/
+	int index=3;
+	int cp_value = value;
+	unsigned int temp=0;
+
+	/*tant que valeur non null (pas finit d'écrire) et pas dépasser taille d'un
+	int (2 ou 4) et pas dépasser taille data*/
+	while(index>=0){
+		/*on regarde si l'addition des bits de value avec l'overflow précédent et data ne provoquent pas de dépassement*/
+		temp = data[index]+extracted+overflow;
+		if((temp&(0xF00))!=0){
+			data[index]=temp&0xFF;	
+			/*au plus égal a 1 car 255+255 fait 1 bit d'overflow*/
+			overflow=1;
+		}else{
+			data[index]+=extracted+overflow;
+			overflow = 0;
+		}
+
+		index--;
+		cp_value = cp_value>>8;
+		extracted = cp_value & 0xFF;
+	}	
+}
