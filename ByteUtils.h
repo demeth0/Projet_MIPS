@@ -52,4 +52,16 @@ return:
 */
 int ImmediatStrToInteger(char *str);
 
+/*
+Description:
+	prend une valeur encodée sur 4 Byte et y ajoute la valeur value signée.
+	prend en compte les débordements.
+paramètre:
+	data - le tableau de 4 Byte ou serra ajouter value (les octets sont en little-endian)
+	value - entier signé a ajouter
+erreur:
+	aucunes
+*/
+void addToByte(Byte data[4],int value);
+
 #endif
