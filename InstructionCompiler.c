@@ -516,7 +516,7 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 		pos += instruction->b[i];
 	}
 
-	/* init mask at 0xFFFFFFFF and val at 0x00000000 */
+	/* init le masque à 0xFFFFFFFF et val à 0x00000000 */
 	for(i=0;i<4;i++){
 		mask1[i] = 0xFF;
 		mask2[i] = 0xFF;
@@ -525,14 +525,14 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 
 	/* met value dans val (taille value =< 4) */
 	for(i=0;i<dim;i++){
-		/* on doit écrire a la fin car les shift sont appliqués dans le sens 
+		/* on doit écrire à la fin car les shift sont appliqués dans le sens 
 		inverse aux indices des tableaux */
 		val[i+(4-dim)]=value[i];
 	}
 
-	/* positionne la valeur a la fin tel que le bit de poid fort soit le premier dans la chaine */
+	/* positionne la valeur à la fin tel que le bit de poids fort soit le premier dans la chaine */
 	shiftLNBit(val, 32-size, 4);
-	/* décale val pour etre a la bonne position dans le code */
+	/* décale val pour être à la bonne position dans le code */
 	shiftRNBit(val, pos,4);
 
 	/* calcul les mask pour l'insertion dans le code */
@@ -568,7 +568,7 @@ void param_to_tab(char tab[8][16],char *instruction){
 			index++;
 		i++;
 	}
-	/*on definit le reste des lignes avec une simple '\0' */
+	/*on définit le reste des lignes avec un simple '\0' */
 	while(i<8){
 		tab[i][0]='\0';
 		i++;
@@ -606,7 +606,7 @@ void format_instr(char *instr){
 	}
 	instr[i] = ' ';
 	i++;
-	cursor++; /*on skip l'operation*/
+	cursor++; /*on skip l'opération*/
 	while((*cursor) != '\0'){
 		if ((*cursor)!= ' '){
 			instr[i] = (*cursor);
@@ -625,7 +625,7 @@ Byte registerToByte(char *val){
     	cp++;
     /*tant qu'on a pas finit de lire le nombre*/
     while((*cp)!='\0' && (*cp) != ')'){
-    	/*on ajoute au résultat la valeur décimale correspondante au caractere fois la bonne dizaine*/
+    	/*on ajoute au résultat la valeur décimale correspondante au caractère fois la bonne dizaine*/
         resultat=resultat * 10 + (*cp)-'0';
         cp++;
     }
