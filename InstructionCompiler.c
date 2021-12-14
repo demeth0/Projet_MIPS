@@ -685,8 +685,9 @@ void param_to_tab(char tab[8][16],char *instruction){
 	int i =0;
 	int j=0;
 	int taille = strlen(instruction);
-	while(instruction[index] != ' ')
+	while(instruction[index] != ' '){
 		index++;
+	}
 	index++;
 	/*tant qu'on est pas à la fin de l'instruction alors il reste des paramètres*/
 	while(index<taille){  
@@ -699,8 +700,8 @@ void param_to_tab(char tab[8][16],char *instruction){
 		}
 		tab[i][j] ='\0';
 		/*on saute la virgule*/
-		if (instruction[index]==',')
-			index++;
+		if(instruction[index]==',') index++;
+		
 		i++;
 	}
 	/*on définit le reste des lignes avec un simple '\0' */
