@@ -169,7 +169,7 @@ void del_espace(char *instr);
 /*
 Description:
   enlève les espaces au début, à la fin et au milieu d'une chaine : "    ADD $1, $2, $3   " -> "ADD $1,$2,$3"
-
+	et met la chaine de caractères en minuscule
 paramètre:
 	instr - chaine de caractères
 return:
