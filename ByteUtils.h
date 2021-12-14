@@ -11,6 +11,8 @@ paramètres:
 	values - un tableau d'octets représentant le nombre binaire
 	n - le nombre de fois qu'on fait le déplacement vers la gauche
 	size - la taille en octets de la chaine
+erreur:
+	si size ne correspond pas a la taille du tableau values
 */
 void shiftLNBit(Byte *values, int n, int size);
 
@@ -21,6 +23,8 @@ parametres:
 	values - un tableau d'octet représentant le nombre binaire
 	n - le nombre de fois qu'on fait le déplacement vers la droite
 	size - la taille en octets de la chaine
+erreur:
+	si size ne correspond pas a la taille du tableau values
 */
 void shiftRNBit(Byte *values, int n, int size);
 
