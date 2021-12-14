@@ -35,7 +35,7 @@ void readInstruction(FILE *f, char *result){
 	dans le cas ou il trouve un commentaire on continue de lire la ligne jusqu'au bout pour avancer le curseur jusqu'a la fin de la ligne
 	*/
 	while((!feof(f)) && (c != '\n')){
-		fgetc(f);
+		c=fgetc(f);
 	}
 }
 
