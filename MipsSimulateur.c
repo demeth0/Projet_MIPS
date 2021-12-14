@@ -1,5 +1,6 @@
 #include "MipsSimulateur.h"
 
+
 /*permet de recopier dans sortie le contenue de l'entrée*/
 void copy_Byte4(Byte entree[4],Byte sortie[4]){
 	sortie[0] = entree[0];
@@ -18,8 +19,8 @@ struct SimEnv {
 	Byte LO[4];
 };
 */
-void writeRamADDR(Environment simulation,Byte adresse[4],Byte value[4]){
-
+void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value){
+	int new_addr;
 	/*si on est sur une architecture 32 bits*/
 	if(sizeof(int) == 4){
 		new_addr= adresse[3];
@@ -33,7 +34,23 @@ void writeRamADDR(Environment simulation,Byte adresse[4],Byte value[4]){
 	}
 		
 	
-	copy_Byte4(value,simulation->RAM[new_addr]);
-
-
+	simulation->RAM[new_addr]=value;
 }
+Byte readRamADDR(Environment *simulation,Byte adresse[4]){
+	/*on calcule l'index dans le tableau*/
+	/*si on est sur une architecture 32 bits*/
+
+	int new_addr;
+	if(sizeof(int) == 4){
+		new_addr= adresse[3];
+		new_addr+= (adresse[2])<<8;
+		new_addr+= (adresse[1])<<16;
+		new_addr+= (adresse[0])<<24;
+	}
+	else if(sizeof(int) == 2){
+		new_addr= (adresse[1]);
+		new_addr+= (adresse[0])<<8;
+	}
+	return simulation->RAM[new_addr];
+}
+

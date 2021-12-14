@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ByteUtils.h"
+#include "InstructionCompiler.h"
+
 
 #define MEM_SIZE 256
 
@@ -17,7 +19,9 @@ struct SimEnv {
 
 typedef struct SimEnv *Environment;
 
-
+void copy_Byte4(Byte entree[4],Byte sortie[4]);
+void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value);
+Byte readRamADDR(Environment *simulation,Byte adresse[4]);
 
 
 	

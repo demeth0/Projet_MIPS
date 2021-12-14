@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "InstructionCompiler.h"
 #include "ManipulationsFichier.h"
+#include "MipsSimulateur.h"
 
 void printInst(char *str_inst,Instruction *inst){
 	printf("Instruction : \n\t\"%s\"\n\tID: %d\n\tHex: %02x%02x %02x%02x\n\tBlocks size: %d %d %d %d %d %d %d %d\n", 
@@ -55,6 +56,21 @@ int main(int argc, char const *argv[])
 	int parseur=1;
 	char line[128];
 	Instruction instr;
+
+/*  endroit pour tester le fonctions*/
+
+	Environment simulation;
+	Byte value=15;
+	Byte adresse[4];
+
+	writeRamADDR(&simulation,adresse,value);
+
+
+
+
+
+/*fin de zone*/
+
 
 	if(argc <= 3){
 		fichier_sortie = fopen("output.txt","w+");
