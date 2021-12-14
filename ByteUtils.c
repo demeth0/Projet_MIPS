@@ -151,3 +151,5 @@ void incr4(Byte *tab, int size){
 	incr(tab,size);
 	incr(tab,size);
 }
+
+void add_to_byte(Byte tab[4],int value);
