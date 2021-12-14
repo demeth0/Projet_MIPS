@@ -1,18 +1,5 @@
 #include "InstructionCompiler.h"
 
-
-/*
-Description:
-	prend une instruction texte d'une ligne et initialise la structure instruction
-	avec le type et la taille des blocks de donnée de l'instruction
-parametre:
-	textInstruction - chaine de caractère contenan l'instruction
-	instruction - la struct inistruction qui recoit les informations déja initialiser
-return:
-	void
-erreur:
-	si la chaine de caractère ne fini pas par \0
-*/
 void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	char opcode[8];
 	getOperationCodeText(textInstruction,opcode);
@@ -190,16 +177,6 @@ void textInstructionToOpcode(char* textInstruction, Instruction *instruction){
 	}
 }
 
-/*
-Description:
-	prend en paramètre une instruction et la chaine de caractère de l'instruction avec ses
-	opérandes et remplis les opérandes dans le code de la struct instruction
-parametre:
-	inst - l'instruction a remplir
-	inst_str - le texte qui continen l'instruction 
-return:
-	void
-*/
 void writeInstructionOperands(Instruction *inst, char *inst_str){
 	/*pasteValue(Instruction* instruction, int field,Byte* value,int dim) */
 	char operandes[8][16];
@@ -212,17 +189,13 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 		case ADD_ID:
 			/*ADD rd(0), rs(1), rt(2)*/
 			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | ADD*/
-			printf("debug: %s %s %s\n", operandes[0],operandes[1],operandes[2]);
 			reg = registerToByte(operandes[1]);
-			printf("rs: %s %d\n", operandes[1],reg);
 			pasteValue(inst,/*flag*/1,&reg,1);
 						
 			reg = registerToByte(operandes[2]);
-			printf("rt: %s %d\n", operandes[2],reg);
 			pasteValue(inst,/*flag*/2,&reg,1);
 
 			reg = registerToByte(operandes[0]);
-			printf("rd: %s %d\n", operandes[0],reg);
 			pasteValue(inst,/*flag*/3,&reg,1);
 			break;
 		case ADDI_ID:
@@ -271,7 +244,7 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 			/*BGTZ | rs(0) | 0 | offset(1)*/
 			reg = registerToByte(operandes[0]);
 			pasteValue(inst,1,&reg,1);
-
+			printf("immediat \"%s\" to %d\n", operandes[1],ImmediatStrToInteger(operandes[1]));
 			IntTo2ByteArray(ImmediatStrToInteger(operandes[1]),imm);
 			pasteValue(inst,/*flag*/3,imm,2);
 			break;
@@ -488,49 +461,15 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 	}
 }
 
-/*
-Description:
-	met les 6 premiers bits de l'instruction avec opCode en conservant les valeurs d'origine pour le reste
-parametre:
-	instruction - l'instruction en paramtre a changer
-	opCode - le code instruction a insérer en début
-return:
-	void
-error :
-	si instruction pas initialiser
-*/
 void setNormalOpCode(Instruction *instruction, Byte opCode){
 	instruction->code[0] = (instruction->code[0]&0x03) + (opCode<<2);
 }
 
-/*
-Description:
-	met les 6 premiers bits de l'instruction a 0 et les 6 derniers avec opCode en conservant les valeurs d'origine pour le reste
-parametre:
-	instruction - l'instruction en paramtre a changer
-	opCode - le code instruction a insérer en fin
-return:
-	void
-error :
-	si instruction pas initialiser
-*/
 void setSpecialOpCode(Instruction *instruction, Byte opCode){
 	instruction->code[3] = (instruction->code[0]&0xC0) + opCode;
 	setNormalOpCode(instruction,0);
 }
 
-/*
-Description:
-	Récupere tout les char jusqu'au premier espace dan l'instruction en  parametre
-et les mets dans res. exemple pour 'addiu $val, $res, 10' va donner 'addiu\0' 
-parametre:
-	textInstruction - l'instruction complete dans un tableau de char (fin \0)
-	res - tableau de char qui va stocker l'instruction au moin de taille 8 (fin \0)
-return:
-	void
-erreur:
-	si res est trop petit ou textInstruction n'est pas valide
-*/
 void getOperationCodeText(char* textInstruction, char* res){
 	int i=0;
 	while(textInstruction[i]!=' '){
@@ -538,42 +477,18 @@ void getOperationCodeText(char* textInstruction, char* res){
 		i++;
 	}
 	res[i]='\0';
-	
 }
 
-/*
-Description:
-	transforme une chaine de caractères en lower case
-parametre:
-	text - chaine de caractère se finissant par \0
-return:
-	void
-erreur:
-	si la chaine n'est pas terminée par \0
-*/
 void toLowerCase(char *text){
 	char *cp = text;
 	while((*cp)!='\0'){
 		if((*cp)>= 'A' && (*cp)<='Z'){
 			(*cp)=(*cp)+32;
 		}
-
 		cp++;
 	}
 }
 
-
-/*
-Description:
-	remplie les paramètres block de l'instruction
-parametre:
-	Instruction* instruction - l'instruction qui va etre modifiée
-	char bn - les tailles des blocks
-return: 
-	void
-erreur:
-	si l'instruction pas initialisée
-*/
 void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,Byte b4,Byte b5,Byte b6,Byte b7){
 	instruction->b[0]=b0;
 	instruction->b[1]=b1;
@@ -585,22 +500,6 @@ void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,By
 	instruction->b[7]=b7;
 }
 
-/*
-Description:
-	prend en parametre une instruction dont les tailles b[n] sont initialisées, et un numéro de block
-	la valeur value de dim octet sera écrite dans le code de la struct Instruction dans zone qui luis est associée
-	avec la taille correspondante dans b[n].
-parametre:
-	instruction - l'insqtruction dont les valeurs b[n] sont intialisée ainsi que le code ou la zone dédiée
-	a la valeur qu'on veut écrire soit vide de données
-	field - le numéro de block qu'on souhaite remplire
-	value - la valeur que le block va prendre tableau de 8*dim bit soit dim char tell que 8*dim > b[field]
-	dim - taille du tableau value en octet
-erreurs:
-	si instruction n'est pas initialisée, alors il y a risque de crash aussi la zone dans le code de 
-	l'instruction ou l'on veut écrire doit nécéssairement etre vide en risque de corrompre tout le code.
-	la taille de value ne provoquera pas d'exeption, la fonction tronquera le nombre automatiquement.
-*/
 void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	/* size in bit of the value not necessarly a multiple of 8 */
 	int size=instruction->b[field];
@@ -645,15 +544,7 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 		instruction->code[i] += mask1[i] &mask2[i]&val[i];
 	}
 }
-/*
-Description:
-	place les arguments dans une matrice de caracteres
-parametre:
-	tab - tableu bidimensionnel de char
-	instruction - pointeur vers char
-return:
-	void
-*/
+
 void param_to_tab(char tab[8][16],char *instruction){
 	int index = 0;
 	int i =0;
@@ -683,7 +574,6 @@ void param_to_tab(char tab[8][16],char *instruction){
 		i++;
 	}
 }
-
 
 void del_espace(char *instr){
 	int index =0;
@@ -728,14 +618,6 @@ void format_instr(char *instr){
 	toLowerCase(instr);
 }
 
-/*
-Description:
-	transforme une chaine de caractere en binaire  -> "11" = 11
-parametre:
-	val - chaine de caractere
-return:
-	Byte
-*/
 Byte registerToByte(char *val){
 	char *cp = val;
     Byte resultat = 0;
@@ -750,18 +632,6 @@ Byte registerToByte(char *val){
     return resultat;
 }
 
-
-
-/*
-Description:
-  retourne la valeur du registre et met dans offset la valeur de l'offset.
-  example si on a "200($1)" => offset=200 et return = 1
-parametre:
-	str - chaine de caractere
-	offset - chaine de caractere
-return:
-	Byte
-*/
 Byte indirectRegisterToByte(char *str, int *offset){
 	/*on recupère l'offset*/
 	int taille =strlen(str);
@@ -792,14 +662,6 @@ Byte indirectRegisterToByte(char *str, int *offset){
     return (registerToByte(ptr));
 }
 
-/*
-Description:
-	initialise instruction
-parametre:
-	instruction a initialiser
-return:
-	void
-*/
 void initInst(Instruction *inst){
 	inst->code[0]=0;
 	inst->code[1]=0;
