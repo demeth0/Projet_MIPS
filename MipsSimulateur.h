@@ -17,7 +17,7 @@ struct SimEnv {
 	Byte LO[4];
 };
 
-typedef struct SimEnv *Environment;
+typedef struct SimEnv Environment;
 
 void copy_Byte4(Byte entree[4],Byte sortie[4]);
 void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value);

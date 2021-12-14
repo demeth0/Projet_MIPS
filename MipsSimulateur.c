@@ -32,8 +32,6 @@ void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value){
 		new_addr= (adresse[1]);
 		new_addr+= (adresse[0])<<8;
 	}
-		
-	
 	simulation->RAM[new_addr]=value;
 }
 Byte readRamADDR(Environment *simulation,Byte adresse[4]){
