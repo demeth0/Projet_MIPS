@@ -52,3 +52,24 @@ Byte readRamADDR(Environment *simulation,Byte adresse[4]){
 	return simulation->RAM[new_addr];
 }
 
+
+void afficher_ram(Environment *simulation){
+
+	int index =0;
+
+	for(index =0;index<MEM_SIZE;index++){
+		printf("%02x ",simulation->RAM[index]);
+	}
+}
+void initSimulation(Environment *simulation){
+	int index =0;
+	Byte *CP = simulation->RAM;
+
+	/*comme tout est a la suite dans une structure, cela permet de tout
+	  initialiser à 0*/
+	for(index =0;index<(32*4+12+MEM_SIZE);index++){
+		*(CP+index) = 0;
+	}
+
+
+}

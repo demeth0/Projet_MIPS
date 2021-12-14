@@ -22,8 +22,8 @@ typedef struct SimEnv Environment;
 void copy_Byte4(Byte entree[4],Byte sortie[4]);
 void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value);
 Byte readRamADDR(Environment *simulation,Byte adresse[4]);
-
-
+void afficher_ram(Environment *simulation);
+void initSimulation(Environment *simulation);
 	
 
 
