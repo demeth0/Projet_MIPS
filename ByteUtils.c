@@ -123,7 +123,6 @@ int SignedStrIntegerToInt(char *str){
 		cp++;
 	}
 	while((*cp) != '\0'){
-		printf("%d\n", res);
 		res = res*10 + ((*cp)-'0');
 		cp++;
 	}

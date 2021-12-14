@@ -212,17 +212,13 @@ void writeInstructionOperands(Instruction *inst, char *inst_str){
 		case ADD_ID:
 			/*ADD rd(0), rs(1), rt(2)*/
 			/*SPECIAL | rs(1) | rt(2) | rd(0) | 0 | ADD*/
-			printf("debug: %s %s %s\n", operandes[0],operandes[1],operandes[2]);
 			reg = registerToByte(operandes[1]);
-			printf("rs: %s %d\n", operandes[1],reg);
 			pasteValue(inst,/*flag*/1,&reg,1);
 						
 			reg = registerToByte(operandes[2]);
-			printf("rt: %s %d\n", operandes[2],reg);
 			pasteValue(inst,/*flag*/2,&reg,1);
 
 			reg = registerToByte(operandes[0]);
-			printf("rd: %s %d\n", operandes[0],reg);
 			pasteValue(inst,/*flag*/3,&reg,1);
 			break;
 		case ADDI_ID:

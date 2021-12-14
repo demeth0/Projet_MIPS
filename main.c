@@ -40,6 +40,10 @@ int processLine(char *line, Instruction *inst){
 	return state;
 }
 
+void waitForNext(){
+	fgetc(stdin);
+}
+
 int main(int argc, char const *argv[])
 {
 	int seq=0;
@@ -47,7 +51,6 @@ int main(int argc, char const *argv[])
 
 	FILE *fichier=NULL;
 	FILE *fichier_sortie=NULL;
-	char dmp;
 
 	int parseur=1;
 	char line[128];
@@ -79,7 +82,7 @@ int main(int argc, char const *argv[])
 
 					if(seq){
 						printf("next>");
-						scanf("n%1c\n",&dmp);
+						waitForNext();
 					}
 				}
 				printf("\n");
