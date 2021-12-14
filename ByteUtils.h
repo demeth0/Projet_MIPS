@@ -64,4 +64,13 @@ erreur:
 */
 void addToByte(Byte data[4],int value);
 
+/*
+Description:
+	écrit la valeur dans le nombre de 32 bit codé dans la tableau data
+parametre:
+	data - tableau ou le nombre est encodé
+	value - valeur a encoder dans le tableau
+*/
+void setByte(Byte data[4],int value);
+
 #endif

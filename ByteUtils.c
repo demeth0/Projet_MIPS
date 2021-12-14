@@ -152,6 +152,14 @@ void incr4(Byte *tab, int size){
 	incr(tab,size);
 }
 
+void setByte(Byte data[4],int value){
+	data[0]=0;
+	data[0]=0;
+	data[0]=0;
+	data[0]=0;
+	addToByte(data,value);
+}
+
 void addToByte(Byte data[4],int value){
 	Byte overflow=0;
 	Byte extracted = value & 0xFF; /*8 premiers bits*/

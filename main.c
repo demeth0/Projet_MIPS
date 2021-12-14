@@ -57,20 +57,6 @@ int main(int argc, char const *argv[])
 	char line[128];
 	Instruction instr;
 
-/*  endroit pour tester le fonctions*/
-
-	Environment simulation;
-	Byte value=15;
-	Byte adresse[4];
-
-	writeRamADDR(&simulation,adresse,value);
-
-
-
-
-
-/*fin de zone*/
-
 
 	if(argc <= 3){
 		fichier_sortie = fopen("output.txt","w+");
