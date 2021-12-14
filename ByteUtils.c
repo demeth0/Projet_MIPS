@@ -51,9 +51,9 @@ void IntTo2ByteArray(int i,Byte *res){
 	int weight = 0x8000; /*1000 0000 0000 0000*/
 
 	while(weight > 0){
-		shiftLNBit(res, 1, 2); /*décale vers la gauche le resultat car on ajoute le nouveau bit de poid faible*/
+		shiftLNBit(res, 1, 2); /*décale vers la gauche le résultat car on ajoute le nouveau bit de poids faible*/
 		/*printf("weight: %d, cp: %d\n",weight,cp);*/
-		/* alors le bit est a 1 sinon 0*/
+		/* alors le bit est à 1 sinon 0*/
 		if((cp&weight) != 0){
 			cp=cp&(~weight);
 			res[1]++;
