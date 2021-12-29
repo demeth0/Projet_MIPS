@@ -73,4 +73,24 @@ parametre:
 */
 void setByte(Byte data[4],int value);
 
+/*
+Description:
+	incrémente la valeur stockée dans le tableau de 1
+return:
+	void
+erreurs:
+	si la taille ne corespond pas
+*/
+void incr(Byte *tab, int size);
+
+/*
+Description:
+	incrémente la valeur stockée dans le tableau de 4
+return:
+	void
+erreurs:
+	si la taille ne corespond pas
+*/
+void incr4(Byte *tab, int size);
+
 #endif

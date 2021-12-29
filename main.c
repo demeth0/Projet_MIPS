@@ -28,10 +28,10 @@ return:
 int processLine(char *line, Instruction *inst){
 	int state=1;
 	initInst(inst); /* remet l'instruction a 0 a chaque appel */
-	format_instr(line);
-	textInstructionToOpcode(line,inst);
+	format_instr(line); /*supprimes espaces en trop*/
+	textInstructionToOpcode(line,inst); /*détermine le type d'instruction*/
 	if(inst->id == UNKNOWN_ID){
-		/*printf("undefined instruction\n");*/
+		printf("instruction non connue\n");
 		state=0;
 	}else{
 		writeInstructionOperands(inst, line);
