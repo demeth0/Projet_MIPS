@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include "ByteUtils.h"
 #include "InstructionCompiler.h"
-
+#include "operation_code_defines.h"
+#include "ByteUtils.h"
 
 #define MEM_SIZE 256
 
