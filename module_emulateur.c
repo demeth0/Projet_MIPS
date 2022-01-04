@@ -1,7 +1,7 @@
 #include "module_emulateur.h"
 
 /*permet de recopier dans sortie le contenue de l'entrée*/
-void copy_Byte4(Byte entree[4],Byte sortie[4]){
+void copy_Byte4(DWord entree,DWord sortie){
 	sortie[0] = entree[0];
 	sortie[1] = entree[1];
 	sortie[2] = entree[2];
@@ -22,10 +22,10 @@ void initSimulation(Environment *simulation){
 
 
 void fetchInstruction(Environment *simulation);
-void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
-void fetchData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
-void processData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
-void writeResult(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
+void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target);
+void fetchData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target);
+void processData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target);
+void writeResult(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target);
 
 void simulate(Instruction *instruction, Environment *simulation){
 	/*déterminer les espace temporaires nécéssaires: 
@@ -34,7 +34,7 @@ void simulate(Instruction *instruction, Environment *simulation){
 		type J: target(26)*/
 	Byte rs=0,rd=0,rt=0,sa=0;
 	Byte imm[2];
-	Byte target[4];
+	DWord target;
 	imm[0]=0;imm[1]=0;
 	target[0]=0;target[1]=0;target[2]=0;target[3]=0;
 
@@ -60,7 +60,7 @@ void fetchInstruction(Environment *simulation){
 /*
 récupère les valeurs dans le code instruction
 */
-void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]){
+void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target){
 	unsigned int type=instruction->id&OPCODE_TYPE_MASK;
 	switch(type){
 		case OPCODE_TYPE_R:
@@ -89,9 +89,9 @@ void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte 
 	}
 }
 
-void fetchData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]){
+void fetchData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target){
 	/*dans cette architecture il n'y a que l'instruction ld qui utlise cette étape*/
-	Byte adresse[4];
+	DWord adresse;
 	int immval = (imm[0]<<8)+imm[1];
 	if(instruction->id == LW_ID){
 		/*LW | base | rt | offset*/
@@ -111,13 +111,91 @@ void fetchData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *
 	}
 }
 
-void processData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]){
+void processData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target){
+	switch(instruction->id){
+		case ADD_ID:
+			/*GPR[rd] ← GPR[rs] + GPR[rt]*/
+			/*simulation->registers[*rd]=simulation->registers[*rs]+simulation->registers[*rt];*/
+			break;
 
+		case ADDI_ID:
+			break;
+
+		case AND_ID:
+			break;
+
+		case BEQ_ID:
+			break;
+
+		case BGTZ_ID:
+			break;
+
+		case BLEZ_ID:
+			break;
+
+		case BNE_ID:
+			break;
+
+		case DIV_ID:
+			break;
+
+		case J_ID:
+			printf("Instruction J a implementer\n");
+			break;
+
+		case JAL_ID:
+			printf("Instruction JAL a implementer\n");
+			break;
+
+		case JR_ID:
+			break;
+
+		case LUI_ID:
+			break;
+
+		case MFHI_ID:
+			break;
+
+		case MFLO_ID:
+			break;
+
+		case MULT_ID:		
+			break;
+
+		case NOP_ID:
+			break;
+
+		case OR_ID:
+			break;
+
+		case ROTR_ID:
+			break;
+
+		case SLL_ID:
+			break;
+
+		case SLT_ID:
+			break;
+
+		case SRL_ID:
+			break;
+
+		case SUB_ID:
+			break;
+
+		case SYSCALL_ID:
+			/*code sur 20 bit pas de valeur donnée*/
+			break;
+
+		case XOR_ID:
+			break;
+
+	}
 }
 
-void writeResult(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]){
+void writeResult(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],DWord target){
 	/*dans cette architecture il n'y a que l'instruction sw qui utlise cette étape*/
-	Byte adresse[4];
+	DWord adresse;
 	
 	int immval = (imm[0]<<8)+imm[1];
 

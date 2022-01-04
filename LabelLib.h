@@ -14,9 +14,9 @@ struct chainedList{
 
 typedef struct chainedList ChainedElement;
 
-void addLabel(char *label, Byte addr[4]);
+void addLabel(char *label, DWord addr);
 void clearLabelList();
-void getAddress(char *label,Byte addr[4]);
+void getAddress(char *label,DWord addr);
 
 
 #endif

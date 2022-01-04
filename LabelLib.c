@@ -2,7 +2,7 @@
 
 ChainedElement *labels_list=NULL;
 
-void addLabel(char *label, Byte addr[4]){
+void addLabel(char *label, DWord addr){
 	ChainedElement *toadd;
 	ChainedElement *cursor=labels_list;
 
@@ -37,7 +37,7 @@ void clearLabelList(){
 	}
 }
 
-void getAddress(char *label, Byte addr[4]){
+void getAddress(char *label, DWord addr){
 	int notfound = 1;
 	ChainedElement *cursor=labels_list;
 

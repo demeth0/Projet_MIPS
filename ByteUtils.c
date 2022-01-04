@@ -177,7 +177,7 @@ void incr4(Byte *tab, int size){
 	incr(tab,size);
 }
 
-void setByte(Byte data[4],int value){
+void setByte(DWord data,int value){
 	data[0]=0;
 	data[0]=0;
 	data[0]=0;
@@ -185,7 +185,7 @@ void setByte(Byte data[4],int value){
 	addToByte(data,value);
 }
 
-void addToByte(Byte data[4],int value){
+void addToByte(DWord data,int value){
 	Byte overflow=0;
 	Byte extracted = value & 0xFF; /*8 premiers bits*/
 	int index=3;
@@ -210,4 +210,8 @@ void addToByte(Byte data[4],int value){
 		cp_value = cp_value>>8;
 		extracted = cp_value & 0xFF;
 	}	
+}
+
+void addByteToByte(Byte *b1,Byte *b2){
+
 }

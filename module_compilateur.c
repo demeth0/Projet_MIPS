@@ -345,9 +345,9 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	int pos = 0,i=0;
 
 	/* temp values */
-	Byte val[4];
-	Byte mask1[4];
-	Byte mask2[4];
+	DWord val;
+	DWord mask1;
+	DWord mask2;
 
 	/* calculate position in bit in the 32bit code */
 	for(i=0;i<field;i++){
@@ -399,7 +399,7 @@ void mapTypeI(Byte rs,Byte rt,Byte immediat[2],Instruction *output){
 }
 
 /*écrit les bloc nécéssaire pour une instruction type J*/
-void mapTypeJ(Byte target[4],Instruction *output){
+void mapTypeJ(DWord target,Instruction *output){
 	pasteValue(output,1,target,4);
 }
 
@@ -506,7 +506,7 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 	int success=1;
 	Byte rs,rt,rd,sa;
 	Byte immediat[2];
-	/*Byte target[4];*/
+	/*DWord target;*/
 
 	switch(output->id){
 		case ADD_ID:

@@ -3,7 +3,7 @@
 /*
 écrit dans memoire ram a adresse
 */
-void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value){
+void writeRamADDR(Environment *simulation,DWord adresse,Byte value){
 	int new_addr;
 	/*si on est sur une architecture 32 bits*/
 	if(sizeof(int) == 4){
@@ -20,7 +20,7 @@ void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value){
 }
 
 /*lis dans memoire a adresse*/
-Byte readRamADDR(Environment *simulation,Byte adresse[4]){
+Byte readRamADDR(Environment *simulation,DWord adresse){
 	/*on calcule l'index dans le tableau*/
 	/*si on est sur une architecture 32 bits*/
 

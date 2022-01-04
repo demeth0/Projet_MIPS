@@ -4,19 +4,20 @@
 #define MEM_SIZE 256
 
 typedef unsigned char Byte;
+typedef Byte DWord[4];
 
 struct SimEnv {
 	Byte RAM[MEM_SIZE];
-	Byte registers[32][4];
-	Byte PC[4];
-	Byte HI[4];
-	Byte LO[4];
+	DWord registers[32];
+	DWord PC;
+	DWord HI;
+	DWord LO;
 };
 
 typedef struct SimEnv Environment;
 
 typedef struct Instruction{
-	Byte code[4];
+	DWord code;
 	unsigned int id;
 	Byte b[6];
 }Instruction;

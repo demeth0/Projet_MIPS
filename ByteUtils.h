@@ -85,7 +85,7 @@ paramètre:
 erreur:
 	aucunes
 */
-void addToByte(Byte data[4],int value);
+void addToByte(DWord data,int value);
 
 /*
 Description:
@@ -94,7 +94,7 @@ parametre:
 	data - tableau ou le nombre est encodé
 	value - valeur a encoder dans le tableau
 */
-void setByte(Byte data[4],int value);
+void setByte(DWord data,int value);
 
 /*
 Description:
@@ -115,5 +115,11 @@ erreurs:
 	si la taille ne corespond pas
 */
 void incr4(Byte *tab, int size);
+
+/*
+Description:
+	b1 = b1 + b2
+*/
+void addDWordToDWord(DWord b1,DWord b2);
 
 #endif

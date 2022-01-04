@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "mips_structures.h"
 
-void writeRamADDR(Environment *simulation,Byte adresse[4],Byte value);
-Byte readRamADDR(Environment *simulation,Byte adresse[4]);
+void writeRamADDR(Environment *simulation,DWord adresse,Byte value);
+Byte readRamADDR(Environment *simulation,DWord adresse);
 void afficher_ram(Environment *simulation);
 
 #endif
