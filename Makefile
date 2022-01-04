@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -pedantic -ansi -Wall
-OBJECTS = main.o ManipulationsFichier.o ByteUtils.o LabelLib.o module_emulateur.o module_compilateur.o
+OBJECTS = main.o ManipulationsFichier.o ByteUtils.o LabelLib.o module_emulateur.o module_compilateur.o module_ram.o
 BIN = main
 RM = rm -f
 
@@ -10,20 +10,25 @@ all: $(OBJECTS)
 main.o: main.c ManipulationsFichier.h module_emulateur.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-ManipulationsFichier.o: ManipulationsFichier.c ManipulationsFichier.h module_compilateur.h
+module_compilateur.o: module_compilateur.c  ByteUtils.h operation_code_defines.h mips_structures.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-ByteUtils.o: ByteUtils.c ByteUtils.h
+module_emulateur.o: module_emulateur.c module_emulateur.h mips_structures.h module_ram.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-module_emulateur.o: module_emulateur.c module_emulateur.h
+module_ram.o: module_ram.c module_ram.h  mips_structures.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-LabelLib.o: LabelLib.c LabelLib.h
+ManipulationsFichier.o: ManipulationsFichier.c ManipulationsFichier.h mips_structures.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-module_compilateur.o: module_compilateur.c module_compilateur.h ByteUtils.h operation_code_defines.h
+ByteUtils.o: ByteUtils.c ByteUtils.h mips_structures.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
+
+LabelLib.o: LabelLib.c LabelLib.h mips_structures.h
+	@$(CC) -c $< -o $@ $(CFLAGS)
+
+
 
 clean:
 	@$(RM) *.o $(BIN)

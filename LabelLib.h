@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "ByteUtils.h"
+#include "mips_structures.h"
 
 struct chainedList{
 	char *name;

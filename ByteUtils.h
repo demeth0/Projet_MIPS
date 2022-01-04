@@ -2,7 +2,7 @@
 #define BYTE_UTILS_LIB
 #include <stdio.h>
 #include <stdlib.h>
-typedef unsigned char Byte;
+#include "mips_structures.h"
 
 #define DEBUG_BYTEUTILS 1
 

@@ -1,17 +1,13 @@
 #ifndef COMPILER_MIPS_MODULE
 #define COMPILER_MIPS_MODULE
 
+#include "mips_structures.h"
 #include "operation_code_defines.h"
 #include "ByteUtils.h"
 #include <string.h>
 
-#define DEBUG_COMPILER 1
 
-typedef struct Instruction{
-	Byte code[4];
-	unsigned int id;
-	Byte b[6];
-}Instruction;
+#define DEBUG_COMPILER 1
 
 /*
 Description:

@@ -2,7 +2,7 @@
 #define MANIPULATION_FICHIER_LIB
 
 #include <stdio.h>
-#include "module_compilateur.h"
+#include "mips_structures.h"
 
 /*
 Description: 
