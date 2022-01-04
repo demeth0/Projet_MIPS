@@ -1,4 +1,4 @@
-#include "MipsSimulateur.h"
+#include "emulateur.h"
 
 
 /*permet de recopier dans sortie le contenue de l'entrée*/
@@ -71,7 +71,7 @@ void initSimulation(Environment *simulation){
 }
 
 
-/*void fetchInstruction();*/
+void fetchInstruction(Environment *simulation);
 void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
 void fetchData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
 void processData(Instruction *instruction, Environment *simulation,Byte *rs,Byte *rd,Byte *rt,Byte *sa,Byte imm[2],Byte target[4]);
@@ -89,7 +89,7 @@ void simulate(Instruction *instruction, Environment *simulation){
 	target[0]=0;target[1]=0;target[2]=0;target[3]=0;
 
 	/*pour référence, ne fait rien les instructions sont passées en paramètre*/
-	/*fetchInstruction();*/
+	fetchInstruction();
 
 	/*calculer les indexes de registres et/ou adresses mémoire*/
 	decodeInstruction(instruction,&rs,&rd,&rt,&sa,imm,target);
@@ -101,6 +101,10 @@ void simulate(Instruction *instruction, Environment *simulation){
 	processData(instruction,simulation,&rs,&rd,&rt,&sa,imm,target);
 	/*écrit résultat, écrit en mémoire ou sw*/
 	writeResult(instruction,simulation,&rs,&rd,&rt,&sa,imm,target);
+}
+
+void fetchInstruction(Environment *simulation){
+	incr4(simulation->PC, 4);
 }
 
 /*

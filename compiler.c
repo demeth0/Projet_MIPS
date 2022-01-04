@@ -1,7 +1,7 @@
 #include "compiler.h"
 
 /******************************************
- *		Section traitement de texte 	  *
+ *      Section traitement de texte       *
  ******************************************/
 
 /*
@@ -116,7 +116,7 @@ void tokenize(char *line){
 }
 
 /***********************************************************************
- *							Section Compilation                        *
+ *                         Section Compilation                         *
  ***********************************************************************/
 /*
 CHANGE:
@@ -124,6 +124,7 @@ CHANGE:
 	R-instruction $rd,$rs,$rt
 	I-instruction $rt,$rs,immediate
 	J-instruction target
+	+ prise en charge des erreurs
 */
 
 /*remplace le char toreplace avec with dans line
@@ -406,12 +407,29 @@ void mapTypeJ(Byte target[4],Instruction *output){
 return: succés ?*/
 int StringToRegistre(char *registre,Byte *converted){
 	int success=1;
+	char REGISTERS[32][6]={
+		"$zero","$at","$v0","$v1","$a0","$a1","$a2","$a3",
+		"$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7",
+		"$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7",
+		"$t8","$t9","$k0","$k1","$gp","$sp","$fp","$ra",
+	};
+	int i=0;
 	if(*registre=='\0'){
 		success=0;
 	}else if(*registre=='$'){
 		success=StringToByte(registre+1,converted);
+		if(success==0){
+			success=0;
+			/*gros if else if strcmp registres en lettre*/
+			while(i<32 && success==0){
+				if(strcmp(REGISTERS[i],registre)==0){
+					success=1;
+					*converted=i;
+				}
+				i++;
+			}
+		}
 	}else{
-		/*gros if else if strcmp registres en lettre*/
 		success=0;
 	}
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "compiler.h"
-#include "ManipulationsFichier.h"
+#include "emulateur.h"
 #include "MipsSimulateur.h"
 
 void printInst(char *str_inst,Instruction *inst){

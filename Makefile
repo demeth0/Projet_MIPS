@@ -1,13 +1,13 @@
 CC = gcc
 CFLAGS = -pedantic -ansi -Wall
-OBJECTS = main.o ManipulationsFichier.o ByteUtils.o LabelLib.o MipsSimulateur.o compiler.o
+OBJECTS = main.o ManipulationsFichier.o ByteUtils.o LabelLib.o emulateur.o compiler.o
 BIN = main
 RM = rm -f
 
 all: $(OBJECTS)
 	@$(CC) $(OBJECTS) -o $(BIN) $(CFLAGS)
 
-main.o: main.c ManipulationsFichier.h MipsSimulateur.h
+main.o: main.c ManipulationsFichier.h emulateur.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
 ManipulationsFichier.o: ManipulationsFichier.c ManipulationsFichier.h compiler.h
@@ -16,7 +16,7 @@ ManipulationsFichier.o: ManipulationsFichier.c ManipulationsFichier.h compiler.h
 ByteUtils.o: ByteUtils.c ByteUtils.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
-MipsSimulateur.o: MipsSimulateur.c MipsSimulateur.h
+emulateur.o: emulateur.c emulateur.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
 
 LabelLib.o: LabelLib.c LabelLib.h
