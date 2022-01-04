@@ -137,7 +137,7 @@ void replace(char *line,char toreplace, char with){
 	}
 }
 
-/*découpe en bloc la ligne pour la compilation
+/*découpe en bloc la ligne pour la compilation si trop de paramètre ou espaces mal placés va retourner un échec
 Req   : line non null
 return: si la ligne a été consumée*/
 int extraction(char tab[4][16],char *line){
@@ -176,15 +176,18 @@ int extraction(char tab[4][16],char *line){
 	return line[index]=='\0';
 }
 
+/*applique les mask pour les opcodes*/
 void setNormalOpCode(Instruction *instruction, Byte opCode){
 	instruction->code[0] = (instruction->code[0]&0x03) + (opCode<<2);
 }
 
+/*applique les mask pour les opcodes*/
 void setSpecialOpCode(Instruction *instruction, Byte opCode){
 	instruction->code[3] = (instruction->code[0]&0xC0) + opCode;
 	setNormalOpCode(instruction,0);
 }
 
+/*initialise les 6 fields bloc de l'instruction*/
 void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,Byte b4,Byte b5){
 	instruction->b[0]=b0;
 	instruction->b[1]=b1;
@@ -194,6 +197,7 @@ void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,By
 	instruction->b[5]=b5;
 }
 
+/*détecte et écrit le code opération de la chaine de caractère dans l'instruction*/
 void mapOpCode(char* opcode, Instruction *instruction){
 	instruction->id = UNKNOWN_ID;
 	if(opcode[1]=='\0' && opcode[0]=='j'){
@@ -332,6 +336,7 @@ void mapOpCode(char* opcode, Instruction *instruction){
 	}
 }
 
+/*écrit une valeur de taille N sur une chaine de Byte*/
 void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	/* size in bit of the value not necessarly a multiple of 8 */
 	int size=instruction->b[field];
@@ -377,6 +382,7 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	}
 }
 
+/*écrit les bloc nécéssaire pour une instruction type R*/
 void mapTypeR(Byte rs,Byte rt,Byte rd,Byte sa,Instruction *output){
 	pasteValue(output,1,&rs,1);
 	pasteValue(output,2,&rt,1);
@@ -384,16 +390,20 @@ void mapTypeR(Byte rs,Byte rt,Byte rd,Byte sa,Instruction *output){
 	pasteValue(output,4,&sa,1);
 }
 
+/*écrit les bloc nécéssaire pour une instruction type I*/
 void mapTypeI(Byte rs,Byte rt,Byte immediat[2],Instruction *output){
 	pasteValue(output,1,&rs,1);
 	pasteValue(output,2,&rt,1);
 	pasteValue(output,3,immediat,2);
 }
 
+/*écrit les bloc nécéssaire pour une instruction type J*/
 void mapTypeJ(Byte target[4],Instruction *output){
 	pasteValue(output,1,target,4);
 }
 
+/*converti une chaine de caractère de type $X en une valeur sur un Byte
+return: succés ?*/
 int StringToRegistre(char *registre,Byte *converted){
 	int success=1;
 	if(*registre=='\0'){
@@ -408,6 +418,8 @@ int StringToRegistre(char *registre,Byte *converted){
 	return success;
 }
 
+/*converti une chaine de caractère représentant un entier signé en hexa ou décimale sur 2 Byte
+return: succés ?*/
 int StringToSignedIntByteArray(char *entier,Byte converted[2]){
 	int success=1;
 	int value;
@@ -425,6 +437,8 @@ int StringToSignedIntByteArray(char *entier,Byte converted[2]){
 	return success;
 }
 
+/*converti une chaine de caractère offset(registre) en Byte
+return: succés ?*/
 int StringToRegistreWithOffset(char *line,Byte *registre,Byte offset[2]){
 	int success=1;
 	int debut,fin;
@@ -468,7 +482,7 @@ int StringToRegistreWithOffset(char *line,Byte *registre,Byte offset[2]){
 attention pour les valeurs de rt rs et rd on attend des registres
 donc sois $X soit un nom défini dans register_defines. Pour la valeur de 
 sa par contre c'est une entière cad sans le $
-
+return: succés ?
 */
 int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *output){
 	int success=1;
@@ -747,6 +761,7 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 	return success;
 }
 
+/*desc dans .h*/
 int compileline(char *line,Instruction *output){
 	char operandes[4][16];
 	int state=0;
@@ -772,6 +787,12 @@ int compileline(char *line,Instruction *output){
 	return state;
 }
 
+/*a implémenter demander par le sujet*/
+int compile(char *source, char *output){
+	return 0;
+}
+
+/*desc dans .h*/
 void initInst(Instruction *inst){
 	inst->code[0]=0;
 	inst->code[1]=0;

@@ -19,12 +19,12 @@ Description:
 	prend le nom du fichier a compiler en entrée et le nom du fichier de sortie.
 	Compile la source en language MIPS
 parametres:
-	input - fichier d'entrée
+	source - fichier d'entrée
 	output - fichier de sortie
 return:
 	void
 */
-void compile(char *input, char *output);
+int compile(char *source, char *output);
 
 /*
 Description:
