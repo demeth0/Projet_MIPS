@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include "InstructionCompiler.h"
+#include "compiler.h"
 #include "ManipulationsFichier.h"
 #include "MipsSimulateur.h"
 
 void printInst(char *str_inst,Instruction *inst){
-	printf("Instruction : \n\t\"%s\"\n\tID: %d\n\tHex: %02x%02x %02x%02x\n\tBlocks size: %d %d %d %d %d %d %d %d\n", 
+	printf("Instruction : \n\t\"%s\"\n\tID: %d\n\tHex: %02x%02x %02x%02x\n\tBlocks size: %d %d %d %d %d %d\n", 
 				str_inst,
 				inst->id,
 				inst->code[0],
@@ -16,29 +16,7 @@ void printInst(char *str_inst,Instruction *inst){
 				inst->b[2],
 				inst->b[3],
 				inst->b[4],
-				inst->b[5],
-				inst->b[6],
-				inst->b[7]);
-}
-
-/*
-return:
-	success : la commande a été traduite et executée sans erreurs
-*/
-int processLine(char *line, Instruction *inst){
-	int state=1;
-	initInst(inst); /* remet l'instruction a 0 a chaque appel */
-	format_instr(line); /*supprimes espaces en trop*/
-	textInstructionToOpcode(line,inst); /*détermine le type d'instruction*/
-	if(inst->id == UNKNOWN_ID){
-		printf("instruction non connue\n");
-		state=0;
-	}else{
-		writeInstructionOperands(inst, line);
-		printInst(line,inst);
-	}
-	
-	return state;
+				inst->b[5]);
 }
 
 void waitForNext(){
@@ -77,8 +55,9 @@ int main(int argc, char const *argv[])
 
 			if(fichier !=NULL){ /*mode fichier activé*/
 				while(!feof(fichier)){
+					initInst(&instr);
 					readInstruction(fichier,line);
-					if(processLine(line, &instr)){
+					if(compileline(line, &instr)){
 						writeHexInstructionToFile(fichier_sortie,instr);
 					}
 
@@ -94,7 +73,8 @@ int main(int argc, char const *argv[])
 					printf("instruction>");
 					readInstruction(stdin,line);
 					run = strcmp(line,"end");
-					if(run && processLine(line, &instr)){
+					initInst(&instr);
+					if(run && compileline(line, &instr)){
 						writeHexInstructionToFile(fichier_sortie,instr);
 					}
 				}

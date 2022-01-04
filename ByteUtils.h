@@ -4,6 +4,8 @@
 #include <stdlib.h>
 typedef unsigned char Byte;
 
+#define DEBUG_BYTEUTILS 1
+
 /*
 Description:
 	Déplace vers la gauche les bits de la chaine values n fois
@@ -30,6 +32,16 @@ void shiftRNBit(Byte *values, int n, int size);
 
 /*
 Description:
+	convertis une chaine de caractère en un entier sur 8bit non signé et gère les erreurs
+return:
+	si la chaine de caractère a été traduite correctement
+erreurs:
+	si str ou result sont NULL
+*/
+int StringToByte(char *str,Byte *result);
+
+/*
+Description:
 	convertit un entier dans un integer en un entier encoder sur un tableau de Byte de taille 2
 parametre:
 	res - tableau de Byte de taille nécessairement 2
@@ -39,18 +51,29 @@ return:
 erreur:
 	si res ne fait pas une taille de 2 
 */
-void IntTo2ByteArray(int i,Byte *res);
+void IntegerTo2ByteArray(int i,Byte *res);
 
 /*
 Description:
-	prend en paramètre une chaine de caractères représentant une valeur immédiate
-	en hexadécimale ou décimale et la converit en un Integer
-parametre:
-	str - chaine de caractères finissant par \0
+	convertit une chaine de caractère de forme 0xHEXA en un entier signé (int)
+paramètre:
+	str - la chaine a convertir
+	converted - le résultat
 return:
-	la valeur décimale signée de la chaine
+	si l'entier a été convertit avec succés
 */
-int ImmediatStrToInteger(char *str);
+int HexStrIntegerToInt(char *str,int *converted);
+
+/*
+Description:
+	convertit une chaine de caractère représentant un entier signé en un type C int
+paramètre:
+	str - la chaine a convertir
+	converted - le résultat
+return:
+	si l'entier a été convertit avec succés
+*/
+int StringToSignedInteger(char *str,int *converted);
 
 /*
 Description:

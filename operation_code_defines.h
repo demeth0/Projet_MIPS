@@ -8,7 +8,7 @@ X_ID correspond a un nombre unique pour définir une instruction
      les deux bits de poid forts correspondent au type d'instruction
 */
 #define OPCODE_TYPE_MASK 0xC0
-#define OPCODE_TYPE_R    0x00 /*00*/
+#define OPCODE_TYPE_R    0xC0 /*11*/
 #define OPCODE_TYPE_I    0x80 /*10*/
 #define OPCODE_TYPE_J    0x40 /*01*/
 

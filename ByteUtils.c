@@ -55,7 +55,27 @@ void shiftRNBit(Byte *values, int n, int size){
 	shiftR8Bit(values, shift, size);
 }
 
-void IntTo2ByteArray(int i,Byte *res){
+int StringToByte(char *str,Byte *result){
+	int success=1,index=0;
+	unsigned int sum=0;
+	/*si index>=3 alors nombre sur 4 digit trop grand pour un Byte  (255)*/
+	while(str[index]>='0' && str[index]<='9' && index<3){
+		sum=sum*10+str[index]-'0';
+		index++;
+	}
+
+	/*si on a pas lus la chaine en entier ou que la somme dépasse le max*/
+	if(str[index]!= '\0' || sum>255){
+		success = 0;
+	}else{
+		*result=sum;/*pas d'overflow car <255*/
+		if(DEBUG_BYTEUTILS) printf("[conversion] result conversion str %s to int: %d\n", str, sum);
+	}
+
+	return success;
+}
+
+void IntegerTo2ByteArray(int i,Byte *res){
 	int cp = i;
 	int weight = 0x8000; /*1000 0000 0000 0000*/
 
@@ -71,28 +91,36 @@ void IntTo2ByteArray(int i,Byte *res){
 	}
 }
 
-int SignedStrIntegerToInt(char *str){
+int StringToSignedInteger(char *str,int *converted){
 	char *cp = str;
-	int res=0;
-	int sign=1;
-	if((*cp)=='-'){
+	int res=0,sign=1,index=0;
+	int success = cp[0]!='\0';
+
+	if(cp[0]=='-'){
 		sign=-1;
 		cp++;
 	}
-	while((*cp) != '\0'){
-		res = res*10 + ((*cp)-'0');
-		cp++;
-	}
 
-	return sign*res;
+	while(cp[index] != '\0' && success){
+		res = res*10 + (cp[index]-'0');
+		success = cp[index]>='0' && cp[index]<='9';
+		index++;
+	}
+	if(success){
+		*converted=sign*res;
+		if(DEBUG_BYTEUTILS) printf("[conversion] result conversion str to int: %d\n", sign*res);
+	}
+	return success;
 }
 
-int HexStrIntegerToInt(char *str){
+int HexStrIntegerToInt(char *str,int *converted){
 	char *cp = str;
-	int res=0;
-	int buffer=0;
-	while((*cp) != '\0'){
-		switch((*cp)){
+	int index=0;
+	int res=0,buffer=0;
+	int success=str[0]!='\0';
+
+	while(cp[index] != '\0' && success){
+		switch(cp[index]){
 			case 'a':
 				buffer=0xA;
 				break;
@@ -112,27 +140,24 @@ int HexStrIntegerToInt(char *str){
 				buffer=0xF;
 				break;
 			default:
-				buffer=(*cp)-'0';
+				if(cp[index]<='9' && cp[index]>='0'){
+					buffer=(*cp)-'0';
+				}else{
+					success=0;
+				}
+				
 				break;
 		}
 		res = res<<4;
 		res += buffer;
 		
-		cp++;
+		index++;
 	}
-
-	return res;
+	if(success){
+		*converted=res;
+	}
+	return success;
 }
-
-int ImmediatStrToInteger(char *str){
-	int res;
-	if(str[0]=='0' && str[1]=='x'){
-		res=HexStrIntegerToInt(str+2);
-	}else{
-		res = SignedStrIntegerToInt(str);
-	}
-	return res;
-} 
 
 void incr(Byte *tab, int size){
 	int index=size-1;
