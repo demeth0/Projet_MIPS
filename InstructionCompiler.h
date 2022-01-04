@@ -1,3 +1,10 @@
+/******************************************************
+ *                                                    *
+ *    première implémentation du compilateur MIPS     *
+ *                  Deprecated                        *
+ *                                                    *
+ ******************************************************/
+
 #ifndef INSTRUCTION_COMPILER_MIPS
 #define INSTRUCTION_COMPILER_MIPS
 
