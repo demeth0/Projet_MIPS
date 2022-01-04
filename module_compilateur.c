@@ -1,4 +1,4 @@
-#include "compiler.h"
+#include "module_compilateur.h"
 
 /******************************************
  *      Section traitement de texte       *

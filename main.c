@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "compiler.h"
-#include "emulateur.h"
-#include "MipsSimulateur.h"
+#include "module_compilateur.h"
+#include "module_emulateur.h"
+#include "ManipulationsFichier.h"
 
 void printInst(char *str_inst,Instruction *inst){
 	printf("Instruction : \n\t\"%s\"\n\tID: %d\n\tHex: %02x%02x %02x%02x\n\tBlocks size: %d %d %d %d %d %d\n", 

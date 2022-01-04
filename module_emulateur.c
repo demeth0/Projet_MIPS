@@ -1,4 +1,4 @@
-#include "emulateur.h"
+#include "module_emulateur.h"
 
 
 /*permet de recopier dans sortie le contenue de l'entrée*/
@@ -89,7 +89,7 @@ void simulate(Instruction *instruction, Environment *simulation){
 	target[0]=0;target[1]=0;target[2]=0;target[3]=0;
 
 	/*pour référence, ne fait rien les instructions sont passées en paramètre*/
-	fetchInstruction();
+	fetchInstruction(simulation);
 
 	/*calculer les indexes de registres et/ou adresses mémoire*/
 	decodeInstruction(instruction,&rs,&rd,&rt,&sa,imm,target);
