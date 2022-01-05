@@ -779,6 +779,8 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 	return success;
 }
 
+
+
 /*desc dans .h*/
 int compileline(char *line,Instruction *output){
 	char operandes[4][16];
@@ -843,10 +845,6 @@ int compile(const char *source, const char *output){
 	return state;
 }
 
-void waitForNext(){
-	fgetc(stdin);
-}
-
 int compile_sequential(const char *source,const char *output){
 	FILE *fichier_source=NULL;
 	FILE *fichier_destination=NULL;
@@ -870,7 +868,8 @@ int compile_sequential(const char *source,const char *output){
 				printf("ligne vide, skip\n");
 			}
 			printf("next>");
-			waitForNext();
+			/*wait for enter*/
+			fgetc(stdin);
 		}
 	}
 

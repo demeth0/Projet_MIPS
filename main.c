@@ -3,25 +3,7 @@
 #include "module_emulateur.h"
 #include "ManipulationsFichier.h"
 
-void printInst(char *str_inst,Instruction *inst){
-	printf("Instruction : \n\t\"%s\"\n\tID: %d\n\tHex: %02x%02x %02x%02x\n\tBlocks size: %d %d %d %d %d %d\n", 
-				str_inst,
-				inst->id,
-				inst->code[0],
-				inst->code[1],
-				inst->code[2],
-				inst->code[3],
-				inst->b[0],
-				inst->b[1],
-				inst->b[2],
-				inst->b[3],
-				inst->b[4],
-				inst->b[5]);
-}
-
-
-
-void interpreteur(){
+void interpreteur(Environment *sim){
 	int run=1;
 	char line[256];
 	Instruction instr;
@@ -32,7 +14,7 @@ void interpreteur(){
 		run = strcmp(line,"end");
 		initInst(&instr);
 		if(run && compileline(line, &instr)){
-			printInst(line,&instr);
+			printInst(sim,instr,line);
 		}
 	}
 }
@@ -42,12 +24,15 @@ int main(int argc, char const *argv[])
 	int seq=0;
 	int i;
 	int source_pos;
+	Environment simulation;
+
+	initSimulation(&simulation);
 
 	if(argc==1){
 		printf("*************************************\n");
 		printf("*         mode interpréteur         *\n");
 		printf("*************************************\n");
-		interpreteur();
+		interpreteur(&simulation);
 	}else if(argc <= 3){
 		for(i=1;i<argc;i++){
 			if(strcmp(argv[i],"-pas")==0){
