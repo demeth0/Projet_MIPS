@@ -26,6 +26,11 @@ void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd
 void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 
+void printInst(Environment *sim, Instruction inst,char *str_inst){
+	printf("%02X%02X%02X%02X %02X%02X%02X%02X '%s'\n", sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
+								  inst.code[0],inst.code[1],inst.code[2],inst.code[3],str_inst);
+}
+
 void simulate(Instruction *instruction, Environment *simulation){
 	/*déterminer les espace temporaires nécéssaires: 
 		type R: rs(5) rt(5) rd(5) sa(5)
@@ -50,6 +55,35 @@ void simulate(Instruction *instruction, Environment *simulation){
 	processData(instruction,simulation,rs,rd,rt,sa,imm,target);
 	/*écrit résultat, écrit en mémoire ou sw*/
 	writeResult(instruction,simulation,rs,rd,rt,sa,imm,target);
+}
+
+void simulateFile(const char *filename,Environment *simulation,int sequential){
+	FILE *source=NULL;
+	Instruction inst;
+	int state;
+	char line[256];
+
+	source = fopen(filename,"rb");
+	if(source!=NULL){
+		while(!feof(source) && state){
+			initInst(&inst);
+			readInstruction(source,line);
+			if(*line!='\0'){
+				state=compileline(line, &inst);
+				if(state){
+					simulate(&inst,simulation);
+					printInst(simulation,inst,line);
+				}else{
+					printf("echec de compilation\n");
+				}
+				if(sequential){
+					printf("next>");
+					/*wait enter*/
+					fgetc(stdin);
+				}
+			}
+		}
+	}
 }
 
 void fetchInstruction(Environment *simulation){
