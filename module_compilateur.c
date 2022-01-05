@@ -786,12 +786,12 @@ int compileline(char *line,Instruction *output){
 	char operandes[4][16];
 	int state=0;
 	if(line != NULL && *line!='\0'){
-		if(DEBUG_COMPILER) printf("tokenizing '%s'\n", line);
+		/*printf("tokenizing '%s'\n", line);*/
 		tokenize(line);
-		if(DEBUG_COMPILER) printf("=> %s\n", line);
-		if(DEBUG_COMPILER) printf("extracting %s\n", line);
+		/*if(DEBUG_COMPILER) printf("=> %s\n", line);*/
+		/*printf("extracting %s\n", line);*/
 		state = extraction(operandes,line);
-		if(DEBUG_COMPILER) printf("=> [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);
+		/*printf("=> [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 
 		/*if line entirely consumed*/
 		if(state){
@@ -799,9 +799,9 @@ int compileline(char *line,Instruction *output){
 			
 			/*if operation known*/
 			if(output->id != UNKNOWN_ID){
-				if(DEBUG_COMPILER) printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);
+				/*printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
-				if(DEBUG_COMPILER) printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);
+				/*printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);*/
 			}
 		}
 	}
@@ -832,45 +832,6 @@ int compile(const char *source, const char *output){
 		}
 	}else{
 		printf("impossible d'ouvrir ou de créer les fichiers\n");
-	}
-
-	if(fichier_source!=NULL){
-		fclose(fichier_source);
-	}
-
-	if(fichier_destination!=NULL){
-		fclose(fichier_destination);
-	}
-
-	return state;
-}
-
-int compile_sequential(const char *source,const char *output){
-	FILE *fichier_source=NULL;
-	FILE *fichier_destination=NULL;
-	Instruction instr;
-	char line[128];
-	int state=1;
-	
-	fichier_source = fopen(source,"rb");
-	fichier_destination = fopen(output,"wb");
-
-	if(fichier_source!=NULL && fichier_destination!= NULL){
-		while(!feof(fichier_source) && state){
-			initInst(&instr);
-			readInstruction(fichier_source,line);
-			if(*line!='\0'){
-				state=compileline(line, &instr);
-				if(state){
-					writeHexInstructionToFile(fichier_destination,instr);
-				}
-			}else{
-				printf("ligne vide, skip\n");
-			}
-			printf("next>");
-			/*wait for enter*/
-			fgetc(stdin);
-		}
 	}
 
 	if(fichier_source!=NULL){

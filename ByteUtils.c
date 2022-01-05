@@ -429,7 +429,3 @@ void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 		twoComplementDWord(LO);
 	}
 }
-
-void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2){
-
-}

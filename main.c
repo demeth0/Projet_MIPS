@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
 
 	if(argc==1){
 		printf("*************************************\n");
-		printf("*         mode interpréteur         *\n");
+		printf("*         mode interpreteur         *\n");
 		printf("*************************************\n");
 		interpreteur(&simulation);
 	}else if(argc <= 3){
@@ -41,19 +41,22 @@ int main(int argc, char const *argv[])
 				source_pos=i;
 			}
 		}
+
+		compile(argv[source_pos],"output.txt");
+
 		if(seq){
 			printf("*************************************\n");
-			printf("*        mode non-intéractif        *\n");
-			printf("*             séquentiel            *\n");
+			printf("*        mode non-interactif        *\n");
+			printf("*             sequentiel            *\n");
 			printf("*************************************\n");
-			compile_sequential(argv[source_pos],"output.txt");
 		}else{
 			printf("*************************************\n");
-			printf("*        mode non-intéractif        *\n");
-			printf("*           non séquentiel          *\n");
+			printf("*        mode non-interactif        *\n");
+			printf("*           non sequentiel          *\n");
 			printf("*************************************\n");
-			compile(argv[source_pos],"output.txt");
 		}
+		
+		simulateFile(argv[source_pos],&simulation,seq);
 	}
 	
 	return 0;

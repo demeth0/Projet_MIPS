@@ -8,9 +8,6 @@
 #include "ByteUtils.h"
 #include <string.h>
 
-
-#define DEBUG_COMPILER 1
-
 /*
 Description:
 	première version du programme demandée (voir sujet.html) 
@@ -23,19 +20,6 @@ return:
 	void
 */
 int compile(const char *source, const char *output);
-
-/*
-Description:
-	première version du programme demandée (voir sujet.html) 
-	prend le nom du fichier a compiler en entrée et le nom du fichier de sortie.
-	Compile la source en language MIPS. mode sequentiel 
-parametres:
-	source - fichier d'entrée
-	output - fichier de sortie
-return:
-	void
-*/
-int compile_sequential(const char *source,const char *output);
 
 /*
 Description:
