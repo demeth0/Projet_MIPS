@@ -261,6 +261,94 @@ int equalsDWord(DWord b1,DWord b2){
 	return i==4;
 }
 
+int sign64bits(unsigned char word[8]){
+	return (word[0]&0x80)==0?1:-1;
+}
+/*b1 <- b1+b2*/
+int add64bits(unsigned char b1[8],unsigned char b2[8]){
+	unsigned int sum=0;
+	int i,overflow=0;
+	if(sign64bits(b1)==sign64bits(b2)){
+		if(sign64bits(b1)==1){
+			overflow=1;
+		}else{
+			overflow=-1;
+		}
+	}
+	for(i=7;i>=0;i--){
+		sum += b1[i]+b2[i];
+		b1[i] = sum&0xFF;  /*new byte value*/
+		if((sum & 0xF00) != 0){ /*overflow on the Byte*/
+			sum=1;
+		} 
+		else
+			sum=0;
+	}
+	return overflow * (sum?1:0); /*return si la somme fait un overflow et meme signe*/
+}
+
+int decalage_64bits_par1(unsigned char tableau[8]){ /*decale de 1 tous les bits sur un tableau de 64 bits*/
+
+	int compteur =7;
+	int poids_fort =0;
+	int overflow =0;
+	unsigned char temp;
+	while(compteur>=0){
+		temp = tableau[compteur];
+		tableau[compteur] = (tableau[compteur]<<1) + poids_fort;
+		poids_fort = (temp & 0x80)>>7;
+		compteur--;
+	}
+
+	if (poids_fort!=0)
+		overflow=1;
+
+	return overflow;
+}
+
+void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2){
+	unsigned char bit;
+	int  parseur=0;
+	int  compteur=3;
+	unsigned char result[8];
+	unsigned char addition[8];
+
+	int i =0;
+	char masque;
+	int x;
+	int decalage =64;
+	
+	for (i = 0;i<8;i++){
+		result[i]=0;
+		addition[i] =0;
+	}
+	while(compteur>=0){ /*on parcourt le premier nombre*/
+		parseur =7;
+		while(parseur>=0){ /*on parcourt chaque bit*/
+			masque = 0x01<<parseur;
+			bit = (b1[compteur] & masque)==0?0:1;
+			if(bit == 1){
+				/*on applique le decalage sur b1*/
+				/*on recopie b1 dans quelque chose de plus grand*/
+				addition[7] = b2[3];
+				addition[6] = b2[2];
+				addition[5] = b2[1];
+				addition[4] = b2[0];
+				addition[3] = addition[2] = addition[1]=addition[0] = 0;
+				/*on decale*/
+				x =0;
+				while (x<(parseur + (3-compteur)*8)){
+					decalage_64bits_par1(addition);
+					x++;
+				}
+				add64bits(result,addition);
+			}
+			decalage--;
+			parseur--;
+		}
+		compteur--;		
+	}
+}
 void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 	int sign_b1,sign_b2,i;
 	DWord num,den;
