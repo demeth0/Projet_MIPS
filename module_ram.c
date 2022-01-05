@@ -40,7 +40,6 @@ Byte readRamADDR(Environment *simulation,DWord adresse){
 
 /*affiche toute la ram*/
 void afficher_ram(Environment *simulation){
-
 	int index =0;
 
 	for(index =0;index<MEM_SIZE;index++){

@@ -337,7 +337,8 @@ void mapOpCode(char* opcode, Instruction *instruction){
 	}
 }
 
-/*écrit une valeur de taille N sur une chaine de Byte*/
+/*écrit une valeur de taille N sur une chaine de Byte
+convention des octets*/
 void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	/* size in bit of the value not necessarly a multiple of 8 */
 	int size=instruction->b[field];
@@ -369,13 +370,13 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	}
 
 	/* positionne la valeur à la fin tel que le bit de poids fort soit le premier dans la chaine */
-	shiftLNBit(val, 32-size, 4);
+	shiftLDWord(val, 32-size);
 	/* décale val pour être à la bonne position dans le code */
-	shiftRNBit(val, pos,4);
+	shiftRDWord(val, pos);
 
 	/* calcul les mask pour l'insertion dans le code */
-	shiftRNBit(mask1, pos,4);
-	shiftLNBit(mask2, 32-(pos+size), 4);
+	shiftRDWord(mask1, pos);
+	shiftLDWord(mask2, 32-(pos+size));
 
 	/* insertion dans le code */
 	for(i=0;i<4;i++){
@@ -392,7 +393,7 @@ void mapTypeR(Byte rs,Byte rt,Byte rd,Byte sa,Instruction *output){
 }
 
 /*écrit les bloc nécéssaire pour une instruction type I*/
-void mapTypeI(Byte rs,Byte rt,Byte immediat[2],Instruction *output){
+void mapTypeI(Byte rs,Byte rt,DWord immediat,Instruction *output){
 	pasteValue(output,1,&rs,1);
 	pasteValue(output,2,&rt,1);
 	pasteValue(output,3,immediat,2);
@@ -438,26 +439,26 @@ int StringToRegistre(char *registre,Byte *converted){
 
 /*converti une chaine de caractère représentant un entier signé en hexa ou décimale sur 2 Byte
 return: succés ?*/
-int StringToSignedIntByteArray(char *entier,Byte converted[2]){
+int StringToSignedIntByteArray(char *entier,DWord converted){
 	int success=1;
 	int value;
 
 	if(entier[0]=='\0'){
 		success=0;
 	}else if(entier[0]=='0' && entier[1]=='x'){
-		success=HexStrIntegerToInt(&entier[2],&value);
+		success=HexStringToInteger(&entier[2],&value);
 	}else{
 		success=StringToSignedInteger(entier,&value);
 	}
 	if(success){
-		IntegerTo2ByteArray(value,converted);
+		IntegerToDWord(value,converted);
 	}
 	return success;
 }
 
 /*converti une chaine de caractère offset(registre) en Byte
 return: succés ?*/
-int StringToRegistreWithOffset(char *line,Byte *registre,Byte offset[2]){
+int StringToRegistreWithOffset(char *line,Byte *registre,DWord offset){
 	int success=1;
 	int debut,fin;
 	if(*line=='\0'){
@@ -505,7 +506,7 @@ return: succés ?
 int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *output){
 	int success=1;
 	Byte rs,rt,rd,sa;
-	Byte immediat[2];
+	DWord immediat; /*16bits integer*/
 	/*DWord target;*/
 
 	switch(output->id){

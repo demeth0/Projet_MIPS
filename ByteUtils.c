@@ -3,56 +3,56 @@
 
 /*
 fait un déplacement binaire vers la gauche de maximum 8bit. 
-Opération élémentaire sur un tableau de Byte
+Opération élémentaire sur un DWord
 */
-void shiftL8Bit(Byte *values, int n, int size){
+void shiftL8Bit(DWord values, int n){
 	int i;
 	values[0]=values[0]<<n;
 
-	for(i=1;i<size;i++){
+	for(i=1;i<4;i++){
 		values[i-1] += values[i] >> (8-n);
 		values[i]=values[i]<<n;
 	}
 }
 
-void shiftLNBit(Byte *values, int n, int size){
+void shiftLDWord(DWord values, int n){
 	int shift=n,i;
 	while(shift > 8){
-		for(i=1;i<size;i++){
+		for(i=1;i<4;i++){
 			values[i-1]=values[i];
 		}
 		values[i-1]=0;
 		shift-=8;
 	}
 
-	shiftL8Bit(values, shift, size);
+	shiftL8Bit(values, shift);
 }
 
 /*
 fait un déplacement binaire vers la droite de maximum 8bit. 
-Opération élémentaire sur un tableau de Byte
+Opération sur un DWord
 */
-void shiftR8Bit(Byte *values, int n, int size){
+void shiftR8Bit(DWord values, int n){
 	int i;
-	values[size-1]=values[size-1]>>n;
+	values[3]=values[3]>>n;
 
-	for(i=size-1;i>0;i--){
+	for(i=3;i>0;i--){
 		values[i] += values[i-1] << (8-n);
 		values[i-1]=values[i-1]>>n;
 	}
 }
 
-void shiftRNBit(Byte *values, int n, int size){
+void shiftRDWord(DWord values, int n){
 	int shift=n,i;
 	while(shift > 8){
-		for(i=size-1;i>0;i--){
+		for(i=3;i>0;i--){
 			values[i]=values[i-1];
 		}
 		values[i]=0;
 		shift-=8;
 	}
 
-	shiftR8Bit(values, shift, size);
+	shiftR8Bit(values, shift);
 }
 
 int StringToByte(char *str,Byte *result){
@@ -75,16 +75,16 @@ int StringToByte(char *str,Byte *result){
 	return success;
 }
 
-void IntegerTo2ByteArray(int i,Byte *res){
-	int cp = i;
+void IntegerToDWord(int i,DWord res){
 	int weight = 0x8000; /*1000 0000 0000 0000*/
 
 	while(weight > 0){
-		shiftLNBit(res, 1, 2); /*décale vers la gauche le résultat car on ajoute le nouveau bit de poids faible*/
+		/*décale vers la gauche le résultat car on ajoute le nouveau bit de poids faible*/
+		shiftLDWord(res, 1); 
+
 		/* alors le bit est à 1 sinon 0*/
-		if((cp&weight) != 0){
-			cp=cp&(~weight);
-			res[1]++;
+		if((i&weight) != 0){
+			res[3]++;
 		}
 		
 		weight = weight>>1;
@@ -113,7 +113,7 @@ int StringToSignedInteger(char *str,int *converted){
 	return success;
 }
 
-int HexStrIntegerToInt(char *str,int *converted){
+int HexStringToInteger(char *str,int *converted){
 	char *cp = str;
 	int index=0;
 	int res=0,buffer=0;
@@ -159,59 +159,110 @@ int HexStrIntegerToInt(char *str,int *converted){
 	return success;
 }
 
-void incr(Byte *tab, int size){
-	int index=size-1;
-	while(tab[index]==0xFF && index >= 0){
-		tab[index]=0;
-		index--;
-	}
-	if(index >= 0){
-		tab[index]++;
-	}
+Byte addIntegerToDWord(int integer,DWord word){
+	DWord temp;
+
+	IntegerToDWord(integer,temp);
+	return addDWord(word,temp);
 }
 
-void incr4(Byte *tab, int size){
-	incr(tab,size);
-	incr(tab,size);
-	incr(tab,size);
-	incr(tab,size);
+int incr(DWord word){
+	DWord one = {0x00,0x00,0x00,0x01};
+	return addDWord(word,one);
 }
 
-void setByte(DWord data,int value){
-	data[0]=0;
-	data[0]=0;
-	data[0]=0;
-	data[0]=0;
-	addToByte(data,value);
+int decr(DWord word){
+	DWord minus_one = {0xFF,0xFF,0xFF,0xFF};
+	return addDWord(word,minus_one);
 }
 
-void addToByte(DWord data,int value){
-	Byte overflow=0;
-	Byte extracted = value & 0xFF; /*8 premiers bits*/
-	int index=3;
-	int cp_value = value;
-	unsigned int temp=0;
+void incr4(DWord word){
+	incr(word);
+	incr(word);
+	incr(word);
+	incr(word);
+}
 
-	/*tant que valeur non null (pas finit d'écrire) et pas dépasser taille d'un
-	int (2 ou 4) et pas dépasser taille data*/
-	while(index>=0){
-		/*on regarde si l'addition des bits de value avec l'overflow précédent et data ne provoquent pas de dépassement*/
-		temp = data[index]+extracted+overflow;
-		if((temp&(0xF00))!=0){
-			data[index]=temp&0xFF;	
-			/*au plus égal a 1 car 255+255 fait 1 bit d'overflow*/
+void copyDWord(DWord dst,DWord src){
+	src[0]=dst[0];
+	src[1]=dst[1];
+	src[2]=dst[2];
+	src[3]=dst[3];
+}
+
+int signDWord(DWord word){
+	return (word[0]&0x80)==0?1:-1;
+}
+
+/*b1 <- b1+b2*/
+int addDWord(DWord b1,DWord b2){
+	unsigned int sum=0;
+	int i,overflow=0;
+	if(signDWord(b1)==signDWord(b2)){
+		if(signDWord(b1)==1){
 			overflow=1;
 		}else{
-			data[index]+=extracted+overflow;
-			overflow = 0;
+			overflow=-1;
 		}
-
-		index--;
-		cp_value = cp_value>>8;
-		extracted = cp_value & 0xFF;
-	}	
+	}
+	for(i=3;i>=0;i--){
+		sum += b1[i]+b2[i];
+		b1[i] = sum&0xFF;  /*new byte value*/
+		if((sum & 0xF00) != 0){ /*overflow on the Byte*/
+			sum=1;
+		} 
+	}
+	return overflow * (sum?1:0); /*return si la somme fait un overflow et meme signe*/
 }
 
-void addByteToByte(Byte *b1,Byte *b2){
+/*value <- -value*/
+int twoComplementDWord(DWord value){
+	int i;
+	for(i=3;i>=0;i--){
+		value[i]=~value[i];
+	}
+	return incr(value);
+}
+
+/*b1 <- b1-b2*/
+int subDWord(DWord b1,DWord b2){
+	DWord cp;
+	copyDWord(cp,b2);
+	twoComplementDWord(cp);
+	return addDWord(b1,cp);
+}
+
+int greaterThanZeroDWord(DWord word){
+	int b1greater;
+
+	if((word[0]|word[1]|word[2]|word[3]) == 0){
+		/*cas word==0*/
+		b1greater=0;
+	}else{
+		if(signDWord(word)==1){
+			/*word>0*/
+			b1greater=1;
+		}else{
+			/*word<0*/
+			b1greater=0;
+		}
+	}
+
+	return b1greater;
+}
+
+int equalsDWord(DWord b1,DWord b2){
+	int i=0;
+	while(b1[i]==b2[i] && i<4){
+		i++;
+	}
+	return i==4;
+}
+
+void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
+
+}
+
+void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 
 }

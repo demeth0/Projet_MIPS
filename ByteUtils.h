@@ -16,7 +16,7 @@ paramètres:
 erreur:
 	si size ne correspond pas a la taille du tableau values
 */
-void shiftLNBit(Byte *values, int n, int size);
+void shiftLDWord(DWord values, int n);
 
 /*
 Description:
@@ -28,7 +28,7 @@ parametres:
 erreur:
 	si size ne correspond pas a la taille du tableau values
 */
-void shiftRNBit(Byte *values, int n, int size);
+void shiftRDWord(DWord values, int n);
 
 /*
 Description:
@@ -42,16 +42,16 @@ int StringToByte(char *str,Byte *result);
 
 /*
 Description:
-	convertit un entier dans un integer en un entier encoder sur un tableau de Byte de taille 2
+	convertit un entier dans un integer en un entier encoder sur un DWord
 parametre:
-	res - tableau de Byte de taille nécessairement 2
-	i - entier sur integer
+	res - DWord qui va stocker la valeur de i
+	i - entier a convertir
 return:
 	void
-erreur:
-	si res ne fait pas une taille de 2 
+erreurs:
+	si res nul
 */
-void IntegerTo2ByteArray(int i,Byte *res);
+void IntegerToDWord(int i,DWord res);
 
 /*
 Description:
@@ -62,7 +62,7 @@ paramètre:
 return:
 	si l'entier a été convertit avec succés
 */
-int HexStrIntegerToInt(char *str,int *converted);
+int HexStringToInteger(char *str,int *converted);
 
 /*
 Description:
@@ -77,24 +77,24 @@ int StringToSignedInteger(char *str,int *converted);
 
 /*
 Description:
-	prend une valeur encodée sur 4 Byte et y ajoute la valeur value signée.
-	prend en compte les débordements.
+	fait word <- word + DWord(integer)
 paramètre:
-	data - le tableau de 4 Byte ou serra ajouter value (les octets sont en little-endian)
-	value - entier signé a ajouter
-erreur:
-	aucunes
+	integer - valeur a ajouter
+	word - dest
+return:
+	l'overflow ou la carry
+erreurs:
+	si word nul
 */
-void addToByte(DWord data,int value);
+Byte addIntegerToDWord(int integer,DWord word);
 
 /*
 Description:
-	écrit la valeur dans le nombre de 32 bit codé dans la tableau data
-parametre:
-	data - tableau ou le nombre est encodé
-	value - valeur a encoder dans le tableau
+	fait word-1
+erreurs:
+	si word nul
 */
-void setByte(DWord data,int value);
+int decr(DWord word);
 
 /*
 Description:
@@ -104,7 +104,7 @@ return:
 erreurs:
 	si la taille ne corespond pas
 */
-void incr(Byte *tab, int size);
+int incr(DWord word);
 
 /*
 Description:
@@ -114,12 +114,83 @@ return:
 erreurs:
 	si la taille ne corespond pas
 */
-void incr4(Byte *tab, int size);
+void incr4(DWord word);
 
 /*
 Description:
-	b1 = b1 + b2
+	copie src dans dst
+parametre:
+	dst - DWord de destination
+	src - DWord a copier
+erreurs:
+	si dst ou src nul
 */
-void addDWordToDWord(DWord b1,DWord b2);
+void copyDWord(DWord dst,DWord src);
+
+/*
+Descccription:
+	retourne le signe du DWord -1 ou 1
+erreurs:
+	si word nul
+*/
+int signDWord(DWord word);
+
+/*
+Description:
+	fait l'opération b1 <- b1 + b2 et retourne l'overflow
+parametre:
+	b1 - premier DWord
+	b2 - DWord a ajouter
+return:
+	0 si pas d'overflow. 1 ou -1 si overflow positif ou négatif
+erreurs:
+	si b1 ou b2 nul*/
+int addDWord(DWord b1,DWord b2);
+
+/*value <- -value*/
+int twoComplementDWord(DWord value);
+
+/*
+Description:
+	fait l'opération b1 <- b1 - b2 et retourne l'overflow
+parametre:
+	b1 - premier DWord
+	b2 - DWord a ajouter
+return:
+	0 si pas d'overflow. 1 ou -1 si overflow positif ou négatif
+erreurs:
+	si b1 ou b2 nul*/
+int subDWord(DWord b1,DWord b2);
+
+/*
+retourne si word>0
+*/
+int greaterThanZeroDWord(DWord word);
+
+/*
+retourne le résultat de l'opération b1==b2
+*/
+int equalsDWord(DWord b1,DWord b2);
+/*
+Description:
+	q ← GPR[rs]31..0 div GPR[rt]31..0
+	LO ← q
+	r ← GPR[rs]31..0 mod GPR[rt]31..0
+	HI ← r
+erreurs:
+	si un des paramètres est nul
+*/
+void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2);
+
+/*
+Description:
+	prod ← GPR[rs]31..0 × GPR[rt]31..0
+	LO ← prod31..0
+	HI ← prod63..32
+erreurs:
+	si un des paramètres est nul
+*/
+void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2);
+
 
 #endif
