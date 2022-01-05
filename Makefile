@@ -35,9 +35,7 @@ clean:
 
 
 
-
-
-test: test.o module_compilateur.o ByteUtils.o
+test: test.o ByteUtils.o
 	@$(CC) $^ -o $@ $(CFLAGS)
-test.o: test.c module_compilateur.h
+test.o: test.c ByteUtils.h
 	@$(CC) -c $< -o $@ $(CFLAGS)

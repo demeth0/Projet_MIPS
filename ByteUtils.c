@@ -184,10 +184,10 @@ void incr4(DWord word){
 }
 
 void copyDWord(DWord dst,DWord src){
-	src[0]=dst[0];
-	src[1]=dst[1];
-	src[2]=dst[2];
-	src[3]=dst[3];
+	dst[0]=src[0];
+	dst[1]=src[1];
+	dst[2]=src[2];
+	dst[3]=src[3];
 }
 
 int signDWord(DWord word){
@@ -210,7 +210,9 @@ int addDWord(DWord b1,DWord b2){
 		b1[i] = sum&0xFF;  /*new byte value*/
 		if((sum & 0xF00) != 0){ /*overflow on the Byte*/
 			sum=1;
-		} 
+		} else{
+			sum=0;
+		}
 	}
 	return overflow * (sum?1:0); /*return si la somme fait un overflow et meme signe*/
 }
@@ -260,7 +262,84 @@ int equalsDWord(DWord b1,DWord b2){
 }
 
 void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
+	int sign_b1,sign_b2,i;
+	DWord num,den;
+	DWord tester;
 
+	tester[0]=0;
+	tester[1]=0;
+	tester[2]=0;
+	tester[3]=0;
+
+	LO[0]=0;
+	LO[1]=0;
+	LO[2]=0;
+	LO[3]=0;
+	HI[0]=0;
+	HI[1]=0;
+	HI[2]=0;
+	HI[3]=0;
+
+	sign_b1=signDWord(b1);
+	sign_b2=signDWord(b2);
+
+	copyDWord(num,b1);
+
+	if(sign_b1==-1){
+		twoComplementDWord(num);
+	}
+
+	copyDWord(den,b2);
+	if(sign_b2==1){
+		twoComplementDWord(den);
+	}/*on obtient un denominateur négatif*/
+	 /*pour faire la soustraction*/
+	
+	/*on aura dans num=abs(b1) et den=-abs(b2)*/
+	/*printf("num: %02x%02x %02x%02x\n", num[0],num[1],num[2],num[3]);
+	printf("den: %02x%02x %02x%02x\n", den[0],den[1],den[2],den[3]);*/
+
+	for(i=0;i<32;i++){
+		/*printf("bit %d\n", i);
+		printf("tester: %02x%02x %02x%02x\n", tester[0],tester[1],tester[2],tester[3]);*/
+
+		/*on récupere le plus gros bit de poid fort*/
+		tester[3]+=((num[0]&0x80)==0)?0:1;
+
+		/*on soustrait */
+		/*overflow impossible val positive - val positive ne peut pas dépasser -255 si les deux valeurs sont bornées a 255*/
+		addDWord(tester,den);
+		
+		/*si bits de poid forts-abs(b2) est supérieur a zero alors*/
+		if(greaterThanZeroDWord(tester) || (tester[0]|tester[1]|tester[2]|tester[3])==0){
+			/*rajoute 1 au résultat*/
+			shiftLDWord(LO,1);
+			LO[3]+=1;
+			
+		}else{
+			/*rajoute zero au résultat*/
+			shiftLDWord(LO,1);
+			/*restaure la valeur de départ extraite pour la garder positive*/
+			twoComplementDWord(den);
+			addDWord(tester,den);
+			twoComplementDWord(den);
+		}
+		/*printf("LO: %02x%02x %02x%02x\n", LO[0],LO[1],LO[2],LO[3]);*/
+		/*passe au digit de poid fort suivant*/
+		shiftLDWord(num,1);
+		shiftLDWord(tester,1);
+	}
+
+	/*a la fin de la boucle, dans tester=r<<1*/
+	/*printf("reste: %02x%02x %02x%02x\n", tester[0],tester[1],tester[2],tester[3]);*/
+	shiftRDWord(tester,1);
+	copyDWord(HI,tester);
+	
+
+	/*si -a/b ou a/-b alors q est négatif*/
+	if(sign_b1*sign_b2 == -1){
+		twoComplementDWord(LO);
+	}
 }
 
 void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2){

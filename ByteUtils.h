@@ -173,9 +173,9 @@ retourne le résultat de l'opération b1==b2
 int equalsDWord(DWord b1,DWord b2);
 /*
 Description:
-	q ← GPR[rs]31..0 div GPR[rt]31..0
+	q ← b1 div b2
 	LO ← q
-	r ← GPR[rs]31..0 mod GPR[rt]31..0
+	r ← b1 mod b2
 	HI ← r
 erreurs:
 	si un des paramètres est nul
