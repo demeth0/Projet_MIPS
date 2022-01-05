@@ -11,11 +11,22 @@ void interpreteur(Environment *sim){
 	while(run){ /*tant que line != "end"*/
 		printf("instruction>");
 		readInstruction(stdin,line);
-		run = strcmp(line,"end");
-		initInst(&instr);
-		if(run && compileline(line, &instr)){
-			printInst(sim,instr,line);
+		if(strcmp(line,"end")==0){
+			run=0;
+		}else if(strcmp(line,"help")==0){
+			printf("view ram - affiche la ram\nview registres - affiche les registres\n");
+		}else if(strcmp(line,"view ram")==0){
+			afficher_ram(sim);
+		}else if(strcmp(line,"view registres")==0){
+			afficher_registres(sim);
+		}else{
+			initInst(&instr);
+			if(compileline(line, &instr)){
+				printInst(sim,instr,line);
+				simulate(&instr, sim);
+			}
 		}
+
 	}
 }
 

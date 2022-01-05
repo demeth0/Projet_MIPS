@@ -45,4 +45,5 @@ void afficher_ram(Environment *simulation){
 	for(index =0;index<MEM_SIZE;index++){
 		printf("%02x ",simulation->RAM[index]);
 	}
+	printf("\n");
 }

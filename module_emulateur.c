@@ -86,6 +86,25 @@ void simulateFile(const char *filename,Environment *simulation,int sequential){
 	}
 }
 
+void afficher_registres(Environment *sim){
+	int i,j;
+	for(i=0;i<8;i++){
+		j=i*4;
+		printf("$%d:%02x%02x %02x%02x    ", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		j++;
+		printf("$%d:%02x%02x %02x%02x    ", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		j++;
+		printf("$%d:%02x%02x %02x%02x    ", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		j++;
+		printf("$%d:%02x%02x %02x%02x\n", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+	}
+	printf("\nPC:%02x%02x %02x%02x    HI:%02x%02x %02x%02x    LO:%02x%02x %02x%02x\n\n", 
+				sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
+				sim->HI[0],sim->HI[1],sim->HI[2],sim->HI[3],
+				sim->LO[0],sim->LO[1],sim->LO[2],sim->LO[3]);
+}
+
+
 void fetchInstruction(Environment *simulation){
 	incr4(simulation->PC);
 }
