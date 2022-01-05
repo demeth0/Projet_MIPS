@@ -396,7 +396,7 @@ void mapTypeR(Byte rs,Byte rt,Byte rd,Byte sa,Instruction *output){
 void mapTypeI(Byte rs,Byte rt,DWord immediat,Instruction *output){
 	pasteValue(output,1,&rs,1);
 	pasteValue(output,2,&rt,1);
-	pasteValue(output,3,immediat,2);
+	pasteValue(output,3,immediat,4);
 }
 
 /*écrit les bloc nécéssaire pour une instruction type J*/
@@ -507,7 +507,6 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 	int success=1;
 	Byte rs,rt,rd,sa;
 	DWord immediat; /*16bits integer*/
-	/*DWord target;*/
 
 	switch(output->id){
 		case ADD_ID:
@@ -785,7 +784,7 @@ int compileline(char *line,Instruction *output){
 	char operandes[4][16];
 	int state=0;
 	if(line != NULL && *line!='\0'){
-		if(DEBUG_COMPILER) printf("tokenizing %s\n", line);
+		if(DEBUG_COMPILER) printf("tokenizing '%s'\n", line);
 		tokenize(line);
 		if(DEBUG_COMPILER) printf("=> %s\n", line);
 		if(DEBUG_COMPILER) printf("extracting %s\n", line);
@@ -800,6 +799,7 @@ int compileline(char *line,Instruction *output){
 			if(output->id != UNKNOWN_ID){
 				if(DEBUG_COMPILER) printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
+				if(DEBUG_COMPILER) printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);
 			}
 		}
 	}
@@ -807,8 +807,82 @@ int compileline(char *line,Instruction *output){
 }
 
 /*a implémenter demander par le sujet*/
-int compile(char *source, char *output){
-	return 0;
+int compile(const char *source, const char *output){
+	FILE *fichier_source=NULL;
+	FILE *fichier_destination=NULL;
+	Instruction instr;
+	char line[128];
+	int state=1;
+	fichier_source = fopen(source,"rb");
+	fichier_destination = fopen(output,"wb");
+	if(fichier_source!=NULL && fichier_destination!= NULL){
+		while(!feof(fichier_source) && state){
+			initInst(&instr);
+			readInstruction(fichier_source,line);
+			if(*line!='\0'){
+				state=compileline(line, &instr);
+				if(state){
+					writeHexInstructionToFile(fichier_destination,instr);
+				}else{
+					printf("echec de compilation\n");
+				}
+			}
+		}
+	}else{
+		printf("impossible d'ouvrir ou de créer les fichiers\n");
+	}
+
+	if(fichier_source!=NULL){
+		fclose(fichier_source);
+	}
+
+	if(fichier_destination!=NULL){
+		fclose(fichier_destination);
+	}
+
+	return state;
+}
+
+void waitForNext(){
+	fgetc(stdin);
+}
+
+int compile_sequential(const char *source,const char *output){
+	FILE *fichier_source=NULL;
+	FILE *fichier_destination=NULL;
+	Instruction instr;
+	char line[128];
+	int state=1;
+	
+	fichier_source = fopen(source,"rb");
+	fichier_destination = fopen(output,"wb");
+
+	if(fichier_source!=NULL && fichier_destination!= NULL){
+		while(!feof(fichier_source) && state){
+			initInst(&instr);
+			readInstruction(fichier_source,line);
+			if(*line!='\0'){
+				state=compileline(line, &instr);
+				if(state){
+					writeHexInstructionToFile(fichier_destination,instr);
+				}
+			}else{
+				printf("ligne vide, skip\n");
+			}
+			printf("next>");
+			waitForNext();
+		}
+	}
+
+	if(fichier_source!=NULL){
+		fclose(fichier_source);
+	}
+
+	if(fichier_destination!=NULL){
+		fclose(fichier_destination);
+	}
+
+	return state;
 }
 
 /*desc dans .h*/

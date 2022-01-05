@@ -19,68 +19,55 @@ void printInst(char *str_inst,Instruction *inst){
 				inst->b[5]);
 }
 
-void waitForNext(){
-	fgetc(stdin);
+
+
+void interpreteur(){
+	int run=1;
+	char line[256];
+	Instruction instr;
+
+	while(run){ /*tant que line != "end"*/
+		printf("instruction>");
+		readInstruction(stdin,line);
+		run = strcmp(line,"end");
+		initInst(&instr);
+		if(run && compileline(line, &instr)){
+			printInst(line,&instr);
+		}
+	}
 }
 
 int main(int argc, char const *argv[])
 {
 	int seq=0;
-	int run=1;
+	int i;
+	int source_pos;
 
-	FILE *fichier=NULL;
-	FILE *fichier_sortie=NULL;
-
-	int parseur=1;
-	char line[128];
-	Instruction instr;
-
-
-	if(argc <= 3){
-		fichier_sortie = fopen("output.txt","w+");
-
-		if(fichier_sortie!= NULL){
-			while(parseur<argc){
-				if(!strcmp(argv[parseur],"-pas")){
-					seq=1;
-				}else{
-					fichier = fopen(argv[parseur],"r");
-					if (fichier ==NULL){
-						printf("erreur: fichier non valide");
-						exit(EXIT_FAILURE);
-					}
-				}
-				parseur++;
+	if(argc==1){
+		printf("*************************************\n");
+		printf("*         mode interpréteur         *\n");
+		printf("*************************************\n");
+		interpreteur();
+	}else if(argc <= 3){
+		for(i=1;i<argc;i++){
+			if(strcmp(argv[i],"-pas")==0){
+				seq=1;
+			}else{
+				source_pos=i;
 			}
-
-			if(fichier !=NULL){ /*mode fichier activé*/
-				while(!feof(fichier)){
-					initInst(&instr);
-					readInstruction(fichier,line);
-					if(compileline(line, &instr)){
-						writeHexInstructionToFile(fichier_sortie,instr);
-					}
-
-					if(seq){
-						printf("next>");
-						waitForNext();
-					}
-				}
-				printf("\n");
-				fclose(fichier);
-			}else{/*mode sequentiel à la main activé*/
-				while(run){ /*tant que line != "end"*/
-					printf("instruction>");
-					readInstruction(stdin,line);
-					run = strcmp(line,"end");
-					initInst(&instr);
-					if(run && compileline(line, &instr)){
-						writeHexInstructionToFile(fichier_sortie,instr);
-					}
-				}
-			}
-			
-			fclose(fichier_sortie);
+		}
+		if(seq){
+			printf("*************************************\n");
+			printf("*        mode non-intéractif        *\n");
+			printf("*             séquentiel            *\n");
+			printf("*************************************\n");
+			compile_sequential(argv[source_pos],"output.txt");
+		}else{
+			printf("*************************************\n");
+			printf("*        mode non-intéractif        *\n");
+			printf("*           non séquentiel          *\n");
+			printf("*************************************\n");
+			compile(argv[source_pos],"output.txt");
 		}
 	}
 	

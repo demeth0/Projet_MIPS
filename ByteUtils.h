@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "mips_structures.h"
 
-#define DEBUG_BYTEUTILS 1
+#define DEBUG_BYTEUTILS 0
 
 /*
 Description:

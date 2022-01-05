@@ -20,7 +20,6 @@ void initSimulation(Environment *simulation){
 	}
 }
 
-
 void fetchInstruction(Environment *simulation);
 void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,DWord imm,DWord target);
 void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);

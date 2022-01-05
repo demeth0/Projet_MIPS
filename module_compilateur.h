@@ -1,8 +1,10 @@
 #ifndef COMPILER_MIPS_MODULE
 #define COMPILER_MIPS_MODULE
 
+#include <stdio.h>
 #include "mips_structures.h"
 #include "operation_code_defines.h"
+#include "ManipulationsFichier.h"
 #include "ByteUtils.h"
 #include <string.h>
 
@@ -20,7 +22,20 @@ parametres:
 return:
 	void
 */
-int compile(char *source, char *output);
+int compile(const char *source, const char *output);
+
+/*
+Description:
+	première version du programme demandée (voir sujet.html) 
+	prend le nom du fichier a compiler en entrée et le nom du fichier de sortie.
+	Compile la source en language MIPS. mode sequentiel 
+parametres:
+	source - fichier d'entrée
+	output - fichier de sortie
+return:
+	void
+*/
+int compile_sequential(const char *source,const char *output);
 
 /*
 Description:
