@@ -27,7 +27,7 @@ void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 
 void printInst(Environment *sim, Instruction inst,char *str_inst){
-	printf("%02X%02X%02X%02X %02X%02X%02X%02X '%s'\n", sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
+	printf("%02X%02X%02X%02X %02X%02X%02X%02X %s\n", sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
 								  inst.code[0],inst.code[1],inst.code[2],inst.code[3],str_inst);
 }
 

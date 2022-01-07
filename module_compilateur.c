@@ -105,7 +105,7 @@ void tolowercase(char *line){
 /*
 Description:
 	prend une chaine de caractère en paramètre et la prépare pour compilation
-Req: chaien de caractère valide (fin avec \0), peut être nul
+Req: chaine de caractère valide (fin avec \0), peut être nul
 */
 void tokenize(char *line){
 	if(line != NULL){
@@ -146,26 +146,32 @@ int extraction(char tab[4][16],char *line){
 	int index = 0;
 	int i = 0;
 	int j = 0;
+	char cp_line[LINE_MAX_WIDTH];
+
+	do{
+		cp_line[index]=line[index];
+	}while(line[index++] != '\0');
+	index=0;
 
 	/*remplace virgules avec espaces
 	ex: add 1,2,3 => add 1 2 3*/
-	replace(line,',',' ');
+	replace(cp_line,',',' ');
 	
-	continue_loop = line[index]!='\0';
+	continue_loop = cp_line[index]!='\0';
 	while(continue_loop){
-		if(line[index]==' '){
+		if(cp_line[index]==' '){
 			tab[i][j]='\0';
 			i++;
 			j=0;
 		}else{
-			tab[i][j]=line[index];
+			tab[i][j]=cp_line[index];
 			j++;
 		}
 
 		index++;
 		/*tant que reste des elements dans line et reste de la place dans tab
 		cas particulier si un des arguments dépasse 15 en taille alors s'arrete*/
-		continue_loop = line[index]!='\0' && i<4 && j<15;
+		continue_loop = cp_line[index]!='\0' && i<4 && j<15;
 	}
 	tab[i][j]='\0';
 	i++;
@@ -174,7 +180,7 @@ int extraction(char tab[4][16],char *line){
 		i++;
 	}
 
-	return line[index]=='\0';
+	return cp_line[index]=='\0';
 }
 
 /*applique les mask pour les opcodes*/
@@ -199,7 +205,7 @@ void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,By
 }
 
 /*détecte et écrit le code opération de la chaine de caractère dans l'instruction*/
-void mapOpCode(char* opcode, Instruction *instruction){
+int mapOpCode(char* opcode, Instruction *instruction){
 	instruction->id = UNKNOWN_ID;
 	if(opcode[1]=='\0' && opcode[0]=='j'){
 		/* alors forcément instruction 'j' 
@@ -335,6 +341,8 @@ void mapOpCode(char* opcode, Instruction *instruction){
 			setBlocksSize(instruction,0,0,0,0,0,0);
 			break;
 	}
+
+	return instruction->id != UNKNOWN_ID;
 }
 
 /*écrit une valeur de taille N sur une chaine de Byte
@@ -791,14 +799,15 @@ int compileline(char *line,Instruction *output){
 		/*if(DEBUG_COMPILER) printf("=> %s\n", line);*/
 		/*printf("extracting %s\n", line);*/
 		state = extraction(operandes,line);
+		/*printf("extraction: %d\n", state);*/
 		/*printf("=> [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 
 		/*if line entirely consumed*/
 		if(state){
-			mapOpCode(operandes[0], output);
-			
+			state = mapOpCode(operandes[0], output);
+
 			/*if operation known*/
-			if(output->id != UNKNOWN_ID){
+			if(state){
 				/*printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
 				/*printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);*/
@@ -813,7 +822,7 @@ int compile(const char *source, const char *output){
 	FILE *fichier_source=NULL;
 	FILE *fichier_destination=NULL;
 	Instruction instr;
-	char line[128];
+	char line[LINE_MAX_WIDTH];
 	int state=1;
 	fichier_source = fopen(source,"rb");
 	fichier_destination = fopen(output,"wb");

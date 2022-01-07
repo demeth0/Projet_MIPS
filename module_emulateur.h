@@ -19,6 +19,9 @@ void simulateFile(const char *filename,Environment *simulation,int sequential);
 
 void printInst(Environment *sim, Instruction inst,char *str_inst);
 
+/*
+
+*/
 void afficher_registres(Environment *sim);
 
 #endif
