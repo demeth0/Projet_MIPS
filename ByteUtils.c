@@ -348,6 +348,11 @@ void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 		}
 		compteur--;		
 	}
+
+
+	copyDWord(HI,result);
+	copyDWord(LO,result+4);
+
 }
 void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 	int sign_b1,sign_b2,i;
