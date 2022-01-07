@@ -42,12 +42,13 @@ void simulate(Instruction *instruction, Environment *simulation){
 	imm[0]=0;imm[1]=0,imm[2]=0,imm[3]=0;
 	target[0]=0;target[1]=0;target[2]=0;target[3]=0;
 
-	/*pour référence, ne fait rien les instructions sont passées en paramètre*/
+	/*pour référence, ne fait rien les instructions sont passées en paramètre
+	  incrémente le PC de 4*/
 	fetchInstruction(simulation);
 
 	/*calculer les indexes de registres et/ou adresses mémoire*/
 	decodeInstruction(instruction,&rs,&rd,&rt,&sa,imm,target);
-
+	
 	/*récupere les données,  si ld charge dans les registres*/
 	fetchData(instruction,simulation,rs,rd,rt,sa,imm,target);
 

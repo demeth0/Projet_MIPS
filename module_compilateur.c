@@ -437,6 +437,11 @@ int StringToRegistre(char *registre,Byte *converted){
 				}
 				i++;
 			}
+		}else{
+			/*valeur du registre trop grande*/
+			if(*converted>=32){
+				success=0;
+			}
 		}
 	}else{
 		success=0;
