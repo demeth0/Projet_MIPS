@@ -5,7 +5,7 @@
 
 void interpreteur(Environment *sim){
 	int run=1;
-	char line[256];
+	char line[LINE_MAX_WIDTH];
 	Instruction instr;
 
 	while(run){ /*tant que line != "end"*/
@@ -24,6 +24,8 @@ void interpreteur(Environment *sim){
 			if(compileline(line, &instr)){
 				printInst(sim,instr,line);
 				simulate(&instr, sim);
+			}else{
+				printf("echec de compilation\n");
 			}
 		}
 

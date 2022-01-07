@@ -8,6 +8,8 @@
 #include "ByteUtils.h"
 #include <string.h>
 
+#define LINE_MAX_WIDTH 128
+
 /*
 Description:
 	première version du programme demandée (voir sujet.html) 
