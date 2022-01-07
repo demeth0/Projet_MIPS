@@ -648,6 +648,8 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 			if( StringToRegistre(operande1,&rt) &&
 				StringToRegistreWithOffset(operande2,/*base*/&rs,immediat)){
 				mapTypeI(rs,rt,immediat,output);
+			}else{
+				success=0;
 			}
 			break;
 
@@ -822,8 +824,12 @@ int compileline(char *line,Instruction *output){
 	return state;
 }
 
+int compile(const char *source,Program prog){
+	return 0;
+}
+
 /*a implémenter demander par le sujet*/
-int compile(const char *source, const char *output){
+int compileFile(const char *source, const char *output){
 	FILE *fichier_source=NULL;
 	FILE *fichier_destination=NULL;
 	Instruction instr;

@@ -365,8 +365,10 @@ void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 		/*LW | base | rt | offset*/
 		/*     rs   | rt | offset*/
 		/*récupère adresse dans registre*/
+		printf("%02X%02X %02X%02X\n", GPR[rs][0],GPR[rs][1],GPR[rs][2],GPR[rs][3]);
 		copyDWord(adresse,GPR[rs]);
 		/*ajoute offset*/
+		printf("%02X%02X %02X%02X\n", GPR[rs][0],GPR[rs][1],GPR[rs][2],GPR[rs][3]);
 		addDWord(adresse,imm);
 
 		writeRamADDR(simulation,adresse,GPR[rt][0]);

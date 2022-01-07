@@ -21,7 +21,7 @@ parametres:
 return:
 	void
 */
-int compile(const char *source, const char *output);
+int compileFile(const char *source, const char *output);
 
 /*
 Description:

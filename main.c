@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
 			}
 		}
 
-		compile(argv[source_pos],"output.txt");
+		compileFile(argv[source_pos],"output.txt");
 
 		if(seq){
 			printf("*************************************\n");

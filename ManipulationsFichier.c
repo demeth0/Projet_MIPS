@@ -37,6 +37,8 @@ void writeHexInstructionToFile(FILE *f, Instruction inst){
 	fprintf(f, "%02x%02x%02x%02x\n", inst.code[0],inst.code[1],inst.code[2],inst.code[3]);
 }
 
+void writeProgramToFile(FILE *f, Program prog);
+
 void supprimerEspaces(char *line){
 	line[0]='z';
 }

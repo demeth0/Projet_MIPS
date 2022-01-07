@@ -2,6 +2,7 @@
 #define MIPS_STRUCTURES_H
 
 #define MEM_SIZE 256
+#define PROGRAM_MAX_SIZE 128
 
 typedef unsigned char Byte;
 typedef Byte DWord[4];
@@ -21,5 +22,7 @@ typedef struct Instruction{
 	unsigned int id;
 	Byte b[6];
 }Instruction;
+
+typedef Instruction Program[PROGRAM_MAX_SIZE];
 
 #endif
