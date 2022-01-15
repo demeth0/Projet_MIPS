@@ -69,18 +69,25 @@ int main(int argc, char const *argv[])
 		
 		/*simulateFile(argv[source_pos],&simulation,seq);*/
 	}else if(argc == 4){
-		/*ouvrir deux fichiers de sortie ecrire les valeurs demander*/
-		/*
+		/*ouvrir deux fichiers de sortie ecrire les valeurs demandes*/
+		
+			FILE *output = fopen(argv[2],"w+");
+			FILE *simu = fopen(argv[3],"w+");
 		if(compile(argv[1],prog)){
 			simulateProgram(prog,&simulation,1);
+
+
+			ecrireProgram(output, prog);
+			ecrireRegistres(simu, &simulation);
+
 		}else{
-			printf("echec de compilation\n");
+			printf("echec de compilation1\n");
 		}
-		*/
-		/*
-			void ecrireProgram(FILE *f, Program prog);
-			void ecrireRegistres(FILE *f, Environment *sim);
-		*/
+			fclose(output);
+			fclose(simu);
+		
+		
+		
 	}else{
 		printf("commande inconue\n");
 	}
