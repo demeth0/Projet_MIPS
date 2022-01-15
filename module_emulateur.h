@@ -29,11 +29,11 @@ void simulate(Instruction *instruction, Environment *simulation);
 
 /*
 Description:
-	prend le nom d'un fichier contenant du code assembleur et l'execute dans la simulation.
+	simule un programme dans l'environement, mode pas a pas ou non 	
 erreurs:
 	si fichier non valides ou simulation nul
 */
-void simulateFile(const char *filename,Environment *simulation,int sequential);
+void simulateProgram(Program prog,Environment *simulation,int sequential);
 
 /*
 Description:
@@ -42,7 +42,7 @@ Description:
 erreurs:
 	si un des paramètres nul
 */
-void printInst(Environment *sim, Instruction inst,char *str_inst);
+void printInst(Environment *sim, Instruction inst);
 
 /*
 Description:

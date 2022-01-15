@@ -121,4 +121,5 @@ X_ID correspond a un nombre unique pour définir une instruction
 #define XOR_CODE 0x26
 
 #define UNKNOWN_ID 0xFF
+#define HALT_ID 0xFE
 #endif

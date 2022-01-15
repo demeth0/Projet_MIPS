@@ -434,3 +434,20 @@ void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 		twoComplementDWord(LO);
 	}
 }
+
+long DWordToLong(DWord word){
+	int i=0;
+	long result=0;
+	if((word[0]&0x80)!=0){
+		/*sign extension*/
+		for(i=sizeof(long);i>=4;i--){
+			result = result<<8;
+			result+=0xFF;
+		}
+	}
+	for(i=0;i<4;i++){
+		result = result<<8;
+		result+=word[i];
+	}
+	return result;
+}

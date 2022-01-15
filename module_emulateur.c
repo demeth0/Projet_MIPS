@@ -1,13 +1,5 @@
 #include "module_emulateur.h"
 
-/*permet de recopier dans sortie le contenue de l'entrée*/
-void copy_Byte4(DWord entree,DWord sortie){
-	sortie[0] = entree[0];
-	sortie[1] = entree[1];
-	sortie[2] = entree[2];
-	sortie[3] = entree[3];
-}
-
 /*initialise simulation*/
 void initSimulation(Environment *simulation){
 	int index =0;
@@ -20,15 +12,15 @@ void initSimulation(Environment *simulation){
 	}
 }
 
-void fetchInstruction(Environment *simulation);
+void fetchInstruction(Program prog,Environment *simulation,int *i);
 void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,DWord imm,DWord target);
 void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 
-void printInst(Environment *sim, Instruction inst,char *str_inst){
+void printInst(Environment *sim, Instruction inst){
 	printf("%02X%02X%02X%02X %02X%02X%02X%02X %s\n", sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
-								  inst.code[0],inst.code[1],inst.code[2],inst.code[3],str_inst);
+								  inst.code[0],inst.code[1],inst.code[2],inst.code[3],inst.text_instr);
 }
 
 void simulate(Instruction *instruction, Environment *simulation){
@@ -44,7 +36,7 @@ void simulate(Instruction *instruction, Environment *simulation){
 
 	/*pour référence, ne fait rien les instructions sont passées en paramètre
 	  incrémente le PC de 4*/
-	fetchInstruction(simulation);
+	incr4(simulation->PC);
 
 	/*calculer les indexes de registres et/ou adresses mémoire*/
 	decodeInstruction(instruction,&rs,&rd,&rt,&sa,imm,target);
@@ -58,55 +50,84 @@ void simulate(Instruction *instruction, Environment *simulation){
 	writeResult(instruction,simulation,rs,rd,rt,sa,imm,target);
 }
 
-void simulateFile(const char *filename,Environment *simulation,int sequential){
-	FILE *source=NULL;
-	Instruction inst;
-	int state;
-	char line[256];
+void simulateProgram(Program prog,Environment *simulation,int sequential){
+	int i=0;
+	Byte rs=0,rd=0,rt=0,sa=0;
+	DWord imm;
+	DWord target;
 
-	source = fopen(filename,"rb");
-	if(source!=NULL){
-		while(!feof(source) && state){
-			initInst(&inst);
-			readInstruction(source,line);
-			if(*line!='\0'){
-				state=compileline(line, &inst);
-				if(state){
-					simulate(&inst,simulation);
-					printInst(simulation,inst,line);
-				}else{
-					printf("echec de compilation\n");
-				}
-				if(sequential){
-					printf("next>");
-					/*wait enter*/
-					fgetc(stdin);
-				}
-			}
+	/*mise du PC a zero*/
+	simulation->PC[0]=0;	
+	simulation->PC[1]=0;
+	simulation->PC[2]=0;
+	simulation->PC[3]=0;
+
+	while(prog[i].id != HALT_ID){
+		rs=0;rd=0;rt=0;sa=0;
+		imm[0]=0;imm[1]=0,imm[2]=0,imm[3]=0;
+		target[0]=0;target[1]=0;target[2]=0;target[3]=0;
+
+		/*calcule l'index dans le programme*/
+		fetchInstruction(prog,simulation,&i);
+		
+		/*calculer les indexes de registres et/ou adresses mémoire*/
+		decodeInstruction(prog+i,&rs,&rd,&rt,&sa,imm,target);
+	
+		/*récupere les données,  si ld charge dans les registres*/
+		fetchData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+
+		/*execute l'opération (addition soustraction jump ...)*/
+		processData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+		/*écrit résultat, écrit en mémoire ou sw*/
+		writeResult(prog+i,simulation,rs,rd,rt,sa,imm,target);
+		printInst(simulation,prog[i]);
+		if(sequential){
+			printf("next>");
+			/*wait enter*/
+			fgetc(stdin);
 		}
 	}
+
 }
 
 void afficher_registres(Environment *sim){
 	int i,j;
 	for(i=0;i<8;i++){
 		j=i*4;
-		printf("$%d:%02x%02x %02x%02x    ", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		printf("$%d:%ld [%02x%02x %02x%02x]    ", j,DWordToLong(sim->registers[j]),sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
 		j++;
-		printf("$%d:%02x%02x %02x%02x    ", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		printf("$%d:%ld [%02x%02x %02x%02x]    ", j,DWordToLong(sim->registers[j]),sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
 		j++;
-		printf("$%d:%02x%02x %02x%02x    ", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		printf("$%d:%ld [%02x%02x %02x%02x]    ", j,DWordToLong(sim->registers[j]),sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
 		j++;
-		printf("$%d:%02x%02x %02x%02x\n", j,sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
+		printf("$%d:%ld [%02x%02x %02x%02x]\n", j,DWordToLong(sim->registers[j]),sim->registers[j][0],sim->registers[j][1],sim->registers[j][2],sim->registers[j][3]);
 	}
-	printf("\nPC:%02x%02x %02x%02x    HI:%02x%02x %02x%02x    LO:%02x%02x %02x%02x\n\n", 
+	printf("\nPC:%02x%02x %02x%02x    HI:%ld [%02x%02x %02x%02x]    LO:%ld [%02x%02x %02x%02x]\n\n", 
 				sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
-				sim->HI[0],sim->HI[1],sim->HI[2],sim->HI[3],
-				sim->LO[0],sim->LO[1],sim->LO[2],sim->LO[3]);
+				DWordToLong(sim->HI),sim->HI[0],sim->HI[1],sim->HI[2],sim->HI[3],
+				DWordToLong(sim->LO),sim->LO[0],sim->LO[1],sim->LO[2],sim->LO[3]);
 }
 
 
-void fetchInstruction(Environment *simulation){
+void fetchInstruction(Program prog,Environment *simulation,int *i){
+	DWord temp;
+
+	copyDWord(temp,simulation->PC);
+	shiftRDWord(temp,2); /*division par 4*/
+
+	/*traduire le PC en un index*/
+	if(sizeof(int) == 4){
+		*i= temp[3];
+		*i+= (temp[2])<<8;
+		*i+= (temp[1])<<16;
+		*i+= (temp[0])<<24;
+	}
+	else if(sizeof(int) == 2){
+		*i= (temp[1]);
+		*i+= (temp[0])<<8;
+	}
+
+	/*PC +4*/
 	incr4(simulation->PC);
 }
 
@@ -165,14 +186,18 @@ void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd
 		copyDWord(adresse,GPR[rs]);
 		/*ajoute offset*/
 		addDWord(adresse,imm);
-
-		GPR[rt][0] = readRamADDR(simulation,adresse);
-		incr(adresse); /*+1*/
-		GPR[rt][1] = readRamADDR(simulation,adresse);
-		incr(adresse); /*+2*/
-		GPR[rt][2] = readRamADDR(simulation,adresse);
-		incr(adresse); /*+3*/
-		GPR[rt][3] = readRamADDR(simulation,adresse);
+		if((adresse[3]&0x03) != 0){
+			/*si l'adresse n'est pas paire de 4*/
+			printf("Adress error exception\n");
+		}else{
+			GPR[rt][0] = readRamADDR(simulation,adresse);
+			incr(adresse); /*+1*/
+			GPR[rt][1] = readRamADDR(simulation,adresse);
+			incr(adresse); /*+2*/
+			GPR[rt][2] = readRamADDR(simulation,adresse);
+			incr(adresse); /*+3*/
+			GPR[rt][3] = readRamADDR(simulation,adresse);
+		}
 	}
 }
 
@@ -361,22 +386,24 @@ void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 	DWord adresse;
 	DWord *GPR = simulation->registers;
 
-	if(instruction->id == LW_ID){
-		/*LW | base | rt | offset*/
+	if(instruction->id == SW_ID){
+		/*SW | base | rt | offset*/
 		/*     rs   | rt | offset*/
 		/*récupère adresse dans registre*/
-		printf("%02X%02X %02X%02X\n", GPR[rs][0],GPR[rs][1],GPR[rs][2],GPR[rs][3]);
 		copyDWord(adresse,GPR[rs]);
 		/*ajoute offset*/
-		printf("%02X%02X %02X%02X\n", GPR[rs][0],GPR[rs][1],GPR[rs][2],GPR[rs][3]);
 		addDWord(adresse,imm);
-
-		writeRamADDR(simulation,adresse,GPR[rt][0]);
-		incr(adresse); /*+1*/
-		writeRamADDR(simulation,adresse,GPR[rt][1]);
-		incr(adresse); /*+2*/
-		writeRamADDR(simulation,adresse,GPR[rt][2]);
-		incr(adresse); /*+3*/
-		writeRamADDR(simulation,adresse,GPR[rt][3]);
+		if((adresse[3]&0x03) != 0){
+			/*si l'adresse n'est pas paire de 4*/
+			printf("Adress error exception\n");
+		}else{
+			writeRamADDR(simulation,adresse,GPR[rt][0]);
+			incr(adresse); /*+1*/
+			writeRamADDR(simulation,adresse,GPR[rt][1]);
+			incr(adresse); /*+2*/
+			writeRamADDR(simulation,adresse,GPR[rt][2]);
+			incr(adresse); /*+3*/
+			writeRamADDR(simulation,adresse,GPR[rt][3]);
+		}
 	}
 }

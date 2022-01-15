@@ -192,5 +192,7 @@ erreurs:
 */
 void multiplyDWord(DWord HI,DWord LO,DWord b1,DWord b2);
 
+/*convertis un DWord en un long*/
+long DWordToLong(DWord word);
 
 #endif

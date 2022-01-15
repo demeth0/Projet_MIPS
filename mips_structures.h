@@ -18,6 +18,7 @@ struct SimEnv {
 typedef struct SimEnv Environment;
 
 typedef struct Instruction{
+	char text_instr[64];
 	DWord code;
 	unsigned int id;
 	Byte b[6];

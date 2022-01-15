@@ -808,7 +808,6 @@ int compileline(char *line,Instruction *output){
 		state = extraction(operandes,line);
 		/*printf("extraction: %d\n", state);*/
 		/*printf("=> [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
-
 		/*if line entirely consumed*/
 		if(state){
 			state = mapOpCode(operandes[0], output);
@@ -818,6 +817,7 @@ int compileline(char *line,Instruction *output){
 				/*printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
 				/*printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);*/
+				strcpy(output->text_instr,line);
 			}
 		}
 	}
@@ -825,7 +825,42 @@ int compileline(char *line,Instruction *output){
 }
 
 int compile(const char *source,Program prog){
-	return 0;
+	FILE *fichier_source=NULL;
+	char line[LINE_MAX_WIDTH];
+	int state=1,i=0;
+	fichier_source = fopen(source,"rb");
+	if(fichier_source!=NULL){
+		while(!feof(fichier_source) && state){
+			/*met a zero la case*/
+			initInst(prog+i);
+			readInstruction(fichier_source,line);
+			if(*line!='\0'){
+				/*ecrit les resultats de compilations*/
+				state=compileline(line, prog+i);
+				if(state){
+					/*passe a la case suivante*/
+					i++;
+					if(i>=PROGRAM_MAX_SIZE-1){
+						state=0;
+						printf("memoire programme insuffisante\n");
+					}
+				}else{
+					printf("echec de compilation\n");
+				}
+			}
+		}
+		/*indique fin du programme*/
+		initInst(prog+i);
+		prog[i].id = HALT_ID;
+	}else{
+		printf("impossible d'ouvrir ou de créer les fichiers\n");
+	}
+
+	if(fichier_source!=NULL){
+		fclose(fichier_source);
+	}
+
+	return state;
 }
 
 /*a implémenter demander par le sujet*/

@@ -22,7 +22,7 @@ void interpreteur(Environment *sim){
 		}else{
 			initInst(&instr);
 			if(compileline(line, &instr)){
-				printInst(sim,instr,line);
+				printInst(sim,instr);
 				simulate(&instr, sim);
 			}else{
 				printf("echec de compilation\n");
@@ -34,11 +34,8 @@ void interpreteur(Environment *sim){
 
 int main(int argc, char const *argv[])
 {
-	int seq=0;
-	int i;
-	int source_pos;
 	Environment simulation;
-
+	Program prog;
 	initSimulation(&simulation);
 
 	if(argc==1){
@@ -46,30 +43,46 @@ int main(int argc, char const *argv[])
 		printf("*         mode interpreteur         *\n");
 		printf("*************************************\n");
 		interpreteur(&simulation);
-	}else if(argc <= 3){
-		for(i=1;i<argc;i++){
-			if(strcmp(argv[i],"-pas")==0){
-				seq=1;
-			}else{
-				source_pos=i;
-			}
-		}
-
-		compileFile(argv[source_pos],"output.txt");
-
-		if(seq){
+	}else if(argc == 3){
+		if(strcmp(argv[2],"-pas")==0){
 			printf("*************************************\n");
 			printf("*        mode non-interactif        *\n");
 			printf("*             sequentiel            *\n");
 			printf("*************************************\n");
+			if(compile(argv[1],prog)){
+				/*simule le programme pas a pas*/
+				simulateProgram(prog,&simulation,1);
+			}else{
+				printf("echec de compilation\n");
+			}
+			/* test reussit
+			printf("result:\n");
+			while(prog[i].id != HALT_ID){
+				printf("%02X%02X%02X%02X %s\n", prog[i].code[0],prog[i].code[1],prog[i].code[2],prog[i].code[3],prog[i].text_instr);
+				i++;
+			}*/
+
+
 		}else{
-			printf("*************************************\n");
-			printf("*        mode non-interactif        *\n");
-			printf("*           non sequentiel          *\n");
-			printf("*************************************\n");
+			printf("paramètres manquants\n");
 		}
 		
-		simulateFile(argv[source_pos],&simulation,seq);
+		/*simulateFile(argv[source_pos],&simulation,seq);*/
+	}else if(argc == 4){
+		/*ouvrir deux fichiers de sortie ecrire les valeurs demander*/
+		/*
+		if(compile(argv[1],prog)){
+			simulateProgram(prog,&simulation,1);
+		}else{
+			printf("echec de compilation\n");
+		}
+		*/
+		/*
+			void ecrireProgram(FILE *f, Program prog);
+			void ecrireRegistres(FILE *f, Environment *sim);
+		*/
+	}else{
+		printf("commande inconue\n");
 	}
 	
 	return 0;

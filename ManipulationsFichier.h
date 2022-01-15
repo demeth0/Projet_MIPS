@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include "mips_structures.h"
+#include "operation_code_defines.h"
+#include "ByteUtils.h"
 
 /*
 Description: 
@@ -24,6 +26,25 @@ parametres:
 */
 void writeHexInstructionToFile(FILE *f, Instruction inst);
 
+/*
+Description:
+	ecrit le programme en hexa dans le fichier
+parametre:
+	prog - le programe a ecrire
+	f - le fichier de sortie
+erreurs:
+	si fichier non ouvert en ecriture/nul ou prog mal defini/nul vide
+*/
+void ecrireProgram(FILE *f, Program prog);
 
-
+/*
+Description:
+	ecrit les registres de la simulation dans le fichier
+parametre:
+	sim - la simulation a ecrire
+	f - le fichier de sortie
+erreurs:
+	si fichier non ouvert en ecriture/nul ou sim mal defini/nul vide
+*/
+void ecrireRegistres(FILE *f, Environment *sim);
 #endif

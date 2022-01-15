@@ -42,6 +42,13 @@ int compileline(char *line,Instruction *output);
 
 /*
 Description:
+	Compile un jeu d'instructions contenu dans un fichier source
+	et ecrit les instructions compilees dans le tableau Program
+*/
+int compile(const char *source,Program prog);
+
+/*
+Description:
 	met tout les éléments de Instruction a 0.
 Return:
 	void
