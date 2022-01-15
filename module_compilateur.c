@@ -472,42 +472,50 @@ int StringToSignedIntByteArray(char *entier,DWord converted){
 /*converti une chaine de caractère offset(registre) en Byte
 return: succes ?*/
 int StringToRegistreWithOffset(char *line,Byte *registre,DWord offset){
-    int success=1;
-    int debut,fin;
-    if(*line=='\0'){
-        success=0;
-    }else{
-        debut=0;
-        fin=0;
-        /*cherche ouverture parenthese*/
-        while(line[debut]!='(' && line[fin]!='\0'){
-            debut++;
-        }
-        /*si pas ouverture echec*/
-        if(line[debut]=='\0'){
-            success=0;
-        }else{
-            /*cherche fermeture parenthese*/
-            while(line[fin]!=')' && line[fin]!='\0'){
-                fin++;
-            }
-            if(line[fin]=='\0'){
-                /*pas de closure de la parenthese*/
-                success=0;
-            }else{
-                /*recupere la valeur registre dans la zone définie par ($..)*/
-                line[fin]='\0';
+	int success=1;
+	int debut,fin;
+	if(*line=='\0'){
+		success=0;
+	}else{
+		debut=0;
+		fin=0;
+		/*cherche ouverture parenthese*/
+		while(line[debut]!='(' && line[fin]!='\0'){
+			debut++;
+		}
+		/*si pas ouverture echec*/
+		if(line[debut]=='\0'){
+			success=0;
+		}else{
+			/*cherche fermeture parenthese*/
+			while(line[fin]!=')' && line[fin]!='\0'){
+				fin++;
+			}
+			if(line[fin]=='\0'){
+				/*pas de closure de la parenthese*/
+				success=0;
+			}else{
+				/*recupere la valeur registre dans la zone définie par ($..)*/
+				line[fin]='\0';
 
-                /*remplace ( par \0 car offset($..) -> offset\0$..\0*/
-                line[debut]='\0';
-                debut++;
-                success = StringToByte(&line[debut+1],registre) && 
-                          StringToSignedIntByteArray(line,offset);
-            }
-        }
-    }
+				/*remplace ( par \0 car offset($..) -> offset\0$..\0*/
 
-    return success;
+				line[debut]='\0';
+				if(debut==0){
+				  debut++;
+				  success = StringToByte(&line[debut+1],registre);
+				  offset[0] = offset[1] = offset[2] = offset[3] = 0;
+
+				}else{
+				  debut++;
+				  success = StringToByte(&line[debut+1],registre) && 
+				            StringToSignedIntByteArray(line,offset);
+				}
+			}
+		}
+	}
+
+	return success;
 }
 
 /*
