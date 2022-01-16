@@ -87,7 +87,9 @@ void simulateProgram(Program prog,Environment *simulation,int sequential){
 			processData(prog+i,simulation,rs,rd,rt,sa,imm,target);
 			/*ecrit resultat, ecrit en memoire ou sw*/
 			writeResult(prog+i,simulation,rs,rd,rt,sa,imm,target);
-			printInst(simulation,prog[i]);
+			if(sequential){
+				printInst(simulation,prog[i]);
+			} 
 		}
 	}
 
