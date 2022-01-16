@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -pedantic -ansi -Wall
-OBJECTS = main.o ManipulationsFichier.o ByteUtils.o LabelLib.o module_emulateur.o module_compilateur.o module_ram.o
+OBJECTS = main.o ManipulationsFichier.o ByteUtils.o module_emulateur.o module_compilateur.o module_ram.o
 BIN = main
 RM = rm -f
 
@@ -24,10 +24,6 @@ ManipulationsFichier.o: ManipulationsFichier.c ManipulationsFichier.h mips_struc
 
 ByteUtils.o: ByteUtils.c ByteUtils.h mips_structures.h
 	@$(CC) -c $< -o $@ $(CFLAGS)
-
-LabelLib.o: LabelLib.c LabelLib.h mips_structures.h
-	@$(CC) -c $< -o $@ $(CFLAGS)
-
 
 
 clean:
