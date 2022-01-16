@@ -20,7 +20,6 @@ void readInstruction(FILE *f, char *result){
 			/* avance dans la chaine de caractères */
 			i++;
 		}
-
 	}
 
 	result[i] = '\0';

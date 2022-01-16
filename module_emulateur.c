@@ -274,8 +274,8 @@ void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 			break;
 
 		case BNE_ID:
-			/*if GPR[rs] != 0*/
-			if((GPR[rs][0]|GPR[rs][1]|GPR[rs][2]|GPR[rs][3])!=0){
+			/*if GPR[rs] != GPR[rt] then branc*/
+			if(!equalsDWord(GPR[rs],GPR[rt])){
 				/*PC+4 + (offset<<2)*/
 				/*attention  PC deja incremente de +4 dans fetchInstruction*/
 				shiftLDWord(imm,2);
