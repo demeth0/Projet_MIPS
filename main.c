@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
 			FILE *output = fopen(argv[2],"w+");
 			FILE *simu = fopen(argv[3],"w+");
 		if(compile(argv[1],prog)){
-			simulateProgram(prog,&simulation,1);
+			simulateProgram(prog,&simulation,0);
 
 			
 			ecrireProgram(output, prog);

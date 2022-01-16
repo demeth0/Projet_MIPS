@@ -10,3 +10,5 @@ in4.txt
 startup.bat
 open_cmd.bat
 backup_*
+out.hex
+out.state

@@ -11,7 +11,6 @@ void readInstruction(FILE *f, char *result){
 	*/
 	while(loop){
 		c = fgetc(f);
-		printf("%c",c);
 		loop=(!feof(f)) && (c != '\n') && (c != '#');
 
 		if (loop){

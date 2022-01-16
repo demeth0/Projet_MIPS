@@ -843,8 +843,6 @@ int compile(const char *source,Program prog){
 			initInst(prog+i);
 			readInstruction(fichier_source,line);
 			if(*line!='\0'){
-				/*ecrit les resultats de compilations*/
-				printf("%s",line);
 				state=compileline(line, prog+i);
 				if(state){
 					/*passe a la case suivante*/

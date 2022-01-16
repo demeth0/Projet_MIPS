@@ -66,25 +66,28 @@ void simulateProgram(Program prog,Environment *simulation,int sequential){
 		rs=0;rd=0;rt=0;sa=0;
 		imm[0]=0;imm[1]=0,imm[2]=0,imm[3]=0;
 		target[0]=0;target[1]=0;target[2]=0;target[3]=0;
-
-		/*calcule l'index dans le programme*/
-		fetchInstruction(prog,simulation,&i);
-		
-		/*calculer les indexes de registres et/ou adresses memoire*/
-		decodeInstruction(prog+i,&rs,&rd,&rt,&sa,imm,target);
-	
-		/*recupere les donnees,  si ld charge dans les registres*/
-		fetchData(prog+i,simulation,rs,rd,rt,sa,imm,target);
-
-		/*execute l'operation (addition soustraction jump ...)*/
-		processData(prog+i,simulation,rs,rd,rt,sa,imm,target);
-		/*ecrit resultat, ecrit en memoire ou sw*/
-		writeResult(prog+i,simulation,rs,rd,rt,sa,imm,target);
-		printInst(simulation,prog[i]);
 		if(sequential){
 			printf("next>");
 			/*wait enter*/
-			fgetc(stdin);
+			/*fgetc(stdin);*/
+			
+			getchar();
+		}
+		/*calcule l'index dans le programme*/
+		fetchInstruction(prog,simulation,&i);
+		
+		if(prog[i].id != HALT_ID){
+			/*calculer les indexes de registres et/ou adresses memoire*/
+			decodeInstruction(prog+i,&rs,&rd,&rt,&sa,imm,target);
+		
+			/*recupere les donnees,  si ld charge dans les registres*/
+			fetchData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+
+			/*execute l'operation (addition soustraction jump ...)*/
+			processData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			/*ecrit resultat, ecrit en memoire ou sw*/
+			writeResult(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			printInst(simulation,prog[i]);
 		}
 	}
 
