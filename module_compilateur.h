@@ -12,11 +12,11 @@
 
 /*
 Description:
-	première version du programme demandée (voir sujet.html) 
-	prend le nom du fichier a compiler en entrée et le nom du fichier de sortie.
+	première version du programme demandee (voir sujet.html) 
+	prend le nom du fichier a compiler en entree et le nom du fichier de sortie.
 	Compile la source en language MIPS
 parametres:
-	source - fichier d'entrée
+	source - fichier d'entree
 	output - fichier de sortie
 return:
 	void
@@ -26,17 +26,17 @@ int compileFile(const char *source, const char *output);
 /*
 Description:
 	prend une ligne en language assembleur MIPS et remplis la structure Instruction
-	avec l'id du code instruction défini dans operation_code_define et la taille de chaque
-	blocs de données de l'instruction met UNKNOW_ID dans la paramètre ID
-	de la structure Instruction si le code opération n'est pas reconnu.
+	avec l'id du code instruction defini dans operation_code_define et la taille de chaque
+	blocs de donnees de l'instruction met UNKNOW_ID dans la paramètre ID
+	de la structure Instruction si le code operation n'est pas reconnu.
 paramètre:
 	textInstruction - chaine de caractères contenant l'instruction
-	instruction - la struct inistruction qui recoit les informations déjà initialisées
+	instruction - la struct inistruction qui recoit les informations deja initialisees
 return:
 	void
 erreur:
 	si la chaine de caractères ne finit pas par \0, ou si 
-	l'espace mémoire pour instruction n'est pas créée
+	l'espace memoire pour instruction n'est pas creee
 */
 int compileline(char *line,Instruction *output);
 
@@ -49,7 +49,7 @@ int compile(const char *source,Program prog);
 
 /*
 Description:
-	met tout les éléments de Instruction a 0.
+	met tout les elements de Instruction a 0.
 Return:
 	void
 erreurs:

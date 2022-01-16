@@ -1,7 +1,7 @@
 #include "module_ram.h"
 
 /*
-écrit dans memoire ram a adresse
+ecrit dans memoire ram avec adresse
 */
 void writeRamADDR(Environment *simulation,DWord adresse,Byte value){
 	int new_addr;
@@ -19,7 +19,7 @@ void writeRamADDR(Environment *simulation,DWord adresse,Byte value){
 	simulation->RAM[new_addr]=value;
 }
 
-/*lis dans memoire a adresse*/
+/*lit dans memoire avec adresse*/
 Byte readRamADDR(Environment *simulation,DWord adresse){
 	/*on calcule l'index dans le tableau*/
 	/*si on est sur une architecture 32 bits*/
@@ -41,9 +41,19 @@ Byte readRamADDR(Environment *simulation,DWord adresse){
 /*affiche toute la ram*/
 void afficher_ram(Environment *simulation){
 	int index =0;
+	int incr = 0;
 
 	for(index =0;index<MEM_SIZE;index++){
-		printf("%02x ",simulation->RAM[index]);
+		for(incr =0;(index+incr)<MEM_SIZE && incr < 4;incr++){
+			printf("%02x ",simulation->RAM[index+incr]);
+			
+		}
+		for(incr =0;(index+incr)<MEM_SIZE && incr < 4;incr++){
+			printf("%c ",simulation->RAM[index+incr]);
+		}
+		printf("\n");
+		index = index+incr;
+		
 	}
 	printf("\n");
 }

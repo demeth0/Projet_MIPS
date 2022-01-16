@@ -8,10 +8,10 @@
 
 /*
 Description:
-	Déplace vers la gauche les bits de la chaine values n fois
+	Deplace vers la gauche les bits de la chaine values n fois
 paramètres:
-	values - un tableau d'octets représentant le nombre binaire
-	n - le nombre de fois qu'on fait le déplacement vers la gauche
+	values - un tableau d'octets representant le nombre binaire
+	n - le nombre de fois qu'on fait le deplacement vers la gauche
 	size - la taille en octets de la chaine
 erreur:
 	si size ne correspond pas a la taille du tableau values
@@ -20,10 +20,10 @@ void shiftLDWord(DWord values, int n);
 
 /*
 Description:
-	Déplace vers la droite les bits de la chaine values n fois
+	Deplace vers la droite les bits de la chaine values n fois
 parametres:
-	values - un tableau d'octet représentant le nombre binaire
-	n - le nombre de fois qu'on fait le déplacement vers la droite
+	values - un tableau d'octet representant le nombre binaire
+	n - le nombre de fois qu'on fait le deplacement vers la droite
 	size - la taille en octets de la chaine
 erreur:
 	si size ne correspond pas a la taille du tableau values
@@ -32,9 +32,9 @@ void shiftRDWord(DWord values, int n);
 
 /*
 Description:
-	convertis une chaine de caractère en un entier sur 8bit non signé et gère les erreurs
+	convertis une chaine de caractère en un entier sur 8bit non signe et gère les erreurs
 return:
-	si la chaine de caractère a été traduite correctement
+	si la chaine de caractère a ete traduite correctement
 erreurs:
 	si str ou result sont NULL
 */
@@ -55,23 +55,23 @@ void IntegerToDWord(int i,DWord res);
 
 /*
 Description:
-	convertit une chaine de caractère de forme 0xHEXA en un entier signé (int)
+	convertit une chaine de caractère de forme 0xHEXA en un entier signe (int)
 paramètre:
 	str - la chaine a convertir
-	converted - le résultat
+	converted - le resultat
 return:
-	si l'entier a été convertit avec succés
+	si l'entier a ete convertit avec succes
 */
 int HexStringToInteger(char *str,int *converted);
 
 /*
 Description:
-	convertit une chaine de caractère représentant un entier signé en un type C int
+	convertit une chaine de caractère representant un entier signe en un type C int
 paramètre:
 	str - la chaine a convertir
-	converted - le résultat
+	converted - le resultat
 return:
-	si l'entier a été convertit avec succés
+	si l'entier a ete convertit avec succes
 */
 int StringToSignedInteger(char *str,int *converted);
 
@@ -98,7 +98,7 @@ int decr(DWord word);
 
 /*
 Description:
-	incrémente la valeur stockée dans le tableau de 1
+	incremente la valeur stockee dans le tableau de 1
 return:
 	void
 erreurs:
@@ -108,7 +108,7 @@ int incr(DWord word);
 
 /*
 Description:
-	incrémente la valeur stockée dans le tableau de 4
+	incremente la valeur stockee dans le tableau de 4
 return:
 	void
 erreurs:
@@ -137,12 +137,12 @@ int signDWord(DWord word);
 
 /*
 Description:
-	fait l'opération b1 <- b1 + b2 et retourne l'overflow
+	fait l'operation b1 <- b1 + b2 et retourne l'overflow
 parametre:
 	b1 - premier DWord
 	b2 - DWord a ajouter
 return:
-	0 si pas d'overflow. 1 ou -1 si overflow positif ou négatif
+	0 si pas d'overflow. 1 ou -1 si overflow positif ou negatif
 erreurs:
 	si b1 ou b2 nul*/
 int addDWord(DWord b1,DWord b2);
@@ -152,12 +152,12 @@ int twoComplementDWord(DWord value);
 
 /*
 Description:
-	fait l'opération b1 <- b1 - b2 et retourne l'overflow
+	fait l'operation b1 <- b1 - b2 et retourne l'overflow
 parametre:
 	b1 - premier DWord
 	b2 - DWord a ajouter
 return:
-	0 si pas d'overflow. 1 ou -1 si overflow positif ou négatif
+	0 si pas d'overflow. 1 ou -1 si overflow positif ou negatif
 erreurs:
 	si b1 ou b2 nul*/
 int subDWord(DWord b1,DWord b2);
@@ -168,7 +168,7 @@ retourne si word>0
 int greaterThanZeroDWord(DWord word);
 
 /*
-retourne le résultat de l'opération b1==b2
+retourne le resultat de l'operation b1==b2
 */
 int equalsDWord(DWord b1,DWord b2);
 /*

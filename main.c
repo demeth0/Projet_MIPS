@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
 		if(compile(argv[1],prog)){
 			simulateProgram(prog,&simulation,1);
 
-
+			
 			ecrireProgram(output, prog);
 			ecrireRegistres(simu, &simulation);
 

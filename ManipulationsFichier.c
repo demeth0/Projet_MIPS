@@ -4,27 +4,30 @@
 
 void readInstruction(FILE *f, char *result){
 	char c = 'a';
-	char *res_copy = result;
 	int loop=1;
+	int i =0;
 	/*
-	lis les caractères uns à uns et s'arrête si il trouve un retour à la ligne ou un début de commentaire
+	lis les caractères uns a uns et s'arrête si il trouve un retour a la ligne ou un debut de commentaire
 	*/
 	while(loop){
 		c = fgetc(f);
-
+		printf("%c",c);
 		loop=(!feof(f)) && (c != '\n') && (c != '#');
 
 		if (loop){
 			/* met la valeur dans resultat */
-			*res_copy = c;
+
+			result[i]= c;
 			/* avance dans la chaine de caractères */
-			res_copy++;
+			i++;
 		}
+
 	}
-	*res_copy = '\0';
+
+	result[i] = '\0';
 
 	/*
-	dans le cas ou il trouve un commentaire on continue de lire la ligne jusqu'au bout pour avancer le curseur jusqu'à la fin de la ligne
+	dans le cas ou il trouve un commentaire on continue de lire la ligne jusqu'au bout pour avancer le curseur jusqu'a la fin de la ligne
 	*/
 	while((!feof(f)) && (c != '\n')){
 		c=fgetc(f);

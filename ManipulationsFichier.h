@@ -19,10 +19,10 @@ void readInstruction(FILE *f, char *result);
 
 /*
 Description:
-	écrit dans le fichier l'instruction en valeur hexadécimale formattée sur 8 char
+	ecrit dans le fichier l'instruction en valeur hexadecimale formattee sur 8 char
 parametres:
-	f - le fichier ou écrire la donnée
-	inst - l'instruction hexadécimale à écrire dans le fichier
+	f - le fichier ou ecrire la donnee
+	inst - l'instruction hexadecimale a ecrire dans le fichier
 */
 void writeHexInstructionToFile(FILE *f, Instruction inst);
 

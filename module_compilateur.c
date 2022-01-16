@@ -17,7 +17,7 @@ void removecomments(char *line){
 }
 
 /*
-enlève les espaces de début et de fin
+enlève les espaces de debut et de fin
 ex: "    ADD $1, $2, $3   " -> "ADD $1, $2, $3"
 Req: non nul
 */
@@ -26,7 +26,7 @@ void del_espaces_bords(char *line){
 	int taille = strlen(line);
 	int i =0;
 
-	/*on supprime les espaces du début*/
+	/*on supprime les espaces du debut*/
 	while(line[index] == ' ')
 		index++;
 
@@ -34,7 +34,7 @@ void del_espaces_bords(char *line){
 	while(line[taille-1] ==' ')
 		taille--;
 
-	/*redéplace la chaine de caractère au début*/
+	/*redeplace la chaine de caractère au debut*/
 	while(index<taille){
 		line[i] = line[index];
 		i++;
@@ -45,14 +45,14 @@ void del_espaces_bords(char *line){
 }
 
 /*
-enlève les espaces au début, à la fin et au milieu d'une chaine : "    ADD $1, $2, $3   " -> "ADD $1,$2,$3"
+enlève les espaces au debut, a la fin et au milieu d'une chaine : "    ADD $1, $2, $3   " -> "ADD $1,$2,$3"
 Req : non nul
 */
 void del_espaces(char *line){
 	char *cursor=line;
 	int i =0;
 
-	/*supprimes espaces aux extremitées*/
+	/*supprimes espaces aux extremitees*/
 	del_espaces_bords(line);
 	/*avance jusqu'a trouver un premier espace*/
 	while((*cursor)!=' ' && (*cursor)!='\0'){
@@ -72,7 +72,7 @@ void del_espaces(char *line){
 	CHANGE:
 		cursor++;=>X
 		dans le cas ou *cursor pointais vers \0 faire ++ skip le char de fin, boucle infini ou presque
-		non nécéssaire car déja gérer par le while juste en dessous si *cursor==' ' 
+		non necessaire car deja gerer par le while juste en dessous si *cursor==' ' 
 	*/
 
 	/*copie de la chaine restante en supprimant les espaces*/
@@ -104,7 +104,7 @@ void tolowercase(char *line){
 
 /*
 Description:
-	prend une chaine de caractère en paramètre et la prépare pour compilation
+	prend une chaine de caractère en paramètre et la prepare pour compilation
 Req: chaine de caractère valide (fin avec \0), peut être nul
 */
 void tokenize(char *line){
@@ -120,7 +120,7 @@ void tokenize(char *line){
  ***********************************************************************/
 /*
 CHANGE:
-	changement d'implémentation, prend avantage des trois types d'instruction défini dans la doc.
+	changement d'implementation, prend avantage des trois types d'instruction defini dans la doc.
 	R-instruction $rd,$rs,$rt
 	I-instruction $rt,$rs,immediate
 	J-instruction target
@@ -138,9 +138,9 @@ void replace(char *line,char toreplace, char with){
 	}
 }
 
-/*découpe en bloc la ligne pour la compilation si trop de paramètre ou espaces mal placés va retourner un échec
+/*decoupe en bloc la ligne pour la compilation si trop de paramètre ou espaces mal places va retourner un echec
 Req   : line non null
-return: si la ligne a été consumée*/
+return: si la ligne a ete consumee*/
 int extraction(char tab[4][16],char *line){
 	int continue_loop=1;
 	int index = 0;
@@ -170,7 +170,7 @@ int extraction(char tab[4][16],char *line){
 
 		index++;
 		/*tant que reste des elements dans line et reste de la place dans tab
-		cas particulier si un des arguments dépasse 15 en taille alors s'arrete*/
+		cas particulier si un des arguments depasse 15 en taille alors s'arrete*/
 		continue_loop = cp_line[index]!='\0' && i<4 && j<15;
 	}
 	tab[i][j]='\0';
@@ -204,11 +204,11 @@ void setBlocksSize(Instruction* instruction, Byte b0,Byte b1,Byte b2, Byte b3,By
 	instruction->b[5]=b5;
 }
 
-/*détecte et écrit le code opération de la chaine de caractère dans l'instruction*/
+/*detecte et ecrit le code operation de la chaine de caractère dans l'instruction*/
 int mapOpCode(char* opcode, Instruction *instruction){
 	instruction->id = UNKNOWN_ID;
 	if(opcode[1]=='\0' && opcode[0]=='j'){
-		/* alors forcément instruction 'j' 
+		/* alors forcement instruction 'j' 
 			j -> 6 premiers bits a 000010
 			donc code[0] = 000010xx
 		*/
@@ -345,7 +345,7 @@ int mapOpCode(char* opcode, Instruction *instruction){
 	return instruction->id != UNKNOWN_ID;
 }
 
-/*écrit une valeur de taille N sur une chaine de Byte
+/*ecrit une valeur de taille N sur une chaine de Byte
 convention des octets*/
 void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	/* size in bit of the value not necessarly a multiple of 8 */
@@ -363,7 +363,7 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 		pos += instruction->b[i];
 	}
 
-	/* init le masque à 0xFFFFFFFF et val à 0x00000000 */
+	/* init le masque a 0xFFFFFFFF et val a 0x00000000 */
 	for(i=0;i<4;i++){
 		mask1[i] = 0xFF;
 		mask2[i] = 0xFF;
@@ -372,14 +372,14 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 
 	/* met value dans val (taille value =< 4) */
 	for(i=0;i<dim;i++){
-		/* on doit écrire à la fin car les shift sont appliqués dans le sens 
+		/* on doit ecrire a la fin car les shift sont appliques dans le sens 
 		inverse aux indices des tableaux */
 		val[i+(4-dim)]=value[i];
 	}
 
-	/* positionne la valeur à la fin tel que le bit de poids fort soit le premier dans la chaine */
+	/* positionne la valeur a la fin tel que le bit de poids fort soit le premier dans la chaine */
 	shiftLDWord(val, 32-size);
-	/* décale val pour être à la bonne position dans le code */
+	/* decale val pour être a la bonne position dans le code */
 	shiftRDWord(val, pos);
 
 	/* calcul les mask pour l'insertion dans le code */
@@ -392,7 +392,7 @@ void pasteValue(Instruction* instruction, int field,Byte* value,int dim){
 	}
 }
 
-/*écrit les bloc nécéssaire pour une instruction type R*/
+/*ecrit les bloc necessaire pour une instruction type R*/
 void mapTypeR(Byte rs,Byte rt,Byte rd,Byte sa,Instruction *output){
 	pasteValue(output,1,&rs,1);
 	pasteValue(output,2,&rt,1);
@@ -400,20 +400,20 @@ void mapTypeR(Byte rs,Byte rt,Byte rd,Byte sa,Instruction *output){
 	pasteValue(output,4,&sa,1);
 }
 
-/*écrit les bloc nécéssaire pour une instruction type I*/
+/*ecrit les bloc necessaire pour une instruction type I*/
 void mapTypeI(Byte rs,Byte rt,DWord immediat,Instruction *output){
 	pasteValue(output,1,&rs,1);
 	pasteValue(output,2,&rt,1);
 	pasteValue(output,3,immediat,4);
 }
 
-/*écrit les bloc nécéssaire pour une instruction type J*/
+/*ecrit les bloc necessaire pour une instruction type J*/
 void mapTypeJ(DWord target,Instruction *output){
 	pasteValue(output,1,target,4);
 }
 
 /*converti une chaine de caractère de type $X en une valeur sur un Byte
-return: succés ?*/
+return: succes ?*/
 int StringToRegistre(char *registre,Byte *converted){
 	int success=1;
 	const char REGISTERS[32][6]={
@@ -450,8 +450,8 @@ int StringToRegistre(char *registre,Byte *converted){
 	return success;
 }
 
-/*converti une chaine de caractère représentant un entier signé en hexa ou décimale sur 2 Byte
-return: succés ?*/
+/*converti une chaine de caractère representant un entier signe en hexa ou decimale sur 2 Byte
+return: succes ?*/
 int StringToSignedIntByteArray(char *entier,DWord converted){
 	int success=1;
 	int value;
@@ -495,7 +495,7 @@ int StringToRegistreWithOffset(char *line,Byte *registre,DWord offset){
 				/*pas de closure de la parenthese*/
 				success=0;
 			}else{
-				/*recupere la valeur registre dans la zone définie par ($..)*/
+				/*recupere la valeur registre dans la zone definie par ($..)*/
 				line[fin]='\0';
 
 				/*remplace ( par \0 car offset($..) -> offset\0$..\0*/
@@ -520,9 +520,9 @@ int StringToRegistreWithOffset(char *line,Byte *registre,DWord offset){
 
 /*
 attention pour les valeurs de rt rs et rd on attend des registres
-donc sois $X soit un nom défini dans register_defines. Pour la valeur de 
+donc sois $X soit un nom defini dans register_defines. Pour la valeur de 
 sa par contre c'est une entière cad sans le $
-return: succés ?
+return: succes ?
 */
 int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *output){
 	int success=1;
@@ -780,7 +780,7 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 			break;
 
 		case SYSCALL_ID:
-			/*code sur 20 bit pas de valeur donnée*/
+			/*code sur 20 bit pas de valeur donnee*/
 			break;
 
 		case XOR_ID:
@@ -844,9 +844,11 @@ int compile(const char *source,Program prog){
 			readInstruction(fichier_source,line);
 			if(*line!='\0'){
 				/*ecrit les resultats de compilations*/
+				printf("%s",line);
 				state=compileline(line, prog+i);
 				if(state){
 					/*passe a la case suivante*/
+
 					i++;
 					if(i>=PROGRAM_MAX_SIZE-1){
 						state=0;
@@ -861,7 +863,7 @@ int compile(const char *source,Program prog){
 		initInst(prog+i);
 		prog[i].id = HALT_ID;
 	}else{
-		printf("impossible d'ouvrir ou de créer les fichiers\n");
+		printf("impossible d'ouvrir ou de creer les fichiers\n");
 	}
 
 	if(fichier_source!=NULL){
@@ -871,7 +873,7 @@ int compile(const char *source,Program prog){
 	return state;
 }
 
-/*a implémenter demander par le sujet*/
+/*a implementer demander par le sujet*/
 int compileFile(const char *source, const char *output){
 	FILE *fichier_source=NULL;
 	FILE *fichier_destination=NULL;
@@ -894,7 +896,7 @@ int compileFile(const char *source, const char *output){
 			}
 		}
 	}else{
-		printf("impossible d'ouvrir ou de créer les fichiers\n");
+		printf("impossible d'ouvrir ou de creer les fichiers\n");
 	}
 
 	if(fichier_source!=NULL){

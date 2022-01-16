@@ -2,8 +2,8 @@
 
 
 /*
-fait un déplacement binaire vers la gauche de maximum 8bit. 
-Opération élémentaire sur un DWord
+fait un deplacement binaire vers la gauche de maximum 8bit. 
+Operation elementaire sur un DWord
 */
 void shiftL8Bit(DWord values, int n){
 	int i;
@@ -29,8 +29,8 @@ void shiftLDWord(DWord values, int n){
 }
 
 /*
-fait un déplacement binaire vers la droite de maximum 8bit. 
-Opération sur un DWord
+fait un deplacement binaire vers la droite de maximum 8bit. 
+Operation sur un DWord
 */
 void shiftR8Bit(DWord values, int n){
 	int i;
@@ -64,7 +64,7 @@ int StringToByte(char *str,Byte *result){
 		index++;
 	}
 
-	/*si on a pas lus la chaine en entier ou que la somme dépasse le max*/
+	/*si on a pas lu la chaine en entier ou que la somme depasse le max*/
 	if(str[index]!= '\0' || sum>255){
 		success = 0;
 	}else{
@@ -79,10 +79,10 @@ void IntegerToDWord(int i,DWord res){
 	int weight = 0x8000; /*1000 0000 0000 0000*/
 
 	while(weight > 0){
-		/*décale vers la gauche le résultat car on ajoute le nouveau bit de poids faible*/
+		/*decale vers la gauche le resultat car on ajoute le nouveau bit de poids faible*/
 		shiftLDWord(res, 1); 
 
-		/* alors le bit est à 1 sinon 0*/
+		/* alors le bit est a 1 sinon 0*/
 		if((i&weight) != 0){
 			res[3]++;
 		}
@@ -385,7 +385,7 @@ void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 	copyDWord(den,b2);
 	if(sign_b2==1){
 		twoComplementDWord(den);
-	}/*on obtient un denominateur négatif*/
+	}/*on obtient un denominateur negatif*/
 	 /*pour faire la soustraction*/
 	
 	/*on aura dans num=abs(b1) et den=-abs(b2)*/
@@ -396,23 +396,23 @@ void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 		/*printf("bit %d\n", i);
 		printf("tester: %02x%02x %02x%02x\n", tester[0],tester[1],tester[2],tester[3]);*/
 
-		/*on récupere le plus gros bit de poid fort*/
+		/*on recupere le plus gros bit de poid fort*/
 		tester[3]+=((num[0]&0x80)==0)?0:1;
 
 		/*on soustrait */
-		/*overflow impossible val positive - val positive ne peut pas dépasser -255 si les deux valeurs sont bornées a 255*/
+		/*overflow impossible val positive - val positive ne peut pas depasser -255 si les deux valeurs sont bornees a 255*/
 		addDWord(tester,den);
 		
-		/*si bits de poid forts-abs(b2) est supérieur a zero alors*/
+		/*si bits de poid forts-abs(b2) est superieur a zero alors*/
 		if(greaterThanZeroDWord(tester) || (tester[0]|tester[1]|tester[2]|tester[3])==0){
-			/*rajoute 1 au résultat*/
+			/*rajoute 1 au resultat*/
 			shiftLDWord(LO,1);
 			LO[3]+=1;
 			
 		}else{
-			/*rajoute zero au résultat*/
+			/*rajoute zero au resultat*/
 			shiftLDWord(LO,1);
-			/*restaure la valeur de départ extraite pour la garder positive*/
+			/*restaure la valeur de depart extraite pour la garder positive*/
 			twoComplementDWord(den);
 			addDWord(tester,den);
 			twoComplementDWord(den);
@@ -429,7 +429,7 @@ void divideDWord(DWord HI,DWord LO,DWord b1,DWord b2){
 	copyDWord(HI,tester);
 	
 
-	/*si -a/b ou a/-b alors q est négatif*/
+	/*si -a/b ou a/-b alors q est negatif*/
 	if(sign_b1*sign_b2 == -1){
 		twoComplementDWord(LO);
 	}

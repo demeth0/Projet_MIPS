@@ -4,7 +4,7 @@
 
 /*X_CODE correspond au binaire de l'instruction en hexadecimal*/
 /*
-X_ID correspond a un nombre unique pour définir une instruction
+X_ID correspond a un nombre unique pour definir une instruction
      les deux bits de poid forts correspondent au type d'instruction
 */
 #define OPCODE_TYPE_MASK 0xC0
