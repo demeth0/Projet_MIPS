@@ -3,13 +3,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "ByteUtils.h"
+#include "module_byteutils.h"
 #include "operation_code_defines.h"
-#include "ByteUtils.h"
 #include "mips_structures.h"
 #include "module_ram.h"
 #include "module_compilateur.h"
-#include "ManipulationsFichier.h"
 
 /*
 Description:

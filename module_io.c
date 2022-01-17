@@ -1,6 +1,4 @@
-#include "ManipulationsFichier.h"
-
-
+#include "module_io.h"
 
 void readInstruction(FILE *f, char *result){
 	char c = 'a';

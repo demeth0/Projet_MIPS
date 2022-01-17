@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "mips_structures.h"
 #include "operation_code_defines.h"
-#include "ByteUtils.h"
+#include "module_byteutils.h"
 
 /*
 Description: 

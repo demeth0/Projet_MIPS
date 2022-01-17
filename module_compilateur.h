@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "mips_structures.h"
 #include "operation_code_defines.h"
-#include "ManipulationsFichier.h"
-#include "ByteUtils.h"
+#include "module_io.h"
+#include "module_byteutils.h"
 #include <string.h>
 
 #define LINE_MAX_WIDTH 128
