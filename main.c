@@ -36,10 +36,10 @@ int main(int argc, char const *argv[])
 {
 	Environment simulation;
 	Program prog;
-	initSimulation(&simulation);
-
 	FILE *output = NULL;
 	FILE *simu = NULL;
+	
+	initSimulation(&simulation);
 
 	if(argc==1){
 		printf("*************************************\n");
@@ -55,17 +55,7 @@ int main(int argc, char const *argv[])
 			if(compile(argv[1],prog)){
 				/*simule le programme pas a pas*/
 				simulateProgram(prog,&simulation,1);
-			}else{
-				printf("echec de compilation\n");
 			}
-			/* test reussit
-			printf("result:\n");
-			while(prog[i].id != HALT_ID){
-				printf("%02X%02X%02X%02X %s\n", prog[i].code[0],prog[i].code[1],prog[i].code[2],prog[i].code[3],prog[i].text_instr);
-				i++;
-			}*/
-
-
 		}else{
 			printf("paramètres manquants\n");
 		}
@@ -73,13 +63,11 @@ int main(int argc, char const *argv[])
 		/*simulateFile(argv[source_pos],&simulation,seq);*/
 	}else if(argc == 4){
 		/*ouvrir deux fichiers de sortie ecrire les valeurs demandes*/
-		
-			
 		if(compile(argv[1],prog)){
 			output = fopen(argv[2],"w+");
 			simu = fopen(argv[3],"w+");
 
-			if (output != NULL && simi != NULL){
+			if (output != NULL && simu != NULL){
 				simulateProgram(prog,&simulation,0);
 				ecrireProgram(output, prog);
 				ecrireRegistres(simu, &simulation);
@@ -89,8 +77,6 @@ int main(int argc, char const *argv[])
 			if (simu != NULL)
 				fclose(simu);
 
-		}else{
-			printf("echec de compilation\n");
 		}
 	}else{
 		printf("commande inconue\n");

@@ -12,18 +12,18 @@ void initSimulation(Environment *simulation){
 	}
 }
 
-void fetchInstruction(Program prog,Environment *simulation,int *i);
-void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,DWord imm,DWord target);
-void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
-void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
-void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
+int fetchInstruction(Program prog,Environment *simulation,int *i);
+int decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,DWord imm,DWord target);
+int fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
+int processData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
+int writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target);
 
 void printInst(Environment *sim, Instruction inst){
 	printf("%02X%02X%02X%02X %02X%02X%02X%02X %s\n", sim->PC[0],sim->PC[1],sim->PC[2],sim->PC[3],
 								  inst.code[0],inst.code[1],inst.code[2],inst.code[3],inst.text_instr);
 }
 
-void simulate(Instruction *instruction, Environment *simulation){
+int simulate(Instruction *instruction, Environment *simulation){
 	/*determiner les espace temporaires necessaires: 
 		type R: rs(5) rt(5) rd(5) sa(5)
 		type I: rs(5) rt(5) imm(16)
@@ -31,6 +31,8 @@ void simulate(Instruction *instruction, Environment *simulation){
 	Byte rs=0,rd=0,rt=0,sa=0;
 	DWord imm;
 	DWord target;
+	int state;
+
 	imm[0]=0;imm[1]=0,imm[2]=0,imm[3]=0;
 	target[0]=0;target[1]=0;target[2]=0;target[3]=0;
 
@@ -39,22 +41,32 @@ void simulate(Instruction *instruction, Environment *simulation){
 	incr4(simulation->PC);
 
 	/*calculer les indexes de registres et/ou adresses memoire*/
-	decodeInstruction(instruction,&rs,&rd,&rt,&sa,imm,target);
+	state = decodeInstruction(instruction,&rs,&rd,&rt,&sa,imm,target);
 	
-	/*recupere les donnees,  si ld charge dans les registres*/
-	fetchData(instruction,simulation,rs,rd,rt,sa,imm,target);
+	if(state){
+		/*recupere les donnees,  si ld charge dans les registres*/
+		state = fetchData(instruction,simulation,rs,rd,rt,sa,imm,target);
+	}
 
-	/*execute l'operation (addition soustraction jump ...)*/
-	processData(instruction,simulation,rs,rd,rt,sa,imm,target);
-	/*ecrit resultat, ecrit en memoire ou sw*/
-	writeResult(instruction,simulation,rs,rd,rt,sa,imm,target);
+	if(state){
+		/*execute l'operation (addition soustraction jump ...)*/
+		state = processData(instruction,simulation,rs,rd,rt,sa,imm,target);
+	}
+
+	if(state){
+		/*ecrit resultat, ecrit en memoire ou sw*/
+		state = writeResult(instruction,simulation,rs,rd,rt,sa,imm,target);
+	}
+	
+	return state;
 }
 
-void simulateProgram(Program prog,Environment *simulation,int sequential){
+int simulateProgram(Program prog,Environment *simulation,int sequential){
 	int i=0;
 	Byte rs=0,rd=0,rt=0,sa=0;
 	DWord imm;
 	DWord target;
+	int state=1;
 
 	/*mise du PC a zero*/
 	simulation->PC[0]=0;	
@@ -62,7 +74,7 @@ void simulateProgram(Program prog,Environment *simulation,int sequential){
 	simulation->PC[2]=0;
 	simulation->PC[3]=0;
 
-	while(prog[i].id != HALT_ID){
+	while(state && prog[i].id != HALT_ID){
 		rs=0;rd=0;rt=0;sa=0;
 		imm[0]=0;imm[1]=0,imm[2]=0,imm[3]=0;
 		target[0]=0;target[1]=0;target[2]=0;target[3]=0;
@@ -74,25 +86,34 @@ void simulateProgram(Program prog,Environment *simulation,int sequential){
 			getchar();
 		}
 		/*calcule l'index dans le programme*/
-		fetchInstruction(prog,simulation,&i);
+		state = fetchInstruction(prog,simulation,&i);
 		
-		if(prog[i].id != HALT_ID){
+		if(state && prog[i].id != HALT_ID){
 			/*calculer les indexes de registres et/ou adresses memoire*/
-			decodeInstruction(prog+i,&rs,&rd,&rt,&sa,imm,target);
-		
-			/*recupere les donnees,  si ld charge dans les registres*/
-			fetchData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			state = decodeInstruction(prog+i,&rs,&rd,&rt,&sa,imm,target);
 
-			/*execute l'operation (addition soustraction jump ...)*/
-			processData(prog+i,simulation,rs,rd,rt,sa,imm,target);
-			/*ecrit resultat, ecrit en memoire ou sw*/
-			writeResult(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			if(state){
+				/*recupere les donnees,  si ld charge dans les registres*/
+				state = fetchData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			}
+
+			if(state){
+				/*execute l'operation (addition soustraction jump ...)*/
+				state = processData(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			}
+
+			if(state){
+				/*ecrit resultat, ecrit en memoire ou sw*/
+				state = writeResult(prog+i,simulation,rs,rd,rt,sa,imm,target);
+			}
+
 			if(sequential){
 				printInst(simulation,prog[i]);
 			} 
 		}
 	}
 
+	return state;
 }
 
 void afficher_registres(Environment *sim){
@@ -113,8 +134,7 @@ void afficher_registres(Environment *sim){
 				DWordToLong(sim->LO),sim->LO[0],sim->LO[1],sim->LO[2],sim->LO[3]);
 }
 
-
-void fetchInstruction(Program prog,Environment *simulation,int *i){
+int fetchInstruction(Program prog,Environment *simulation,int *i){
 	DWord temp;
 
 	copyDWord(temp,simulation->PC);
@@ -134,13 +154,15 @@ void fetchInstruction(Program prog,Environment *simulation,int *i){
 
 	/*PC +4*/
 	incr4(simulation->PC);
+	return 1; /*on admet que l'instruction acceder existe toujour*/
 }
 
 /*
 recupère les valeurs dans le code instruction
 */
-void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,DWord imm,DWord target){
+int decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte *sa,DWord imm,DWord target){
 	unsigned int type=instruction->id&OPCODE_TYPE_MASK;
+	int state = 1;
 	switch(type){
 		case OPCODE_TYPE_R:
 			(*rs) =((instruction->code[0]&0x03)<<3)+ /*000000XX -> 000XX000*/
@@ -177,13 +199,19 @@ void decodeInstruction(Instruction *instruction,Byte *rs,Byte *rd,Byte *rt,Byte 
 			copyDWord(instruction->code,target);
 			target[0]=target[0]&0x03; /*enleve 6 premiers bits*/
 		break;
+		default:
+			printf("Format d'instruction inconue\n");
+			state=0; /*impossible de trouver le type de l'instruction*/
+			break;
 	}
+	return state;
 }
 
-void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target){
+int fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target){
 	/*dans cette architecture il n'y a que l'instruction ld qui utlise cette etape*/
 	DWord adresse;
 	DWord *GPR=simulation->registers;
+	int state=1;
 	if(instruction->id == LW_ID){
 		/*LW | base | rt | offset*/
 		/*     rs   | rt | offset*/
@@ -193,6 +221,7 @@ void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd
 		addDWord(adresse,imm);
 		if((adresse[3]&0x03) != 0){
 			/*si l'adresse n'est pas paire de 4*/
+			state = 0;
 			printf("Adress error exception\n");
 		}else{
 			GPR[rt][0] = readRamADDR(simulation,adresse);
@@ -204,12 +233,13 @@ void fetchData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd
 			GPR[rt][3] = readRamADDR(simulation,adresse);
 		}
 	}
+	return state;
 }
 
-void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target){
+int processData(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target){
 	DWord *GPR = simulation->registers;
 	DWord temp;
-	int overflow;
+	int overflow,state=1;
 
 	switch(instruction->id){
 		case ADD_ID:
@@ -220,6 +250,8 @@ void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 				copyDWord(GPR[rd],temp);
 			}else{
 				/*SignalException(IntegerOverflow)*/
+				printf("Signal Exception, Integer Overflow\n");
+				state=0;
 			}
 			break;
 
@@ -231,6 +263,8 @@ void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 				copyDWord(GPR[rt],temp);
 			}else{
 				/*SignalException(IntegerOverflow)*/
+				printf("Signal Exception, Integer Overflow\n");
+				state=0;
 			}
 			break;
 
@@ -368,6 +402,8 @@ void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 				copyDWord(GPR[rd],temp);
 			}else{
 				/*SignalException(IntegerOverflow)*/
+				printf("Signal Exception, Integer Overflow\n");
+				state=0;
 			}
 			break;
 
@@ -382,15 +418,15 @@ void processData(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 			GPR[rd][2]=GPR[rs][2] ^ GPR[rt][2];
 			GPR[rd][3]=GPR[rs][3] ^ GPR[rt][3];
 			break;
-
 	}
+	return state;
 }
 
-void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target){
+int writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte rd,Byte rt,Byte sa,DWord imm,DWord target){
 	/*dans cette architecture il n'y a que l'instruction sw qui utlise cette etape*/
 	DWord adresse;
 	DWord *GPR = simulation->registers;
-
+	int state=1;
 	if(instruction->id == SW_ID){
 		/*SW | base | rt | offset*/
 		/*     rs   | rt | offset*/
@@ -400,7 +436,8 @@ void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 		addDWord(adresse,imm);
 		if((adresse[3]&0x03) != 0){
 			/*si l'adresse n'est pas paire de 4*/
-			printf("Adress error exception\n");
+			state=0;
+			printf("Adress error Exception\n");
 		}else{
 			writeRamADDR(simulation,adresse,GPR[rt][0]);
 			incr(adresse); /*+1*/
@@ -411,4 +448,5 @@ void writeResult(Instruction *instruction, Environment *simulation,Byte rs,Byte 
 			writeRamADDR(simulation,adresse,GPR[rt][3]);
 		}
 	}
+	return state;
 }

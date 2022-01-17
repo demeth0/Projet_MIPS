@@ -120,6 +120,6 @@ X_ID correspond a un nombre unique pour definir une instruction
 #define XOR_ID   (0x19|OPCODE_TYPE_R)
 #define XOR_CODE 0x26
 
-#define UNKNOWN_ID 0xFF
-#define HALT_ID 0xFE
+#define UNKNOWN_ID 0x3F
+#define HALT_ID 0x3E
 #endif

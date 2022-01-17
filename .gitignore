@@ -21,3 +21,5 @@ rot.s
 rot.state
 emul-mips.exe
 rot.hex
+out1
+out2

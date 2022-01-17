@@ -522,7 +522,7 @@ int StringToRegistreWithOffset(char *line,Byte *registre,DWord offset){
 /*
 attention pour les valeurs de rt rs et rd on attend des registres
 donc sois $X soit un nom defini dans register_defines. Pour la valeur de 
-sa par contre c'est une entière cad sans le $
+sa par contre c'est une entiere cad sans le $
 return: succes ?
 */
 int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *output){
@@ -827,15 +827,15 @@ int compileline(char *line,Instruction *output){
 				/*printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
 				if(!state){
-					printf("erreur de mappage des opérandes\n");
+					printf("erreur de mappage des operandes\n");
 				}
 				/*printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);*/
 				strcpy(output->text_instr,line);
 			}else{
-				printf("erreur de mappage du code opération\n");
+				printf("erreur de mappage du code operation\n");
 			}
 		}else{
-			printf("erreur de découpage de l'instruction\n");
+			printf("erreur de decoupage de l'instruction\n");
 		}
 	}
 	return state;

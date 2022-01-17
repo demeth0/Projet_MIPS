@@ -23,7 +23,7 @@ Description:
 erreurs:
 	si un des paramètres nul
 */
-void simulate(Instruction *instruction, Environment *simulation);
+int simulate(Instruction *instruction, Environment *simulation);
 
 /*
 Description:
@@ -31,7 +31,7 @@ Description:
 erreurs:
 	si fichier non valides ou simulation nul
 */
-void simulateProgram(Program prog,Environment *simulation,int sequential);
+int simulateProgram(Program prog,Environment *simulation,int sequential);
 
 /*
 Description:
