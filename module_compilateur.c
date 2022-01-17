@@ -27,15 +27,16 @@ void del_espaces_bords(char *line){
 	int i =0;
 
 	/*on supprime les espaces du debut*/
-	while(line[index] == ' ')
+	while(line[index] == ' ' && line[index] == '	')
 		index++;
 
-	/*on supprime les espaces de la fin*/
-	while(line[taille-1] ==' ')
+	/*on supprime les caracteres non imprimables de la fin*/
+	while(line[taille-1] <= 32){
 		taille--;
+	}
 
 	/*redeplace la chaine de caractère au debut*/
-	while(index<taille){
+	while(i<taille){
 		line[i] = line[index];
 		i++;
 		index++;
@@ -747,6 +748,7 @@ int mapOperandes(char *operande1,char *operande2,char *operande3,Instruction *ou
 		case SRL_ID:
 			/*SRL rd(0),rt(1),sa(2)*/
 			/*SPECIAL | 0 | R | rt(1) | rd(0) | sa(2) | SRL*/
+
 			if( StringToRegistre(operande1,&rd) &&
 			    StringToRegistre(operande2,&rt) && 
 			    StringToByte(operande3,&sa)){
@@ -825,15 +827,15 @@ int compileline(char *line,Instruction *output){
 				/*printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
 				if(!state){
-					printf("erreur de mappage opérandes\n");
+					printf("erreur de mappage des opérandes\n");
 				}
 				/*printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);*/
 				strcpy(output->text_instr,line);
 			}else{
-				printf("erreur de mappage de l'opération\n");
+				printf("erreur de mappage du code opération\n");
 			}
 		}else{
-			printf("erreur d'extraction\n");
+			printf("erreur de découpage de l'instruction\n");
 		}
 	}
 	return state;

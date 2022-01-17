@@ -19,3 +19,5 @@ in2.state
 numops.s
 rot.s
 rot.state
+emul-mips.exe
+rot.hex
