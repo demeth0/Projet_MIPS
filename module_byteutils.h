@@ -128,7 +128,7 @@ erreurs:
 void copyDWord(DWord dst,DWord src);
 
 /*
-Descccription:
+Description:
 	retourne le signe du DWord -1 ou 1
 erreurs:
 	si word nul
@@ -147,7 +147,13 @@ erreurs:
 	si b1 ou b2 nul*/
 int addDWord(DWord b1,DWord b2);
 
-/*value <- -value*/
+/*
+Description:
+	convertit le nombre binaire avec le complement a deux
+return:
+	si le calcul du complement a deux produit un overflow
+erreurs:
+	si value nul*/
 int twoComplementDWord(DWord value);
 
 /*

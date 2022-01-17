@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -pedantic -ansi -Wall
 OBJECTS = main.o module_io.o module_byteutils.o module_emulateur.o module_compilateur.o module_ram.o
-BIN = main
+BIN = emul-mips
 RM = rm -f
 
 all: $(OBJECTS)
