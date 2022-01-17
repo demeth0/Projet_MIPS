@@ -1,5 +1,6 @@
 Projet_MIPS/
 tests/
+Dechambre_Dadamo_etape2_MIPS/
 *.o
 main.exe
 test*
@@ -12,3 +13,9 @@ open_cmd.bat
 backup_*
 out.hex
 out.state
+emul-mips
+in1.hex
+in2.state
+numops.s
+rot.s
+rot.state

@@ -824,9 +824,16 @@ int compileline(char *line,Instruction *output){
 			if(state){
 				/*printf("compiling [%s,%s,%s,%s]\n", operandes[0],operandes[1],operandes[2],operandes[3]);*/
 				state = mapOperandes(operandes[1],operandes[2],operandes[3],output);
+				if(!state){
+					printf("erreur de mappage opérandes\n");
+				}
 				/*printf("=> %02X%02X %02X%02X\n", output->code[0], output->code[1], output->code[2], output->code[3]);*/
 				strcpy(output->text_instr,line);
+			}else{
+				printf("erreur de mappage de l'opération\n");
 			}
+		}else{
+			printf("erreur d'extraction\n");
 		}
 	}
 	return state;
@@ -854,6 +861,7 @@ int compile(const char *source,Program prog){
 					}
 				}else{
 					printf("echec de compilation\n");
+					printf("%s\n", line);
 				}
 			}
 		}

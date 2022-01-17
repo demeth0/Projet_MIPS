@@ -75,19 +75,14 @@ int main(int argc, char const *argv[])
 			FILE *simu = fopen(argv[3],"w+");
 		if(compile(argv[1],prog)){
 			simulateProgram(prog,&simulation,0);
-
-			
 			ecrireProgram(output, prog);
 			ecrireRegistres(simu, &simulation);
 
 		}else{
-			printf("echec de compilation1\n");
+			/*printf("echec de compilation\n");*/
 		}
-			fclose(output);
-			fclose(simu);
-		
-		
-		
+		fclose(output);
+		fclose(simu);
 	}else{
 		printf("commande inconue\n");
 	}
