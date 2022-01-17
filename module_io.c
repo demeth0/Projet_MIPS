@@ -59,7 +59,3 @@ void ecrireRegistres(FILE *f, Environment *sim){
 				DWordToLong(sim->HI),sim->HI[0],sim->HI[1],sim->HI[2],sim->HI[3],
 				DWordToLong(sim->LO),sim->LO[0],sim->LO[1],sim->LO[2],sim->LO[3]);
 }
-
-void supprimerEspaces(char *line){
-	line[0]='z';
-}
