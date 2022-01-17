@@ -24,8 +24,6 @@ void interpreteur(Environment *sim){
 			if(compileline(line, &instr)){
 				printInst(sim,instr);
 				simulate(&instr, sim);
-			}else{
-				printf("echec de compilation\n");
 			}
 		}
 
