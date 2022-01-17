@@ -38,6 +38,9 @@ int main(int argc, char const *argv[])
 	Program prog;
 	initSimulation(&simulation);
 
+	FILE *output = NULL;
+	FILE *simu = NULL;
+
 	if(argc==1){
 		printf("*************************************\n");
 		printf("*         mode interpreteur         *\n");
@@ -71,18 +74,24 @@ int main(int argc, char const *argv[])
 	}else if(argc == 4){
 		/*ouvrir deux fichiers de sortie ecrire les valeurs demandes*/
 		
-			FILE *output = fopen(argv[2],"w+");
-			FILE *simu = fopen(argv[3],"w+");
+			
 		if(compile(argv[1],prog)){
-			simulateProgram(prog,&simulation,0);
-			ecrireProgram(output, prog);
-			ecrireRegistres(simu, &simulation);
+			output = fopen(argv[2],"w+");
+			simu = fopen(argv[3],"w+");
+
+			if (output != NULL && simi != NULL){
+				simulateProgram(prog,&simulation,0);
+				ecrireProgram(output, prog);
+				ecrireRegistres(simu, &simulation);
+			}
+			if(output!=NULL)
+				fclose(output);
+			if (simu != NULL)
+				fclose(simu);
 
 		}else{
-			/*printf("echec de compilation\n");*/
+			printf("echec de compilation\n");
 		}
-		fclose(output);
-		fclose(simu);
 	}else{
 		printf("commande inconue\n");
 	}
